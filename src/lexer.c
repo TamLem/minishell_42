@@ -1,19 +1,29 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_putendl_fd.c                                    :+:      :+:    :+:   */
+/*   lexer.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: tlemma <tlemma@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/08/31 19:32:17 by tlemma            #+#    #+#             */
-/*   Updated: 2022/02/01 14:48:46 by tlemma           ###   ########.fr       */
+/*   Created: 2022/02/01 16:26:02 by tlemma            #+#    #+#             */
+/*   Updated: 2022/02/01 18:52:23 by tlemma           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#include "../include/minishell.h"
 
-void	ft_putendl_fd(char *s, int fd)
+typedef struct token
 {
-	ft_putstr_fd(s, fd);
-	ft_putchar_fd('\n', fd);
-}
+	char	*value;
+	char	*type;
+	char	*next;
+};
+
+typedef struct s_cmd_table
+{
+	char	*word;
+	char	**options;
+	char	*infile;
+	char	*outfile;
+} 		t_cmd_table;
+
