@@ -1,0 +1,7 @@
+"$HOME*/
+pipex/
+*.o
+libft.a
+minishell
+pipex
+.vscode/
