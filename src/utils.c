@@ -1,37 +1,41 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: tlemma <tlemma@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/02/01 14:13:55 by tlemma            #+#    #+#             */
-/*   Updated: 2022/02/05 14:19:03 by tlemma           ###   ########.fr       */
+/*   Created: 2022/02/03 17:53:52 by tlemma            #+#    #+#             */
+/*   Updated: 2022/02/03 18:28:25 by tlemma           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
 
-void	print_prompt()
+char	*ft_append_char(char *s1, char c)
 {
-	printf(KGRN);
-	printf("$ ");
-	printf(KNRM);
-}
+	size_t	i;
+	size_t	len;
+	char	*ret;
 
-int	main(void)
-{
-	char	*line;
-
-	// print_prompt();
-	line = readline("$ ");
-	if (line)
-		lex(line);
-	return (0);
-	while(ft_strcmp(line, "exit") != 0)
+	if (c == '\0')
+		return (NULL);
+	i = 0;
+	ret = NULL;
+	if (s1 != NULL)
+		len = ft_strlen(s1);
+	else
+		len = 0;
+	ret = malloc(sizeof(char) * (int)len + 2);
+	if (!ret)
+		return (NULL);
+	while (i < len)
 	{
-		printf("%s\n", line);
-		// print_prompt();
-		line = readline(NULL);
+		ret[i] = s1[i];
+		i++;
 	}
+	ret[i] = c;
+	ret[i + 1] = '\0';
+	free(s1);
+	return (ret);
 }

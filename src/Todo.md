@@ -14,3 +14,7 @@
 
 
 ## Done
+
+
+## Notes
+	- redirection fails for all if a file in the chain can't be opened
