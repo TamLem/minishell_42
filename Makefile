@@ -6,14 +6,14 @@
 #    By: tlemma <tlemma@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/08/23 18:12:02 by tlemma            #+#    #+#              #
-#    Updated: 2022/02/03 18:21:28 by tlemma           ###   ########.fr        #
+#    Updated: 2022/02/07 17:13:35 by tlemma           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME = minishell
 
 CC = gcc 
-CFLAGS = -Wall -Werror -Wextra 
+CFLAGS = -Wall -Werror -Wextra -g
 READLINE = -L /Users/$(USER)/.brew/opt/readline/lib
 READLINE_INC = -I /Users/$(USER)/.brew/opt/readline/include
 

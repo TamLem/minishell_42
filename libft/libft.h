@@ -6,7 +6,7 @@
 /*   By: tlemma <tlemma@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/02 17:20:02 by tlemma            #+#    #+#             */
-/*   Updated: 2022/02/03 17:53:28 by tlemma           ###   ########.fr       */
+/*   Updated: 2022/02/07 12:39:46 by tlemma           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,6 +67,8 @@ void	ft_lstiter(t_list *lst, void (*f)(void *));
 t_list	*ft_lstmap(t_list *lst, void *(*f)(void *), void (*del)(void *));
 int		ft_strcmp(const char *s1, const char *s2);
 char	*ft_strjoin(char const *s1, char const *s2);
+char	*ft_strndup(const char *s, int n);
+
 
 
 #endif

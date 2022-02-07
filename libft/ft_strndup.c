@@ -1,41 +1,27 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   utils.c                                            :+:      :+:    :+:   */
+/*   ft_strndup.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: tlemma <tlemma@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/02/03 17:53:52 by tlemma            #+#    #+#             */
-/*   Updated: 2022/02/07 17:11:54 by tlemma           ###   ########.fr       */
+/*   Created: 2022/02/07 12:35:32 by tlemma            #+#    #+#             */
+/*   Updated: 2022/02/07 12:39:32 by tlemma           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../include/minishell.h"
-
-char	*ft_append_char(char *s1, char c)
+char	*ft_strndup(const char *s, int n)
 {
-	size_t	i;
-	size_t	len;
-	char	*ret;
+	char	*p;
+	int		len;
 
-	if (c == '\0')
-		return (s1);
-	i = 0;
-	ret = NULL;
-	if (s1 != NULL)
-		len = ft_strlen(s1);
-	else
-		len = 0;
-	ret = malloc(sizeof(char) * (int)len + 2);
-	if (!ret)
+	p = NULL;
+	len = ft_strlen(s);
+	if (n < len)
+		len = n;
+	p = malloc(len * sizeof(char) + 1);
+	if (!p)
 		return (NULL);
-	while (i < len)
-	{
-		ret[i] = s1[i];
-		i++;
-	}
-	ret[i] = c;
-	ret[i + 1] = '\0';
-	free(s1);
-	return (ret);
+	ft_strlcpy(p, s, (len + 1));
+	return (p);
 }

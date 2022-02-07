@@ -6,12 +6,16 @@
 /*   By: tlemma <tlemma@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/03 13:03:11 by tlemma            #+#    #+#             */
-/*   Updated: 2022/02/05 14:57:26 by tlemma           ###   ########.fr       */
+/*   Updated: 2022/02/07 17:07:48 by tlemma           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef LEXER_H
 #define LEXER_H
+
+
+#define RESET 'y'
+#define NO_RESET 'n'
 
 typedef struct s_token
 {
