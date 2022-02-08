@@ -18,3 +18,12 @@
 
 ## Notes
 	- redirection fails for all if a file in the chain can't be opened
+
+
+## Lexing Steps
+	- Toeknization and delimiting keep quotes
+    	- parameter expansion
+	- Word expansiom
+    	- field splitting
+    	- Quote removal
+	- Shell Grammer

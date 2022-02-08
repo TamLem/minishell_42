@@ -6,7 +6,7 @@
 /*   By: tlemma <tlemma@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/01 16:26:02 by tlemma            #+#    #+#             */
-/*   Updated: 2022/02/07 21:32:50 by tlemma           ###   ########.fr       */
+/*   Updated: 2022/02/08 16:07:38 by tlemma           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,26 +22,30 @@ bool	is_space(char c)
 
 bool	is_operator(char c)
 {
-	if (c == LESS || c == GREAT || c == PIPE || c == ASSIGN)
+	if (c == LESS || c == GREAT || c == PIPE)
 		return (true);
 	return (false);
 }
 
-bool shall_split(char *line)
+bool shall_split(char *line, char *appended)
 {
 	if (*(line + 1) == '\0')
 		return (true);
+	// if (*(line + 1) == DOLLAR)
+	// 	return (true);
 	if (is_space(*(line + 1)))
 		return (true);
 	if (!is_operator(*line) && is_operator(*(line + 1)))
 		return (true);
 	if (is_operator(*(line)) && !is_operator(*(line + 1)))
 		return (true);
+	if (is_operator(*line) && (*line != *appended || ft_strlen(appended) > 1))
+		return (true);
 	else
 		return (false);
 }
 
-int	split_input(char *line)
+int	tokenize(char *line)
 {
 	t_token *token;
 
@@ -52,7 +56,7 @@ int	split_input(char *line)
 		if (!is_space(*line))
 		{
 			token->value = ft_append_char(token->value, *line);
-			if(shall_split(line))
+			if(shall_split(line, token->value))
 			{
 				if(is_operator(*line))
 					token->type = OPERATOR;
@@ -119,10 +123,7 @@ char	*strip_quotes(char *line)
 		if (*line == '$' && state != QUOTE)
 			stripped = ft_append_char(stripped, '$');
 		if (*line == '$' && state == QUOTE)
-		{
-			stripped = ft_append_char(stripped, '\\');
-			stripped = ft_append_char(stripped, '$');
-		}
+			stripped = ft_append_char(stripped, PLACE_HOLDER);
 		if (*line != '$' && ((*line != QUOTE && *line != DQUOTE) 
 			|| (state != *(line) && state != 0)))
 			stripped = ft_append_char(stripped, *line);
@@ -145,18 +146,65 @@ int	quotes_matched(char *line)
 		return (false);
 }
 
+int	tokenize_operators()
+{
+	t_token *token;
+
+	token = &g_data.tokens;
+	while(token)
+	{
+		if(ft_strcmp(token->value, "<") == 0)
+			token->type = LESS;
+		else if(ft_strcmp(token->value, "<<") == 0)
+			token->type = DLESS;
+		else if(ft_strcmp(token->value, ">") == 0)
+			token->type = GREAT;
+		else if(ft_strcmp(token->value, ">>") == 0)
+			token->type = DGREAT;
+		else if(ft_strcmp(token->value, "=") == 0)
+			token->type = LESS;
+		else if(ft_strcmp(token->value, "|") == 0)
+			token->type = PIPE;
+		else if(ft_strcmp(token->value, "||") == 0)
+			token->type = ERROR;
+		else if(ft_strchr(token->value, '=') && *(token->value) != ASSIGN)
+			token->type = ASSIGN;
+		else
+			token->type = WORD;
+		token = token->next;
+	}
+	return (0);
+}
+
+int	param_expansion()
+{
+	t_token	*token;
+
+	token = &g_data.tokens;
+	while(token)
+	{
+		if (token->type == WORD && *(token->value) == DOLLAR)
+			token->value = getenv(token->value + 1);
+		if (token->type == WORD && ft_strchr(token->value, PLACE_HOLDER))
+			*(ft_strchr(token->value, PLACE_HOLDER))= DOLLAR;
+		token = token->next;
+	}
+	return (0);
+}
+
 int	lex(char *line)
 {
-	char	*stripped;
+	// char	*stripped;
 	t_token *temp;
 	
 	while (!quotes_matched(line))
 		line = ft_strjoin(line, readline("> "));
 	printf("line: %s\n", line);
-	stripped = strip_quotes(line);
-	split_input(line);
-	printf("split: \n");
-	// return 0;
+	// stripped = strip_quotes(line);
+	tokenize(line);
+	// printf("split: \n");
+	tokenize_operators();
+	param_expansion();
 	temp = &g_data.tokens;
 	while (temp != NULL)
 	{

@@ -6,7 +6,7 @@
 /*   By: tlemma <tlemma@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/03 13:03:11 by tlemma            #+#    #+#             */
-/*   Updated: 2022/02/07 17:07:48 by tlemma           ###   ########.fr       */
+/*   Updated: 2022/02/08 13:09:41 by tlemma           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,11 +16,12 @@
 
 #define RESET 'y'
 #define NO_RESET 'n'
+#define	PLACE_HOLDER 0x1D
 
 typedef struct s_token
 {
 	char			*value;
-	char			type;
+	int				type;
 	struct s_token	*next;
 }			t_token;
 
@@ -53,6 +54,7 @@ enum e_TOKENS{
 	WORD=-1,
 	TOKEN=-2,
 	OPERATOR=-3,
+	ERROR=-9,
 	FLAG='-',
 	QUOTE='\'',
 	DQUOTE='\"',
