@@ -6,7 +6,7 @@
 /*   By: tlemma <tlemma@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/01 14:16:00 by tlemma            #+#    #+#             */
-/*   Updated: 2022/02/03 18:22:22 by tlemma           ###   ########.fr       */
+/*   Updated: 2022/02/09 13:32:05 by tlemma           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,8 @@
 typedef	struct s_data
 {
 	t_token	tokens;
+	char	**env;
+	int		state;
 		
 }	t_data;
 

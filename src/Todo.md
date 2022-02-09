@@ -11,8 +11,12 @@
     	- Current traps set by trap
     	- environment inherited by the shell when it begins (see the export special built-in)
     	- Process IDs of the last commands in asynchronous lists known to this shell environment; see Asynchronous Lists
-
-
+  
+## Cases to handle
+	- nested parameters
+    	- $PATH$ARG
+    	- terminating chars
+  	- feild splitting
 ## Done
 
 

@@ -6,7 +6,7 @@
 /*   By: tlemma <tlemma@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/01 14:13:55 by tlemma            #+#    #+#             */
-/*   Updated: 2022/02/07 17:16:05 by tlemma           ###   ########.fr       */
+/*   Updated: 2022/02/09 12:45:25 by tlemma           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,10 +19,11 @@ void	print_prompt()
 	printf(KNRM);
 }
 
-int	main(void)
+int	main(int argc, char *argv[], char *envp[])
 {
 	char	*line;
-
+	
+	g_data.env = envp;
 	line = readline("$ ");
 	if (line)
 		lex(line);
