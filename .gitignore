@@ -5,3 +5,5 @@ libft.a
 minishell
 pipex
 .vscode/
+minishell.dSYM/Contents/Info.plist
+file

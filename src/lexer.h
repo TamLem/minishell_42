@@ -6,12 +6,12 @@
 /*   By: tlemma <tlemma@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/03 13:03:11 by tlemma            #+#    #+#             */
-/*   Updated: 2022/02/09 17:55:34 by tlemma           ###   ########.fr       */
+/*   Updated: 2022/02/10 21:58:24 by tlemma           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef LEXER_H
-#define LEXER_H
+# define LEXER_H
 
 
 #define RESET 'y'
@@ -26,14 +26,15 @@ typedef struct s_token
 	int				type;
 	bool			split;
 	struct s_token	*next;
-}			t_token;
+}		t_token;
 
 typedef struct s_cmd_table
 {
-	char	*word;
+	char	*cmd;
 	char	**options;
 	char	*infile;
 	char	*outfile;
+	char	*next;
 } 		t_cmd_table;
 
 
@@ -72,7 +73,11 @@ enum	e_STATE{
 	OUTDQUOTE,
 };
 
-int	lex(char *line);
-
+int		lex(char *line);
+bool	is_space(char c);
+bool	is_operator(char c);
+int		quotes_matched(char *line);
+bool	shall_split(char *line, char *appended, int state);
+int		get_state(char pos);
 
 #endif
