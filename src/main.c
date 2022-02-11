@@ -6,7 +6,7 @@
 /*   By: tlemma <tlemma@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/01 14:13:55 by tlemma            #+#    #+#             */
-/*   Updated: 2022/02/10 22:00:59 by tlemma           ###   ########.fr       */
+/*   Updated: 2022/02/11 15:25:11 by tlemma           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,10 +24,11 @@ int	main(int argc, char *argv[], char *envp[])
 	char	*line;
 	
 	g_data.env = envp;
-	line = "echo $path";
+	line = "> echo $path | ";
 	// line = readline("$ ");
 	if (line)
 		lex(line);
+	parse();
 	return (0);
 	while(ft_strcmp(line, "exit") != 0)
 	{

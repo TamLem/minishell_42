@@ -6,7 +6,7 @@
 /*   By: tlemma <tlemma@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/01 16:26:02 by tlemma            #+#    #+#             */
-/*   Updated: 2022/02/10 22:04:06 by tlemma           ###   ########.fr       */
+/*   Updated: 2022/02/11 13:37:01 by tlemma           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -170,7 +170,7 @@ int	tokenize_operators()
 	token = &g_data.tokens;
 	while(token)
 	{
-		if (token && token->type == OPERATOR)
+		if (token && token->value)
 		{
 			if(ft_strcmp(token->value, "<") == 0)
 				token->type = LESS;

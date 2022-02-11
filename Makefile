@@ -6,7 +6,7 @@
 #    By: tlemma <tlemma@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/08/23 18:12:02 by tlemma            #+#    #+#              #
-#    Updated: 2022/02/10 21:53:15 by tlemma           ###   ########.fr        #
+#    Updated: 2022/02/11 15:17:31 by tlemma           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -22,7 +22,7 @@ RM = rm -rf
 AR = ar rs
 
 SDIR = src
-SRCS = main.c lexer.c utils.c lexer_utils.c
+SRCS = main.c lexer.c utils.c lexer_utils.c parser.c
 
 ODIR = objs
 OBJS = $(patsubst %.c, %.o, $(SRCS))

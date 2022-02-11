@@ -6,7 +6,7 @@
 /*   By: tlemma <tlemma@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/01 14:16:00 by tlemma            #+#    #+#             */
-/*   Updated: 2022/02/10 21:55:03 by tlemma           ###   ########.fr       */
+/*   Updated: 2022/02/11 15:20:16 by tlemma           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,12 +27,14 @@
 #include <readline/history.h>
 #include "../libft/libft.h"
 #include "../src/lexer.h"
+#include "../src/parser.h"
 
 typedef	struct s_data
 {
-	t_token	tokens;
-	char	**env;
-	int		state;
+	t_token			tokens;
+	t_simple_cmd 	*cmds;
+	char			**env;
+	int				state;
 		
 }	t_data;
 
