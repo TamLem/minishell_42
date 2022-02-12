@@ -6,7 +6,14 @@
 /*   By: nlenoch <nlenoch@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/08 12:33:05 by nlenoch           #+#    #+#             */
-/*   Updated: 2022/02/08 12:33:06 by nlenoch          ###   ########.fr       */
+/*   Updated: 2022/02/10 21:52:30 by nlenoch          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+int	ft_env(int agrc, char **argv, char *env)
+{
+	printf("%s", env);
+	// while (env)
+	// 	printf("%s", env);
+	return (0);
+}

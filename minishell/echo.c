@@ -6,13 +6,56 @@
 /*   By: nlenoch <nlenoch@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/01 12:22:51 by nlenoch           #+#    #+#             */
-/*   Updated: 2022/02/01 18:51:38 by nlenoch          ###   ########.fr       */
+/*   Updated: 2022/02/10 21:52:34 by nlenoch          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 // string can be in "qotes" or without
 // if string includes '$PWD' return print current working directory with rest of string
 // if option '-n' do not print a newline
+
+int	ft_echo(int argc, char **argv, char **env)
+{
+	int i;
+
+	i = 1;
+	if (*argv[0] == "-n")
+	{
+		while (*argv[i])
+		{
+			printf("%s", *argv[i]);
+			i++;
+		}
+	}
+	else
+	{
+		while (*argv[i])
+		{
+			printf("%s", *argv[i]);
+			i++;
+		}
+		printf("\n");
+	}
+	return (0);
+}
+
+with "echo" one can print out smth to the command line
+the only option that should work is "-n"
+
+Cases to handle:
+
+echo smth
+echo "smth"
+echo 'smth'
+
+echo $cmd
+echo "$cmd"
+
+echo smth$cmd
+echo "smth $cmd"
+
+echo $cmdsmth
+echo "$cmd smth"
 
 #include <stdio.h>
 #include <stdlib.h>

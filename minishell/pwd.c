@@ -6,7 +6,7 @@
 /*   By: nlenoch <nlenoch@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/08 12:22:28 by nlenoch           #+#    #+#             */
-/*   Updated: 2022/02/08 16:53:38 by nlenoch          ###   ########.fr       */
+/*   Updated: 2022/02/11 19:30:33 by nlenoch          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,9 +38,8 @@
 // which are passed as the environment of the new program. Must be NULL terminated.
 
 
-void	pwd(char **input)
+void	ft_pwd(int argc, char **argv, char **env)
 {
-	if (input == "pwd" || input == "PWD" || input == "Pwd" || input == "pwD"
-		|| input == "pWd" || input == "PWd" || input == "PwD" || input == "pWD")
-		printf("%s", getcwd(input, size));
+	if (argv[1] == "PWD")
+		printf("%s", getcwd(env, size));
 }
