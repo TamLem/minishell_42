@@ -6,7 +6,7 @@
 /*   By: tlemma <tlemma@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/01 16:26:02 by tlemma            #+#    #+#             */
-/*   Updated: 2022/02/11 13:37:01 by tlemma           ###   ########.fr       */
+/*   Updated: 2022/02/15 15:49:33 by tlemma           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,18 +52,6 @@ int	tokenize(char *line)
 		line++;
 	}
 	token->next = NULL;
-	return (0);
-}
-
-int	parse_redir()
-{
-	t_token	*token;
-
-	token = &g_data.tokens;
-	while(token)
-	{
-		token = token->next;
-	}
 	return (0);
 }
 
@@ -180,16 +168,17 @@ int	tokenize_operators()
 				token->type = GREAT;
 			else if(ft_strcmp(token->value, ">>") == 0)
 				token->type = DGREAT;
-			else if(ft_strcmp(token->value, "=") == 0)
-				token->type = LESS;
 			else if(ft_strcmp(token->value, "|") == 0)
 				token->type = PIPE;
 			else if(ft_strcmp(token->value, "||") == 0)
 				token->type = ERROR;
 			else if(ft_strchr(token->value, '=') && *(token->value) != ASSIGN)
 				token->type = ASSIGN;
-			else
+			else if (token->type != REDIR)
 				token->type = WORD;
+			if ((token->type == LESS || token->type == DLESS 
+				|| token->type == GREAT || token->type == DGREAT) && token->next)
+					token->next->type = REDIR;	
 		}
 		token = token->next;
 	}
@@ -213,11 +202,11 @@ int	lex(char *input)
 	// printf("split: \n");
 	tokenize_operators();
 	temp = &g_data.tokens;
-	while (temp != NULL)
-	{
-		printf("token\t");
-		printf("%d: %s\n", temp->type, temp->value);
-		temp = temp->next;
-	}
+	// while (temp != NULL)
+	// {
+	// 	printf("token\t");
+	// 	printf("%d: %s\n", temp->type, temp->value);
+	// 	temp = temp->next;
+	// }
 	return (0);
 }

@@ -6,11 +6,22 @@
 /*   By: tlemma <tlemma@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/03 17:53:52 by tlemma            #+#    #+#             */
-/*   Updated: 2022/02/07 17:11:54 by tlemma           ###   ########.fr       */
+/*   Updated: 2022/02/15 17:03:46 by tlemma           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
+
+void	*ft_malloc(size_t size)
+{
+	void	*ret;
+
+	ret = malloc(size);
+	if (ret == NULL)
+	{
+		printf("Memory error\n");
+	}
+}
 
 char	*ft_append_char(char *s1, char c)
 {

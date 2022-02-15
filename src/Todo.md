@@ -17,6 +17,10 @@
     	- $PATH$ARG
     	- terminating chars
   	- feild splitting
+  	- assigment before command
+    	-  hello=world ls
+    	-  hello=$(PATH)
+ 	-  echo hello >
 ## Done
 
 
@@ -31,3 +35,4 @@
     	- field splitting
     	- Quote removal
 	- Shell Grammer
+
