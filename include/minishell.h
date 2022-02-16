@@ -6,7 +6,7 @@
 /*   By: tlemma <tlemma@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/01 14:16:00 by tlemma            #+#    #+#             */
-/*   Updated: 2022/02/15 12:02:48 by tlemma           ###   ########.fr       */
+/*   Updated: 2022/02/16 16:17:24 by tlemma           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,8 +29,14 @@
 # include "../libft/libft.h"
 # include "../src/lexer.h"
 # include "../src/parser.h"
+# include "../src/xecutor.h"
 
-
+typedef struct s_env
+{
+	char	*name;
+	char	*value;
+	char	*next;
+}			t_env;
 typedef	struct s_data
 {
 	t_token			tokens;

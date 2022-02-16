@@ -6,13 +6,13 @@
 /*   By: tlemma <tlemma@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/03 17:53:52 by tlemma            #+#    #+#             */
-/*   Updated: 2022/02/15 17:03:46 by tlemma           ###   ########.fr       */
+/*   Updated: 2022/02/16 13:12:38 by tlemma           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
 
-void	*ft_malloc(size_t size)
+void	ft_malloc(size_t size)
 {
 	void	*ret;
 

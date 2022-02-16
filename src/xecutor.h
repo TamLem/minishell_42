@@ -6,12 +6,13 @@
 /*   By: tlemma <tlemma@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/15 16:13:15 by tlemma            #+#    #+#             */
-/*   Updated: 2022/02/15 16:14:18 by tlemma           ###   ########.fr       */
+/*   Updated: 2022/02/16 13:23:07 by tlemma           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef XECUTOR_H
 # define XECUTOR_H
 
+int xecute(void);
 
 #endif

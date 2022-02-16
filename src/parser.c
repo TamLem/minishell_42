@@ -6,7 +6,7 @@
 /*   By: tlemma <tlemma@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/10 22:08:11 by tlemma            #+#    #+#             */
-/*   Updated: 2022/02/15 15:51:04 by tlemma           ###   ########.fr       */
+/*   Updated: 2022/02/16 18:29:43 by tlemma           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -128,8 +128,7 @@ int	parse(void)
 	simple_cmd = g_data.cmds;
 	while (simple_cmd)
 	{
-		printf("%s %s %d %d\n", simple_cmd->cmd, 
-			simple_cmd->args->value, simple_cmd->infile->value, simple_cmd->outfile->value);
+		printf("%s %d %d\n", simple_cmd->cmd, simple_cmd->infile->value, simple_cmd->infile->value);
 		simple_cmd = simple_cmd->next;
 	}
 	return (0);
