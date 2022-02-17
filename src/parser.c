@@ -6,7 +6,7 @@
 /*   By: tlemma <tlemma@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/10 22:08:11 by tlemma            #+#    #+#             */
-/*   Updated: 2022/02/16 18:29:43 by tlemma           ###   ########.fr       */
+/*   Updated: 2022/02/17 22:50:27 by tlemma           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,12 +28,11 @@ int	init_cmd(t_simple_cmd **simple_cmd)
 
 int	add_args(t_args **args, char *value)
 {
+	while (*args != NULL)
+		args = &(*args)->next;
+	*args = malloc(sizeof(t_args));
 	if (*args == NULL)
-	{
-		*args = malloc(sizeof(t_args));
-		if (*args == NULL)
-			return (2);
-	}
+		return (2);
 	(*args)->value = value;
 	(*args)->next = NULL;
 	return (0);
@@ -41,6 +40,8 @@ int	add_args(t_args **args, char *value)
 
 int	add_infiles(t_infiles **infile, char *file)
 {
+	while (*infile != NULL)
+		infile = &(*infile)->next;
 	*infile = malloc(sizeof(t_infiles));
 	if (*infile == NULL)
 		return (2);
@@ -55,6 +56,8 @@ int	add_infiles(t_infiles **infile, char *file)
 
 int	add_outfiles(t_outfiles **outfile , char *file, int mode)
 {
+	while (*outfile != NULL)
+		outfile = &(*outfile)->next;
 	*outfile = malloc(sizeof(t_outfiles));
 	if (*outfile == NULL)
 		return (2);
@@ -128,7 +131,9 @@ int	parse(void)
 	simple_cmd = g_data.cmds;
 	while (simple_cmd)
 	{
-		printf("%s %d %d\n", simple_cmd->cmd, simple_cmd->infile->value, simple_cmd->infile->value);
+		// printf("%s %d %d\n", simple_cmd->cmd, simple_cmd->infile->value, simple_cmd->infile->value);
+		printf("Args; %s\n", simple_cmd->cmd);
+		break;
 		simple_cmd = simple_cmd->next;
 	}
 	return (0);
