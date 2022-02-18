@@ -21,6 +21,7 @@
     	-  hello=world ls
     	-  hello=$(PATH)
  	-  echo hello >
+ 	- order of heredocs and dir
 ## Done
 
 

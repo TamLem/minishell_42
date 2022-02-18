@@ -26,6 +26,36 @@ int	child_process(char **cmd)
 	return (0);
 }
 
+int	get_infile(t_simple_cmd *simple_cmd, int fdin)
+{
+	t_infiles	*infile;
+	t_outfiles	*outfile;
+	char		*line;
+	int			fd;
+
+
+	infile = simple_cmd->infile;
+	outfile = simple_cmd->outfile;
+	while (infile) //here
+	{
+		if (infile->value == 0)
+		{
+			fd = open("heredocs", O_WRONLY | O_CREAT, S_IRWXU);
+			while (ft_strcmp((line = readline(NULL)), infile->dlmtr))
+			{
+				write(fd, line, sizeof(line));
+			}
+			infile->value = fd;
+		}
+		dprintf(2, "fdin %d\n", infile->value);
+		if (infile->next)
+			infile = infile->next;
+	}
+	if (infile)
+		fdin = infile->value;
+	return (fdin);
+}
+
 int xecute(void)
 {
 	int init_stdin;
@@ -43,22 +73,24 @@ int xecute(void)
 	int	fdin;
 	int	fdout;
 	int	ret;
-	t_infiles	*infile;
+	// t_infiles	*infile;
 	t_outfiles	*outfile;
 
 	fdin = dup(init_stdin);
 	fdout = dup(init_stdout);
 	printf("%d %d\n", fdin, fdout);
 	ret = 0;
-			int	fdpipe[2];
+	int	fdpipe[2];
 	while (simple_cmd != NULL)
 	{
-		infile = simple_cmd->infile;
+		fdin = get_infile(simple_cmd, fdin);
+		// infile = simple_cmd->infile;
 		outfile = simple_cmd->outfile;
-		while (infile && infile->next)
-			infile = infile->next;
-		if (infile)
-			fdin = infile->value;
+		// while (infile && infile->next)
+		// 	infile = infile->next;
+		// if (infile)
+		// 	fdin = infile->value;
+		dprintf(2, "fdin %d fdout %d\n", fdin, fdout);
 		dup2(fdin, 0);
 		close(fdin);
 		if (simple_cmd->next == NULL)
@@ -77,7 +109,6 @@ int xecute(void)
 			fdout = fdpipe[1];
 			fdin = fdpipe[0];
 		}
-		dprintf(2, "fdin %d fdout %d\n", fdin, fdout);
 		dup2(fdout, 1);
 		close(fdout);
 		ret = fork();
@@ -85,12 +116,9 @@ int xecute(void)
 			child_process(&simple_cmd->cmd);
 		else
 			simple_cmd = simple_cmd->next;
-		printf("PID %d\n", getpid());
 	}
 	close(init_stdin);
 	close(init_stdout);
 	waitpid(ret, NULL, 0);
-	printf("len %d\n", cmd_len);
-
 	return (0);
 }

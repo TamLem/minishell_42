@@ -6,7 +6,7 @@
 /*   By: tlemma <tlemma@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/10 22:08:11 by tlemma            #+#    #+#             */
-/*   Updated: 2022/02/17 22:50:27 by tlemma           ###   ########.fr       */
+/*   Updated: 2022/02/18 16:50:38 by tlemma           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,7 @@ int	init_cmd(t_simple_cmd **simple_cmd)
 	(*simple_cmd)->next = NULL;
 	(*simple_cmd)->infile = NULL;
 	(*simple_cmd)->outfile = NULL;
+	(*simple_cmd)->heredocs = NULL;
 	return (0);
 }
 
@@ -38,17 +39,35 @@ int	add_args(t_args **args, char *value)
 	return (0);
 }
 
-int	add_infiles(t_infiles **infile, char *file)
+// int	add_heredocs(t_infiles **heredocs, char *eof)
+// {
+// 	while (*heredocs != NULL)
+// 		heredocs = &(*heredocs)->next;
+// 	*heredocs = malloc(sizeof(t_heredocs));
+// 	if (*heredocs == NULL)
+// 		return (2);
+// 	(*heredocs)->value = eof;
+// 	(*heredocs)->next = NULL;
+// 	return (0);
+// }
+
+int	add_infiles(t_infiles **infile, char *file, int mode)
 {
 	while (*infile != NULL)
 		infile = &(*infile)->next;
 	*infile = malloc(sizeof(t_infiles));
 	if (*infile == NULL)
 		return (2);
-	(*infile)->value = open(file, O_RDONLY);
-	if ((*infile)->value == -1)
+	if (mode == LESS)
 	{
-		printf("open: %s\n", file);
+		(*infile)->value = open(file, O_RDONLY);
+		if ((*infile)->value == -1)
+			printf("open: %s\n", file);
+		(*infile)->dlmtr = NULL;
+	}
+	else{
+		(*infile)->value = 0;
+		(*infile)->dlmtr = file;
 	}
 	(*infile)->next = NULL;
 	return (0);
@@ -73,14 +92,13 @@ int	add_outfiles(t_outfiles **outfile , char *file, int mode)
 	return (0);
 }
 
-int	parse_redir(t_simple_cmd *cmd)
+int	parse_redir(t_simple_cmd *cmd, t_token *token)
 {
-	t_token			*token;
 	int				last_op;
 
 	token = &g_data.tokens;
 	last_op = 0;
-	while (token)
+	while (token != NULL)
 	{
 		if ((token->type == LESS || token->type == DLESS 
 				|| token->type == GREAT || token->type == DGREAT))
@@ -88,10 +106,12 @@ int	parse_redir(t_simple_cmd *cmd)
 		if (token->type == REDIR)
 		{
 			//handle heredocs
-			if (last_op == LESS)
-				add_infiles(&(cmd->infile), token->value);
-			else if(last_op == GREAT || last_op == DGREAT)
+			if (last_op == LESS || last_op == DLESS)
+				add_infiles(&(cmd->infile), token->value, last_op);
+			else if (last_op == GREAT || last_op == DGREAT)
 				add_outfiles(&(cmd->outfile), token->value, last_op);
+			// else if (last_op == DLESS)
+			// 	add_heredocs(&(cmd->heredocs), token->value);
 			last_op = 0;
 		}
 		token = token->next;
@@ -110,6 +130,7 @@ int	parse(void)
 	simple_cmd = g_data.cmds;
 	while (token)
 	{
+		parse_redir(simple_cmd, token);
 		while (token && token->type != PIPE)
 		{
 			if (token->type == WORD)
@@ -123,7 +144,6 @@ int	parse(void)
 		}
 		if (!token)
 			break ;
-		parse_redir(simple_cmd);
 		init_cmd(&(simple_cmd->next));
 		simple_cmd = simple_cmd->next;
 		token = token->next;
