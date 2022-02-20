@@ -6,7 +6,7 @@
 /*   By: tlemma <tlemma@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/01 16:26:02 by tlemma            #+#    #+#             */
-/*   Updated: 2022/02/18 15:53:48 by tlemma           ###   ########.fr       */
+/*   Updated: 2022/02/20 18:13:23 by tlemma           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,8 @@ int	tokenize(char *line)
 	t_token *token;
 	int		state;
 
-	token = &g_data.tokens;
+	g_data.tokens = malloc(sizeof(t_token));
+	token = g_data.tokens;
 	token->value = NULL;
 	g_data.state = 0;
 	while(*line != '\0')
@@ -26,7 +27,7 @@ int	tokenize(char *line)
 		state = get_state(*line);
 		if (*line == '$' && state == QUOTE)
 			*line = PLACE_HOLDER;
-		if (!is_space(*line) || state != 0)
+		if (!is_WSPACE(*line) || state != 0)
 		{
 			token->value = ft_append_char(token->value, *line);
 			if(shall_split(line, token->value, state))
@@ -62,11 +63,11 @@ char	*field_split(char *str)
 	split = NULL;
 	while(*str)
 	{
-		if (!is_space(*str))
+		if (!is_WSPACE(*str))
 		{
 			split =ft_append_char(split, *str);
-			if (is_space(*(str + 1)))
-			split = ft_append_char(split, WSPACE);
+			if (is_WSPACE(*(str + 1)))
+			split = ft_append_char(split, WWSPACE);
 		}
 		str++;
 	}
@@ -96,7 +97,7 @@ char	*strip_quotes(char *line)
 	t_token	*token;
 	char	*quoted;
 
-	token = &g_data.tokens;
+	token = g_data.tokens;
 	g_data.state = 0;
 	while(token)
 	{
@@ -125,7 +126,7 @@ int	param_expansion()
 	t_token	*token;
 	char	*exp_env;
 
-	token = &g_data.tokens;
+	token = g_data.tokens;
 	while(token)
 	{
 		if (token->type == TOKEN && *(token->value) == DOLLAR)
@@ -155,7 +156,7 @@ int	tokenize_operators()
 {
 	t_token *token;
 
-	token = &g_data.tokens;
+	token = g_data.tokens;
 	while(token)
 	{
 		if (token && token->value)
@@ -194,14 +195,12 @@ int	lex(char *input)
 	line = ft_strdup(input);
 	g_data.state = 0;	
 	while (!quotes_matched(line))
-		line = ft_strjoin(line, ft_strdup(readline("> ")));
-	printf("line: %s\n", line);
+		line = ft_strjoin(line, ft_strdup(readline(KGRN"> "KNRM)));
 	tokenize(line);
 	param_expansion();
 	line = strip_quotes(line);
-	// printf("split: \n");
 	tokenize_operators();
-	temp = &g_data.tokens;
+	temp = g_data.tokens;
 	// while (temp != NULL)
 	// {
 	// 	printf("token\t");

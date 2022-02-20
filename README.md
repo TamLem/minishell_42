@@ -15,7 +15,7 @@ A mini unix shell with basic functionalities
 		}			t_token; 
 ```
 >>#### Steps
-	- space delimitation
+	- WSPACE delimitation
       	- echo     arg1
 	- echo $PATH "" '$PATH'
 

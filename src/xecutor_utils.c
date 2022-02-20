@@ -6,7 +6,7 @@
 /*   By: tlemma <tlemma@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/17 19:46:04 by tlemma            #+#    #+#             */
-/*   Updated: 2022/02/17 23:08:58 by tlemma           ###   ########.fr       */
+/*   Updated: 2022/02/20 17:26:06 by tlemma           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,30 +67,20 @@ char	**ft_getpath(char *keypairs[], char *cmd)
 	return (path);
 }
 
-/* 
-void	check_cmds(void)
+int	check_cmds(char	*cmd)
 {
-	int	i;
-	int	res;
+	int		i;
+	int		res;
+	char	**path;
 
 	i = 0;
 	res = 0;
-	while (g_pa.path1[i])
+	path = ft_getpath(g_data.env, cmd);
+	while (path[i])
 	{
-		if (access(g_pa.path1[i], F_OK | X_OK) == 0)
+		if (access(path[i], F_OK | X_OK) == 0)
 			res = 1;
 		i++;
 	}
-	if (!res)
-		err(-1, 'x', g_pa.cmd1[0]);
-	i = 0;
-	res = 0;
-	while (g_pa.path2[i])
-	{
-		if (access(g_pa.path2[i], F_OK | X_OK) == 0)
-			res = 1;
-		i++;
-	}
-	if (!res)
-		err(-1, 'x', g_pa.cmd2[0]);
-} */
+	return (res);
+}

@@ -6,7 +6,7 @@
 /*   By: tlemma <tlemma@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/03 17:53:52 by tlemma            #+#    #+#             */
-/*   Updated: 2022/02/16 13:12:38 by tlemma           ###   ########.fr       */
+/*   Updated: 2022/02/20 17:13:01 by tlemma           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,15 @@ void	ft_malloc(size_t size)
 	if (ret == NULL)
 	{
 		printf("Memory error\n");
+	}
+}
+
+void	free_dp(char **i)
+{
+	while (*i)
+	{
+		free(*i);
+		i++;
 	}
 }
 

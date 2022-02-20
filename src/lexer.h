@@ -6,7 +6,7 @@
 /*   By: tlemma <tlemma@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/03 13:03:11 by tlemma            #+#    #+#             */
-/*   Updated: 2022/02/15 11:13:10 by tlemma           ###   ########.fr       */
+/*   Updated: 2022/02/20 16:18:28 by tlemma           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,9 +31,9 @@ typedef struct s_token
 
 
 enum e_IFS{
-	WSPACE=' ',
-	TAB='\t',
-	NEWLINE='\n',
+	WWSPACE=' ',
+	WTAB='\t',
+	WNEWLINE='\n',
 };
 
 enum e_OPERATORS{
@@ -67,7 +67,7 @@ enum	e_STATE{
 };
 
 int		lex(char *line);
-bool	is_space(char c);
+bool	is_WSPACE(char c);
 bool	is_operator(char c);
 int		quotes_matched(char *line);
 bool	shall_split(char *line, char *appended, int state);

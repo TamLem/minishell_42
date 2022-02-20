@@ -6,7 +6,7 @@
 /*   By: tlemma <tlemma@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/10 22:08:11 by tlemma            #+#    #+#             */
-/*   Updated: 2022/02/18 16:50:38 by tlemma           ###   ########.fr       */
+/*   Updated: 2022/02/20 17:18:24 by tlemma           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,18 +39,6 @@ int	add_args(t_args **args, char *value)
 	return (0);
 }
 
-// int	add_heredocs(t_infiles **heredocs, char *eof)
-// {
-// 	while (*heredocs != NULL)
-// 		heredocs = &(*heredocs)->next;
-// 	*heredocs = malloc(sizeof(t_heredocs));
-// 	if (*heredocs == NULL)
-// 		return (2);
-// 	(*heredocs)->value = eof;
-// 	(*heredocs)->next = NULL;
-// 	return (0);
-// }
-
 int	add_infiles(t_infiles **infile, char *file, int mode)
 {
 	while (*infile != NULL)
@@ -81,7 +69,7 @@ int	add_outfiles(t_outfiles **outfile , char *file, int mode)
 	if (*outfile == NULL)
 		return (2);
 	if (mode == GREAT)
-		(*outfile)->value = open(file, O_WRONLY | O_CREAT, S_IRWXU);
+		(*outfile)->value = open(file, O_WRONLY | O_CREAT | O_TRUNC, S_IRWXU);
 	else if (mode == DGREAT)
 		(*outfile)->value = open(file, O_WRONLY | O_APPEND | O_CREAT, S_IRWXU);
 	if ((*outfile)->value == -1)
@@ -96,22 +84,18 @@ int	parse_redir(t_simple_cmd *cmd, t_token *token)
 {
 	int				last_op;
 
-	token = &g_data.tokens;
 	last_op = 0;
-	while (token != NULL)
+	while (token != NULL && token->type != PIPE)
 	{
 		if ((token->type == LESS || token->type == DLESS 
 				|| token->type == GREAT || token->type == DGREAT))
 			last_op = token->type;
 		if (token->type == REDIR)
 		{
-			//handle heredocs
 			if (last_op == LESS || last_op == DLESS)
 				add_infiles(&(cmd->infile), token->value, last_op);
 			else if (last_op == GREAT || last_op == DGREAT)
 				add_outfiles(&(cmd->outfile), token->value, last_op);
-			// else if (last_op == DLESS)
-			// 	add_heredocs(&(cmd->heredocs), token->value);
 			last_op = 0;
 		}
 		token = token->next;
@@ -125,7 +109,7 @@ int	parse(void)
 	t_simple_cmd	*simple_cmd;
 
 	g_data.cmds = NULL;
-	token = &g_data.tokens;
+	token = g_data.tokens;
 	init_cmd(&(g_data.cmds));
 	simple_cmd = g_data.cmds;
 	while (token)
@@ -137,8 +121,7 @@ int	parse(void)
 			{
 				if (simple_cmd->cmd == NULL)
 					simple_cmd->cmd = token->value;
-				else
-					add_args(&(simple_cmd->args), token->value);
+				add_args(&(simple_cmd->args), token->value);
 			}	
 			token = token->next;
 		}
@@ -149,12 +132,12 @@ int	parse(void)
 		token = token->next;
 	}
 	simple_cmd = g_data.cmds;
-	while (simple_cmd)
-	{
-		// printf("%s %d %d\n", simple_cmd->cmd, simple_cmd->infile->value, simple_cmd->infile->value);
-		printf("Args; %s\n", simple_cmd->cmd);
-		break;
-		simple_cmd = simple_cmd->next;
-	}
+	// while (simple_cmd)
+	// {
+	// 	// printf("%s %d %d\n", simple_cmd->cmd, simple_cmd->infile->value, simple_cmd->infile->value);
+	// 	printf("Args; %s\n", simple_cmd->args->value);
+	// 	break;
+	// 	simple_cmd = simple_cmd->next;
+	// }
 	return (0);
 }

@@ -6,7 +6,7 @@
 /*   By: tlemma <tlemma@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/10 21:26:47 by tlemma            #+#    #+#             */
-/*   Updated: 2022/02/10 22:04:01 by tlemma           ###   ########.fr       */
+/*   Updated: 2022/02/20 16:18:28 by tlemma           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,9 +15,9 @@
 
 int	get_state(char pos);
 
-bool	is_space(char c)
+bool	is_WSPACE(char c)
 {
-	if (c == WSPACE || c == TAB || c == NEWLINE)
+	if (c == WWSPACE || c == WTAB || c == WNEWLINE)
 		return (true);
 	return (false);
 }
@@ -37,7 +37,7 @@ bool shall_split(char *line, char *appended, int state)
 		return (true);
 	if (*appended == DOLLAR && !(ft_isdigit(*(line + 1)) || ft_isalpha(*(line + 1))))
 		return (true);
-	if (is_space(*(line + 1)) && state == 0)
+	if (is_WSPACE(*(line + 1)) && state == 0)
 		return (true);
 	if (!is_operator(*line) && is_operator(*(line + 1)))
 		return (true);

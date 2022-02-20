@@ -6,7 +6,7 @@
 /*   By: tlemma <tlemma@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/01 14:16:00 by tlemma            #+#    #+#             */
-/*   Updated: 2022/02/17 16:56:51 by tlemma           ###   ########.fr       */
+/*   Updated: 2022/02/20 17:39:36 by tlemma           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,14 +33,15 @@
 
 typedef	struct s_data
 {
-	t_token			tokens;
+	t_token			*tokens;
 	t_simple_cmd 	*cmds;
 	char			**env;
 	int				state;
-		
+	int				exit_status;
 }	t_data;
 
 t_data	g_data;
+void	free_dp(char **i);
 char	*ft_append_char(char *s1, char c);
 
 #endif

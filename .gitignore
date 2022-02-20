@@ -6,4 +6,7 @@ minishell
 pipex
 .vscode/
 minishell.dSYM/Contents/Info.plist
-file
+file*
+heredocs
+include/minishell.h.gch
+.gitignore
