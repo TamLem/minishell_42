@@ -24,7 +24,13 @@ A mini unix shell with basic functionalities
     	- OPERATOR
     	- identify expandables
 
-
+## Shell grammer
+	- io_sym filename cmd args... | 
+	- cmd io_sym filename args...
+	- cmd args.. io_sym filename
+	-  $?
+	-  name=word
+	-  
 
 
 ###	- Parsing

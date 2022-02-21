@@ -6,7 +6,7 @@
 /*   By: tlemma <tlemma@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/03 13:03:11 by tlemma            #+#    #+#             */
-/*   Updated: 2022/02/20 16:18:28 by tlemma           ###   ########.fr       */
+/*   Updated: 2022/02/21 17:52:11 by tlemma           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,11 +43,15 @@ enum e_OPERATORS{
 	GREAT='>',
 	DGREAT=15934,
 	ASSIGN='=',
-	REDIR=8995
+};
+
+enum e_grammer{
+	WORD=-1,
+	REDIR=8995,
+	QMARK='?',
 };
 
 enum e_TOKENS{
-	WORD=-1,
 	TOKEN=-2,
 	OPERATOR=-3,
 	ERROR=-9,
@@ -56,7 +60,6 @@ enum e_TOKENS{
 	DQUOTE='\"',
 	IO_NUMBER=-2,
 	DOLLAR='$',
-	QMARK='?',
 } TOKENS;
 
 enum	e_STATE{

@@ -6,12 +6,12 @@
 /*   By: tlemma <tlemma@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/01 16:26:02 by tlemma            #+#    #+#             */
-/*   Updated: 2022/02/20 18:13:23 by tlemma           ###   ########.fr       */
+/*   Updated: 2022/02/21 17:57:08 by tlemma           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "lexer.h"
 #include "../include/minishell.h"
+#include "lexer.h"
 
 int	tokenize(char *line)
 {
@@ -22,7 +22,7 @@ int	tokenize(char *line)
 	token = g_data.tokens;
 	token->value = NULL;
 	g_data.state = 0;
-	while(*line != '\0')
+	while (*line != '\0')
 	{
 		state = get_state(*line);
 		if (*line == '$' && state == QUOTE)
@@ -32,7 +32,7 @@ int	tokenize(char *line)
 			token->value = ft_append_char(token->value, *line);
 			if(shall_split(line, token->value, state))
 			{
-				if(is_operator(*line))
+				if (is_operator(*line))
 					token->type = OPERATOR;
 				else
 					token->type = TOKEN;
@@ -74,21 +74,6 @@ char	*field_split(char *str)
 	//free
 	return (split);
 }
-
-// int	del_token()
-// {
-// 	t_token	*token;
-// 	t_token	*temp;
-
-// 	token = &g_data.tokens;
-// 	while (token)
-// 	{
-// 		if (token->next->value == NULL)
-// 		{
-// 			temp = token->next;
-// 		}
-// 	}
-// }
 
 char	*strip_quotes(char *line)
 {
@@ -186,6 +171,25 @@ int	tokenize_operators()
 	return (0);
 }
 
+void	del_empty_tokens()
+{
+	t_token	*token;
+	t_token *next_token;
+
+	token = g_data.tokens;
+	while(token)
+	{
+		next_token = token->next;
+		if (next_token && next_token->value == NULL)
+		{
+			token->next = next_token->next;
+			free(next_token);
+		}
+		else
+			token = token->next;
+	}
+}
+
 int	lex(char *input)
 {
 	// char	*stripped;
@@ -200,12 +204,13 @@ int	lex(char *input)
 	param_expansion();
 	line = strip_quotes(line);
 	tokenize_operators();
+	del_empty_tokens();
 	temp = g_data.tokens;
-	// while (temp != NULL)
-	// {
-	// 	printf("token\t");
-	// 	printf("%d: %s\n", temp->type, temp->value);
-	// 	temp = temp->next;
-	// }
+	while (temp != NULL)
+	{
+		printf("token\t");
+		printf("%d: %s\n", temp->type, temp->value);
+		temp = temp->next;
+	}
 	return (0);
 }
