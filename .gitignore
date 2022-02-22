@@ -1,0 +1,13 @@
+"$HOME*/
+pipex/
+*.o
+libft.a
+minishell
+pipex
+.vscode/
+minishell.dSYM/Contents/Info.plist
+file*
+heredocs
+include/minishell.h.gch
+.gitignore
+.gitignore
