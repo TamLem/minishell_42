@@ -22,6 +22,8 @@
     	-  hello=$(PATH)
  	-  echo hello >
  	- order of heredocs and dir
+ 	- when quoted string is a file name with spaces, and the filename is
+     	- saved in a variable
 ## Done
 
 

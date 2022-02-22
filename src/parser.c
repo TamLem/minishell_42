@@ -6,7 +6,7 @@
 /*   By: tlemma <tlemma@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/10 22:08:11 by tlemma            #+#    #+#             */
-/*   Updated: 2022/02/20 17:18:24 by tlemma           ###   ########.fr       */
+/*   Updated: 2022/02/22 15:18:26 by tlemma           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,11 +29,19 @@ int	init_cmd(t_simple_cmd **simple_cmd)
 
 int	add_args(t_args **args, char *value)
 {
+	// char	**split;
+
 	while (*args != NULL)
 		args = &(*args)->next;
 	*args = malloc(sizeof(t_args));
 	if (*args == NULL)
 		return (2);
+	// if (ft_strchr(value, ' '))
+	// {
+	// 	split = ft_split(value, ' ');
+	// 	while (*split)
+	// 		add_args(args, *split++);
+	// }
 	(*args)->value = value;
 	(*args)->next = NULL;
 	return (0);
@@ -87,8 +95,8 @@ int	parse_redir(t_simple_cmd *cmd, t_token *token)
 	last_op = 0;
 	while (token != NULL && token->type != PIPE)
 	{
-		if ((token->type == LESS || token->type == DLESS 
-				|| token->type == GREAT || token->type == DGREAT))
+		if (token->type == LESS || token->type == DLESS 
+				|| token->type == GREAT || token->type == DGREAT)
 			last_op = token->type;
 		if (token->type == REDIR)
 		{
@@ -135,8 +143,8 @@ int	parse(void)
 	// while (simple_cmd)
 	// {
 	// 	// printf("%s %d %d\n", simple_cmd->cmd, simple_cmd->infile->value, simple_cmd->infile->value);
-	// 	printf("Args; %s\n", simple_cmd->args->value);
-	// 	break;
+	// 	if (simple_cmd->args)
+	// 		printf("Args; %s %s\n", simple_cmd->args->value, simple_cmd->args->next->value);
 	// 	simple_cmd = simple_cmd->next;
 	// }
 	return (0);

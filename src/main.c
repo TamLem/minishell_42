@@ -6,7 +6,7 @@
 /*   By: tlemma <tlemma@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/01 14:13:55 by tlemma            #+#    #+#             */
-/*   Updated: 2022/02/20 19:34:29 by tlemma           ###   ########.fr       */
+/*   Updated: 2022/02/22 14:59:23 by tlemma           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ int	main(int argc, char *argv[], char *envp[])
 	// test();
 	// return (0);
 	g_data.env = envp;
-	// line = "<<eof cat";
+	// line = "cat < $FILE";
 	line = readline(KGRN"$ "KNRM);
 	while(line && ft_strcmp(ft_strtrim(line, " \t\n"), "exit") != 0)
 	{
