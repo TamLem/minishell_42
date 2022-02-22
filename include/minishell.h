@@ -6,7 +6,7 @@
 /*   By: tlemma <tlemma@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/01 14:16:00 by tlemma            #+#    #+#             */
-/*   Updated: 2022/02/20 17:39:36 by tlemma           ###   ########.fr       */
+/*   Updated: 2022/02/22 20:13:07 by tlemma           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,7 @@ typedef	struct s_data
 	char			**env;
 	int				state;
 	int				exit_status;
+	int				rl_redisplay;
 }	t_data;
 
 t_data	g_data;

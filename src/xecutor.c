@@ -140,8 +140,8 @@ int xecute(void)
 		ret = fork();
 		if (ret == 0)
 		{
-			g_data.exit_status = child_process(simple_cmd);
-			exit(g_data.exit_status);
+			child_process(simple_cmd);
+			exit(1);
 		}
 		else
 			simple_cmd = simple_cmd->next;
@@ -150,6 +150,8 @@ int xecute(void)
 	dup2(init_stdout, STDOUT_FILENO);
 	close(init_stdin);
 	close(init_stdout);
-	waitpid(ret, NULL, 0);
+	waitpid(ret, &g_data.exit_status, 0);
+	// printf("es1 %d\n", g_data.exit_status);
+	
 	return (0);
 }

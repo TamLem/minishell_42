@@ -6,14 +6,14 @@
 #    By: tlemma <tlemma@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/08/23 18:12:02 by tlemma            #+#    #+#              #
-#    Updated: 2022/02/20 16:20:44 by tlemma           ###   ########.fr        #
+#    Updated: 2022/02/22 16:56:32 by tlemma           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME = minishell
 
 CC = gcc 
-CFLAGS = -Wall -Werror -Wextra -Wno-unused-parameter -g
+CFLAGS = -Wall -Werror -Wextra -Wno-unused-parameter -Wno-missing-braces  -g
 READLINE = -L /goinfre/tlemma/.brew/opt/readline/lib -lreadline
 READLINE_INC = -I /goinfre/tlemma/.brew/opt/readline/include
 

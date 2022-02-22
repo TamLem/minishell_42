@@ -6,7 +6,7 @@
 /*   By: tlemma <tlemma@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/01 16:26:02 by tlemma            #+#    #+#             */
-/*   Updated: 2022/02/21 17:57:08 by tlemma           ###   ########.fr       */
+/*   Updated: 2022/02/22 16:13:21 by tlemma           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -206,11 +206,11 @@ int	lex(char *input)
 	tokenize_operators();
 	del_empty_tokens();
 	temp = g_data.tokens;
-	while (temp != NULL)
-	{
-		printf("token\t");
-		printf("%d: %s\n", temp->type, temp->value);
-		temp = temp->next;
-	}
+	// while (temp != NULL)
+	// {
+	// 	printf("token\t");
+	// 	printf("%d: %s\n", temp->type, temp->value);
+	// 	temp = temp->next;
+	// }
 	return (0);
 }
