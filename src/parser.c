@@ -6,7 +6,7 @@
 /*   By: tlemma <tlemma@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/10 22:08:11 by tlemma            #+#    #+#             */
-/*   Updated: 2022/02/22 15:18:26 by tlemma           ###   ########.fr       */
+/*   Updated: 2022/02/23 16:07:25 by tlemma           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,8 @@ int	add_infiles(t_infiles **infile, char *file, int mode)
 			printf("open: %s\n", file);
 		(*infile)->dlmtr = NULL;
 	}
-	else{
+	else if (mode == DLESS)
+	{
 		(*infile)->value = 0;
 		(*infile)->dlmtr = file;
 	}

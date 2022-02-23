@@ -37,11 +37,20 @@ char	**init_args(t_simple_cmd *simple_cmd)
 	return (arg_array);
 }
 
+void	child_exit(int signum)
+{
+	(void)signum;
+	close(STDIN_FILENO);
+	close(STDOUT_FILENO);
+	exit(130);
+}
+
 int	child_process(t_simple_cmd *simple_cmd)
 {
 	char	**path;
 	char	**args;
 
+   	signal(SIGINT, child_exit);
 	if (!check_cmds(simple_cmd->cmd))
 	{
 		dprintf(2, "minishell: %s: command not found\n", simple_cmd->cmd);
@@ -71,13 +80,19 @@ int	get_infile(t_simple_cmd *simple_cmd, int fdin)
 		if (infile->value == 0)
 		{
 			fd = open("heredocs", O_RDWR | O_CREAT | O_TRUNC, S_IRWXU);
-			line = readline("heredoc> ");
+			g_data.state = 2;
+			line = readline("> ");
+			if (g_data.state == 0)
+			{
+				close(fd);
+				return (-1);
+			}
 			while (line && ft_strcmp(line, infile->dlmtr))
 			{
 				write(fd, line, ft_strlen(line));
 				write(fd, "\n", 1);
 				free(line);
-				line = readline("heredoc> ");
+				line = readline("> ");
 			}
 			free(line);
 			close(fd);
@@ -95,6 +110,7 @@ int xecute(void)
 {
 	int				fdin;
 	int				fdout;
+	int				fdpipe[2];
 	int				ret;
 	int				init_stdin;
 	int				init_stdout;
@@ -104,17 +120,28 @@ int xecute(void)
 
 	
 	ret = 0;
-	init_stdin = dup(STDIN_FILENO);
-	init_stdout = dup(STDOUT_FILENO);
 	simple_cmd = g_data.cmds;
-	cmd_len = getcmdlen(simple_cmd);
-	fdin = dup(init_stdin);
-	fdout = dup(init_stdout);
+	if (simple_cmd != NULL)
+	{
+		init_stdin = dup(STDIN_FILENO);
+		init_stdout = dup(STDOUT_FILENO);
+		cmd_len = getcmdlen(simple_cmd);
+		fdin = dup(init_stdin);
+		fdout = dup(init_stdout);
+	}
+	else
+		return (2);
 	// printf("%d %d\n", fdin, fdout);
-	int	fdpipe[2];
 	while (simple_cmd != NULL)
 	{
+		close(fdin);
 		fdin = get_infile(simple_cmd, fdin);
+		if (fdin == -1)	
+		{
+			close(fdin);
+			close(fdout);
+			break ;
+		}		/* maybe unsafe */
 		outfile = simple_cmd->outfile;
 		// dprintf(2, "fdin %d fdout %d\n", fdin, fdout);
 		dup2(fdin, 0);
@@ -137,6 +164,7 @@ int xecute(void)
 		}
 		dup2(fdout, 1);
 		close(fdout);
+		g_data.state = 1;
 		ret = fork();
 		if (ret == 0)
 		{

@@ -6,7 +6,7 @@
 /*   By: tlemma <tlemma@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/01 16:26:02 by tlemma            #+#    #+#             */
-/*   Updated: 2022/02/22 16:13:21 by tlemma           ###   ########.fr       */
+/*   Updated: 2022/02/23 16:16:46 by tlemma           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -200,6 +200,9 @@ int	lex(char *input)
 	g_data.state = 0;	
 	while (!quotes_matched(line))
 		line = ft_strjoin(line, ft_strdup(readline(KGRN"> "KNRM)));
+	line = ft_strtrim(line, "\\n\\t ");
+	if (!*line)
+		return (1);
 	tokenize(line);
 	param_expansion();
 	line = strip_quotes(line);

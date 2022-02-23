@@ -6,7 +6,7 @@
 /*   By: tlemma <tlemma@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/01 14:16:00 by tlemma            #+#    #+#             */
-/*   Updated: 2022/02/22 20:13:07 by tlemma           ###   ########.fr       */
+/*   Updated: 2022/02/23 18:27:34 by tlemma           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,18 +31,31 @@
 # include "../src/parser.h"
 # include "../src/xecutor.h"
 
+typedef struct s_env_list
+{
+	char				*name;
+	char				*value;
+	struct s_env_list	*next;
+}	t_env_list;
+
 typedef	struct s_data
 {
 	t_token			*tokens;
 	t_simple_cmd 	*cmds;
 	char			**env;
+	t_env_list		*env_list;
 	int				state;
 	int				exit_status;
 	int				rl_redisplay;
 }	t_data;
 
+
 t_data	g_data;
 void	free_dp(char **i);
 char	*ft_append_char(char *s1, char c);
+int		init_env(int argc, char **argv, char **envp);
+int		ft_export();
+
+
 
 #endif

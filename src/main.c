@@ -6,12 +6,13 @@
 /*   By: tlemma <tlemma@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/01 14:13:55 by tlemma            #+#    #+#             */
-/*   Updated: 2022/02/22 20:14:51 by tlemma           ###   ########.fr       */
+/*   Updated: 2022/02/23 18:27:19 by tlemma           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
 #include <signal.h>
+#include <termios.h>
 
 void	test()
 {
@@ -21,16 +22,51 @@ void	test()
 	printf("%x\n", O_RDONLY | O_TRUNC | O_APPEND);
 }
 
+int	change_ctrlc_sym(bool	value)
+{
+	struct termios attr;
+
+	tcgetattr(STDIN_FILENO, &attr);
+	if (value == true)
+	{
+		attr.c_lflag |= ECHOCTL;
+	}
+	if (value == false)
+	{
+		attr.c_lflag &= ~ECHOCTL;
+	}
+	tcsetattr(STDIN_FILENO, TCSANOW, &attr);
+	return (0);
+}
+
 void	sig_ctrlc(int sig)
 {
-	printf("\n");
-	rl_on_new_line();
-	rl_replace_line("", 0);
-	rl_redisplay();
-	// printf("es2 %d\n",g_data.exit_status);
-	
-	
-	// g_data.rl_redisplay = 1;
+	if (g_data.state == 2)
+	{
+		close(STDIN_FILENO);
+		close(6);
+		// rl_replace_line("", 0);
+		// if (g_data.state == 0)
+		printf("\n");
+	}
+	else
+	{
+		if (g_data.state == 1)
+			printf("^C");
+		printf("\n");	
+		// rl_replace_line("", 0);
+		rl_on_new_line();
+	}
+	if (g_data.state == 0)
+		rl_redisplay();
+	g_data.state = 0;
+}
+
+int	ft_free()
+{
+	/* To Free */
+	/* Env list */ 
+	return (0);
 }
 
 int	main(int argc, char *argv[], char *envp[])
@@ -38,39 +74,37 @@ int	main(int argc, char *argv[], char *envp[])
 	char	*line;
 	
 	g_data.env = envp;
+	init_env(argc, argv, envp);
+	ft_export();
+	return (0);
 	g_data.exit_status = 0;
+	change_ctrlc_sym(false);
  	signal(SIGINT, sig_ctrlc);
-	// signal(SIGINT, SIG_DFL);
    	signal(SIGQUIT, SIG_IGN);
 	line = NULL;
-	// g_data.rl_redisplay = 0;
+	g_data.state = 0;
 	while(ft_strcmp(ft_strtrim(line, " \t\n"), "exit") != 0)
 	{
-		// if (g_data.rl_redisplay)
-		// {
-		// 	line = readline(NULL);
-		// 	g_data.rl_redisplay = 0;
-		// }
-		// else
 		line = readline(KGRN"$ "KNRM);
 		if (line)
 		{
-			add_history(line);
-			lex(line);
+			if (*line)
+				add_history(line);
+			if(!lex(line))
+			{
+				parse();
+				xecute();
+			}
 			free(line);
-			parse();
-			xecute();
+			g_data.state = 0;
 		}
 		else
 		{
-			printf(KGRN"\033[A$ "KNRM);
-			printf("exit\n");
-			rl_replace_line("", 0);
-			rl_redisplay();
 			free(line);
 			break ;
 		}
 		// free(line);
 	}
+	change_ctrlc_sym(true);
 	return (0);
 }
