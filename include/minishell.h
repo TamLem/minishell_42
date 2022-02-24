@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tlemma <tlemma@student.42.fr>              +#+  +:+       +#+        */
+/*   By: nlenoch <nlenoch@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/01 14:16:00 by tlemma            #+#    #+#             */
-/*   Updated: 2022/02/23 18:27:34 by tlemma           ###   ########.fr       */
+/*   Updated: 2022/02/24 11:42:26 by nlenoch          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,10 +31,13 @@
 # include "../src/parser.h"
 # include "../src/xecutor.h"
 
+typedef enum {false, true = !false} bool; 
+
 typedef struct s_env_list
 {
 	char				*name;
 	char				*value;
+	bool				is_env;
 	struct s_env_list	*next;
 }	t_env_list;
 
