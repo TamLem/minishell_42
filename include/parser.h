@@ -6,7 +6,7 @@
 /*   By: tlemma <tlemma@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/10 22:08:29 by tlemma            #+#    #+#             */
-/*   Updated: 2022/02/18 15:40:03 by tlemma           ###   ########.fr       */
+/*   Updated: 2022/02/24 16:52:18 by tlemma           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,7 @@ typedef struct s_heredocs
 	int					value;
 	struct s_heredocs	*next;
 }			t_heredocs;
+
 typedef struct s_simple_cmd
 {
 	char				*cmd;

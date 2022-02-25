@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: nlenoch <nlenoch@student.42.fr>            +#+  +:+       +#+         #
+#    By: tlemma <tlemma@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/08/23 18:12:02 by tlemma            #+#    #+#              #
-#    Updated: 2022/02/23 20:22:55 by nlenoch          ###   ########.fr        #
+#    Updated: 2022/02/25 10:54:12 by tlemma           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -14,8 +14,8 @@ NAME = minishell
 
 CC = gcc 
 CFLAGS = -Wall -Werror -Wextra -Wno-unused-parameter -Wno-missing-braces  -g
-READLINE = -L /Users/nlenoch/.brew/opt/readline/lib -lreadline
-READLINE_INC = -I /Users/nlenoch/.brew/opt/readline/include
+READLINE = -L /goinfre/tlemma/.brew/opt/readline/lib -lreadline
+READLINE_INC = -I /goinfre/tlemma/.brew/opt/readline/include
 
 RM = rm -rf
 AR = ar rs
@@ -32,7 +32,7 @@ $(NAME): $(addprefix $(SDIR)/, $(SRCS))
 	@mkdir -p $(ODIR)
 	$(CC) $(CFLAGS) $(READLINE_INC) -I ./include/ -c $^
 	@mv $(OBJS) $(ODIR)
-	$(CC) $(CFLAGS) $(addprefix $(ODIR)/, $(OBJS)) $(READLINE_INC) $(READLINE) -lreadline libft/libft.a -o $(NAME)
+	$(CC) $(CFLAGS) $(addprefix $(ODIR)/, $(OBJS)) $(READLINE_INC) $(READLINE) libft/libft.a -o $(NAME)
 	@echo $(NAME) created!\\n
 
 all: $(NAME)

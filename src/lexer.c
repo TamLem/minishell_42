@@ -6,12 +6,12 @@
 /*   By: tlemma <tlemma@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/01 16:26:02 by tlemma            #+#    #+#             */
-/*   Updated: 2022/02/23 16:16:46 by tlemma           ###   ########.fr       */
+/*   Updated: 2022/02/25 10:56:22 by tlemma           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../include/minishell.h"
 #include "lexer.h"
+#include "minishell.h"
 
 int	tokenize(char *line)
 {
@@ -200,7 +200,7 @@ int	lex(char *input)
 	g_data.state = 0;	
 	while (!quotes_matched(line))
 		line = ft_strjoin(line, ft_strdup(readline(KGRN"> "KNRM)));
-	line = ft_strtrim(line, "\\n\\t ");
+	line = ft_strtrim(line, "\n\t ");
 	if (!*line)
 		return (1);
 	tokenize(line);

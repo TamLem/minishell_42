@@ -6,11 +6,11 @@
 /*   By: tlemma <tlemma@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/01 14:13:55 by tlemma            #+#    #+#             */
-/*   Updated: 2022/02/23 18:27:19 by tlemma           ###   ########.fr       */
+/*   Updated: 2022/02/25 10:48:35 by tlemma           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../include/minishell.h"
+#include "minishell.h"
 #include <signal.h>
 #include <termios.h>
 
@@ -54,7 +54,7 @@ void	sig_ctrlc(int sig)
 		if (g_data.state == 1)
 			printf("^C");
 		printf("\n");	
-		// rl_replace_line("", 0);
+		rl_replace_line("", 0);
 		rl_on_new_line();
 	}
 	if (g_data.state == 0)
@@ -74,9 +74,9 @@ int	main(int argc, char *argv[], char *envp[])
 	char	*line;
 	
 	g_data.env = envp;
-	init_env(argc, argv, envp);
-	ft_export();
-	return (0);
+	// init_env(argc, argv, envp);
+	// ft_export();
+	// return (0);
 	g_data.exit_status = 0;
 	change_ctrlc_sym(false);
  	signal(SIGINT, sig_ctrlc);

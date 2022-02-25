@@ -1,4 +1,4 @@
-#include "../include/minishell.h"
+#include "minishell.h"
 #include "xecutor.h"
 
 int	getcmdlen(t_simple_cmd *cmds)
@@ -106,28 +106,47 @@ int	get_infile(t_simple_cmd *simple_cmd, int fdin)
 	return (fdin);
 }
 
+
+int	get_outfile(t_simple_cmd *simple_cmd, int init_std[2], int *fdout)
+{
+	t_outfiles	*outfile;
+
+	outfile = simple_cmd->outfile;
+	while (outfile && outfile->next)
+		outfile = outfile->next;
+	if (outfile)
+		*fdout = outfile->value;
+	else
+		*fdout = dup(init_std[1]);
+	return (0);
+}
+
+int	run_cmd(void)
+{
+	return (0);
+}
+
 int xecute(void)
 {
 	int				fdin;
 	int				fdout;
 	int				fdpipe[2];
 	int				ret;
-	int				init_stdin;
-	int				init_stdout;
+	int				init_std[2];
 	int				cmd_len;
 	t_simple_cmd	*simple_cmd;
-	t_outfiles		*outfile;
+	// t_outfiles		*outfile;
 
 	
 	ret = 0;
 	simple_cmd = g_data.cmds;
+	cmd_len = getcmdlen(simple_cmd);
 	if (simple_cmd != NULL)
 	{
-		init_stdin = dup(STDIN_FILENO);
-		init_stdout = dup(STDOUT_FILENO);
-		cmd_len = getcmdlen(simple_cmd);
-		fdin = dup(init_stdin);
-		fdout = dup(init_stdout);
+		init_std[0] = dup(STDIN_FILENO);
+		init_std[1] = dup(STDOUT_FILENO);
+		fdin = dup(init_std[0]);
+		fdout = dup(init_std[1]);
 	}
 	else
 		return (2);
@@ -136,25 +155,12 @@ int xecute(void)
 	{
 		close(fdin);
 		fdin = get_infile(simple_cmd, fdin);
-		if (fdin == -1)	
-		{
-			close(fdin);
-			close(fdout);
-			break ;
-		}		/* maybe unsafe */
-		outfile = simple_cmd->outfile;
-		// dprintf(2, "fdin %d fdout %d\n", fdin, fdout);
-		dup2(fdin, 0);
+		if (fdin == -1 && close(fdin) && close(fdout))	
+				return (2);	/* maybe unsafe */
+		dup2(fdin, STDIN_FILENO);
 		close(fdin);
 		if (simple_cmd->next == NULL)
-		{
-			while (outfile && outfile->next)
-				outfile = outfile->next;
-			if (outfile)
-				fdout = outfile->value;
-			else
-				fdout = dup(init_stdout);
-		}
+			get_outfile(simple_cmd, init_std, &fdout);
 		else
 		{
 			if(pipe(fdpipe) == -1)
@@ -162,7 +168,7 @@ int xecute(void)
 			fdout = fdpipe[1];
 			fdin = fdpipe[0];
 		}
-		dup2(fdout, 1);
+		dup2(fdout, STDOUT_FILENO);
 		close(fdout);
 		g_data.state = 1;
 		ret = fork();
@@ -174,10 +180,10 @@ int xecute(void)
 		else
 			simple_cmd = simple_cmd->next;
 	}
-	dup2(init_stdin, STDIN_FILENO);
-	dup2(init_stdout, STDOUT_FILENO);
-	close(init_stdin);
-	close(init_stdout);
+	dup2(init_std[0], STDIN_FILENO);
+	dup2(init_std[1], STDOUT_FILENO);
+	close(init_std[0]);
+	close(init_std[1]);
 	waitpid(ret, &g_data.exit_status, 0);
 	// printf("es1 %d\n", g_data.exit_status);
 	

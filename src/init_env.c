@@ -1,4 +1,4 @@
-# include "../include/minishell.h"
+# include "minishell.h"
 
 int	init_env(int argc, char **argv, char **envp)
 {	

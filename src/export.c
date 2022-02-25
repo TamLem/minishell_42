@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   export.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nlenoch <nlenoch@student.42.fr>            +#+  +:+       +#+        */
+/*   By: tlemma <tlemma@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/08 12:32:47 by nlenoch           #+#    #+#             */
-/*   Updated: 2022/02/24 12:25:19 by nlenoch          ###   ########.fr       */
+/*   Updated: 2022/02/24 14:44:42 by tlemma           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../include/minishell.h"
+#include "minishell.h"
 
 void	order_env(char **env)
 {
@@ -97,7 +97,7 @@ int	add_env_args(int argc, char *argv[], char *envp[])
 			if (assign)
 			{
 				tmp_env->name = ft_substr(*argv, 0, assign - *argv - 1);
-				tmp_env->value = ft_substr(*argv, assign + 1, ft_strlen(assign + 1));
+				tmp_env->value = ft_substr(*argv, ft_strlen(*argv) - ft_strlen(assign) + 1, ft_strlen(assign + 1));
 				tmp_env->is_env = true;
 			}
 			else

@@ -6,12 +6,12 @@
 /*   By: tlemma <tlemma@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/10 21:26:47 by tlemma            #+#    #+#             */
-/*   Updated: 2022/02/20 16:18:28 by tlemma           ###   ########.fr       */
+/*   Updated: 2022/02/24 16:47:42 by tlemma           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "lexer.h"
-#include "../include/minishell.h"
+#include "minishell.h"
 
 int	get_state(char pos);
 
@@ -24,7 +24,7 @@ bool	is_WSPACE(char c)
 
 bool	is_operator(char c)
 {
-	if (c == LESS || c == GREAT || c == PIPE)
+	if (c == LESS || c == GREAT || c == PIPE) 
 		return (true);
 	return (false);
 }

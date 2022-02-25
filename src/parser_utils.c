@@ -6,12 +6,12 @@
 /*   By: tlemma <tlemma@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/21 16:39:24 by tlemma            #+#    #+#             */
-/*   Updated: 2022/02/23 09:48:27 by tlemma           ###   ########.fr       */
+/*   Updated: 2022/02/24 13:17:24 by tlemma           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "parser.h"
-#include "../include/minishell.h"
+#include "minishell.h"
 
 bool	is_io_modifier(int	type)
 {

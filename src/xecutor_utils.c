@@ -6,11 +6,11 @@
 /*   By: tlemma <tlemma@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/17 19:46:04 by tlemma            #+#    #+#             */
-/*   Updated: 2022/02/20 17:26:06 by tlemma           ###   ########.fr       */
+/*   Updated: 2022/02/24 13:17:12 by tlemma           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../include/minishell.h"
+#include "minishell.h"
 #include "xecutor.h"
 
 static char	*ft_strjoin2(char *s1, char *s2)

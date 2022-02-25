@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nlenoch <nlenoch@student.42.fr>            +#+  +:+       +#+        */
+/*   By: tlemma <tlemma@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/01 14:16:00 by tlemma            #+#    #+#             */
-/*   Updated: 2022/02/24 11:42:26 by nlenoch          ###   ########.fr       */
+/*   Updated: 2022/02/24 14:42:08 by tlemma           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,12 +26,11 @@
 # include <readline/readline.h>
 # include <readline/history.h>
 # include <fcntl.h>
+# include <stdbool.h>
 # include "../libft/libft.h"
-# include "../src/lexer.h"
-# include "../src/parser.h"
-# include "../src/xecutor.h"
-
-typedef enum {false, true = !false} bool; 
+# include "lexer.h"
+# include "parser.h"
+# include "xecutor.h"
 
 typedef struct s_env_list
 {
@@ -58,7 +57,6 @@ void	free_dp(char **i);
 char	*ft_append_char(char *s1, char c);
 int		init_env(int argc, char **argv, char **envp);
 int		ft_export();
-
 
 
 #endif

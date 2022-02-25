@@ -6,11 +6,11 @@
 /*   By: tlemma <tlemma@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/03 17:53:52 by tlemma            #+#    #+#             */
-/*   Updated: 2022/02/20 17:13:01 by tlemma           ###   ########.fr       */
+/*   Updated: 2022/02/24 13:17:17 by tlemma           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../include/minishell.h"
+#include "minishell.h"
 
 void	ft_malloc(size_t size)
 {
