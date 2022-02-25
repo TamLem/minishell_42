@@ -24,6 +24,12 @@
  	- order of heredocs and dir
  	- when quoted string is a file name with spaces, and the filename is
      	- saved in a variable
+   	- ls > file | wc 
+     	- empty fd passed to wc = 0 0 0 
+   	- ls > file | echo hello > file
+     	- only written one by first cmd
+   	- export twice
+   	- export multiple args
 ## Done
 
 

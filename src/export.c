@@ -6,10 +6,11 @@
 /*   By: tlemma <tlemma@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/08 12:32:47 by nlenoch           #+#    #+#             */
-/*   Updated: 2022/02/24 14:44:42 by tlemma           ###   ########.fr       */
+/*   Updated: 2022/02/25 19:25:13 by tlemma           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include "xecutor.h"
 #include "minishell.h"
 
 void	order_env(char **env)
@@ -62,7 +63,21 @@ void    print_env_or_export(char *cmd, char **env_arr)
     }
 }
 
-int	env(int argc, char *argv[], char *envp[])
+t_env_list *ft_getenv(char *name)
+{
+	t_env_list *tmp_env;
+
+	tmp_env = g_data.env_list;
+	while (tmp_env != NULL)
+	{
+		if ((ft_strcmp(name, tmp_env->name)) == 0)
+			return (tmp_env);
+		tmp_env = tmp_env->next;
+	}
+	return (NULL);
+}
+
+int	ft_env(int argc, char *argv[], char *envp[])
 {
 	if (argc == 1)
 	{
@@ -80,8 +95,11 @@ void	print_export(char **exports)
 int	add_env_args(int argc, char *argv[], char *envp[])
 {
     t_env_list  *tmp_env;
+	t_env_list 	*existing;
     int			i;
 	char		*assign;
+	char		*name;
+	char		*value;
 
     i = 0;
     tmp_env = g_data.env_list;
@@ -90,14 +108,22 @@ int	add_env_args(int argc, char *argv[], char *envp[])
 	while (*argv)
 	{
 		assign = ft_strchr(*argv, '=');
-		if (**argv)
+		name = ft_substr(*argv, 0, assign - *argv - 1);
+		value = ft_substr(*argv, ft_strlen(*argv) - ft_strlen(assign) + 1, ft_strlen(assign + 1));
+		existing = ft_getenv(name);
+		if (existing && existing->value)
+		{
+			free(existing->value);
+			existing->value = value;
+		}
+		else if (**argv)
 		{
    	 		tmp_env->next = malloc(sizeof(t_env_list));
 			tmp_env = tmp_env->next;
 			if (assign)
 			{
-				tmp_env->name = ft_substr(*argv, 0, assign - *argv - 1);
-				tmp_env->value = ft_substr(*argv, ft_strlen(*argv) - ft_strlen(assign) + 1, ft_strlen(assign + 1));
+				tmp_env->name = name;
+				tmp_env->value = value;
 				tmp_env->is_env = true;
 			}
 			else

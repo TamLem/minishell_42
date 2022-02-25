@@ -6,7 +6,7 @@
 /*   By: tlemma <tlemma@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/01 14:13:55 by tlemma            #+#    #+#             */
-/*   Updated: 2022/02/25 10:48:35 by tlemma           ###   ########.fr       */
+/*   Updated: 2022/02/25 13:47:21 by tlemma           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,6 @@ void	sig_ctrlc(int sig)
 	if (g_data.state == 2)
 	{
 		close(STDIN_FILENO);
-		close(6);
 		// rl_replace_line("", 0);
 		// if (g_data.state == 0)
 		printf("\n");

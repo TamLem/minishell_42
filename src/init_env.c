@@ -25,3 +25,4 @@ int	init_env(int argc, char **argv, char **envp)
 	}
 	return (0);
 }
+

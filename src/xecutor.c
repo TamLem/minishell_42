@@ -13,29 +13,6 @@ int	getcmdlen(t_simple_cmd *cmds)
 	}
 	return (len);
 }
-char	**init_args(t_simple_cmd *simple_cmd)
-{
-	int		i;
-	int		len;
-	char	**arg_array;
-	t_args 	*args;
-
-	i = 0;
-	len = 0;
-	args = simple_cmd->args;
-	while(args && ++len)
-		args = args->next;
-	arg_array = malloc(sizeof(char *) * (len + 1));
-	arg_array[len] = NULL;
-	args = simple_cmd->args;
-	while (i < len)
-	{
-		arg_array[i] = args->value;
-		args = args->next;
-		i++;
-	}
-	return (arg_array);
-}
 
 void	child_exit(int signum)
 {
@@ -45,11 +22,37 @@ void	child_exit(int signum)
 	exit(130);
 }
 
+int	exec_builtin(int argc, char **argv, char **env)
+{
+	int	res;
+
+	res = 0;
+	if (ft_strcmp(argv[0], "cd") == 0)
+		res = ft_cd(argc, argv, env);
+	else if (ft_strcmp(argv[0], "echo") == 0)
+		res = ft_echo(argc, argv, env);
+	else if (ft_strcmp(argv[0], "env") == 0)
+		res = ft_env(argc, argv, env);
+	else if (ft_strcmp(argv[0], "export") == 0)
+		res = ft_export(argc, argv, env);
+	else if (ft_strcmp(argv[0], "unset") == 0)
+		res = ft_unset(argc, argv, env);
+	else if (ft_strcmp(argv[0], "pwd") == 0)
+		res = ft_pwd(argc, argv, env);
+	else if (ft_strcmp(argv[0], "exit") == 0)
+		res = ft_exit(argc, argv, env);
+	return (res);
+}
+
 int	child_process(t_simple_cmd *simple_cmd)
 {
 	char	**path;
 	char	**args;
+	int		argc;
+	int		res;
 
+	res = 0;
+	args = NULL;
    	signal(SIGINT, child_exit);
 	if (!check_cmds(simple_cmd->cmd))
 	{
@@ -57,19 +60,50 @@ int	child_process(t_simple_cmd *simple_cmd)
 		return (1);
 	}
 	path = ft_getpath(g_data.env, simple_cmd->cmd);
-	args = init_args(simple_cmd);
-	while (execve(*path, args, g_data.env) && *path)
+	argc = init_args(simple_cmd, &args);
+	if (is_builtin(simple_cmd->cmd))
+		res = exec_builtin(argc, args, g_data.env); //env save to str_arr
+	else
+	{
+		while (execve(*path, args, g_data.env) && *path)
 			path++;
+	}
 	free_dp(args);
 	free_dp(path);
 	close(STDIN_FILENO);
 	close(STDOUT_FILENO);
-	return (0);
+	return (res);
+}
+
+int read_heredocs(char	*dlmtr)
+{
+	int			fd;
+	char		*line;
+
+	line = NULL;
+	fd = open("heredocs", O_RDWR | O_CREAT | O_TRUNC, S_IRWXU);
+	g_data.state = 2;
+	line = readline("> ");
+	if (g_data.state == 0)
+	{
+		close(fd);
+		return (-1);
+	}
+	while (line && ft_strcmp(line, dlmtr))
+	{
+		write(fd, line, ft_strlen(line));
+		write(fd, "\n", 1);
+		free(line);
+		line = readline("> ");
+	}
+	free(line);
+	close(fd);
+	fd = open("heredocs", O_RDONLY);
+	return (fd);
 }
 
 int	get_infile(t_simple_cmd *simple_cmd, int fdin)
 {
-	int			fd;
 	char		*line;
 	t_infiles	*infile;
 
@@ -77,38 +111,23 @@ int	get_infile(t_simple_cmd *simple_cmd, int fdin)
 	line = NULL;
 	while (infile)
 	{
+		close(fdin);
 		if (infile->value == 0)
-		{
-			fd = open("heredocs", O_RDWR | O_CREAT | O_TRUNC, S_IRWXU);
-			g_data.state = 2;
-			line = readline("> ");
-			if (g_data.state == 0)
-			{
-				close(fd);
-				return (-1);
-			}
-			while (line && ft_strcmp(line, infile->dlmtr))
-			{
-				write(fd, line, ft_strlen(line));
-				write(fd, "\n", 1);
-				free(line);
-				line = readline("> ");
-			}
-			free(line);
-			close(fd);
-			fd = open("heredocs", O_RDONLY);
-			infile->value = fd;
-		}
+			fdin = read_heredocs(infile->dlmtr);
+		else
+			fdin = infile->value;
+		if (fdin == -1)
+			return (-1);
 		// dprintf(2, "fdin %d\n", infile->value);
-		fdin = infile->value;
 		infile = infile->next;
 	}
 	return (fdin);
 }
 
 
-int	get_outfile(t_simple_cmd *simple_cmd, int init_std[2], int *fdout)
+int	get_outfile(t_simple_cmd *simple_cmd, int stdout_init, int *fdout, int *fdin)
 {
+	int			fdpipe[2];
 	t_outfiles	*outfile;
 
 	outfile = simple_cmd->outfile;
@@ -116,60 +135,62 @@ int	get_outfile(t_simple_cmd *simple_cmd, int init_std[2], int *fdout)
 		outfile = outfile->next;
 	if (outfile)
 		*fdout = outfile->value;
+	else if(simple_cmd->next == NULL)
+		*fdout = dup2(stdout_init, *fdout);
+	if (simple_cmd->next != NULL)
+	{
+		if(pipe(fdpipe) == -1)
+			return (4);
+		*fdout = fdpipe[1];
+		*fdin = fdpipe[0];
+	}
+	if (outfile != NULL)
+		dup2(outfile->value, STDOUT_FILENO);
 	else
-		*fdout = dup(init_std[1]);
+		dup2(*fdout, STDOUT_FILENO);
+	close(*fdout);
 	return (0);
 }
 
-int	run_cmd(void)
+void init_fds(int fd[4])
 {
-	return (0);
+	fd[STDIN_INIT] = dup(STDIN_FILENO);
+	fd[STDOUT_INIT] = dup(STDOUT_FILENO);
+	fd[IN] = dup(fd[STDIN_INIT]);
+	fd[OUT] = dup(fd[STDOUT_INIT]);
+}
+
+void reset_fds(int fd[4])
+{
+	dup2(fd[STDIN_INIT], STDIN_FILENO);
+	dup2(fd[STDOUT_INIT], STDOUT_FILENO);
+	close(fd[STDIN_INIT]);
+	close(fd[STDOUT_INIT]);
 }
 
 int xecute(void)
 {
-	int				fdin;
-	int				fdout;
-	int				fdpipe[2];
 	int				ret;
-	int				init_std[2];
 	int				cmd_len;
+	int				fd[4];
 	t_simple_cmd	*simple_cmd;
-	// t_outfiles		*outfile;
 
 	
 	ret = 0;
 	simple_cmd = g_data.cmds;
 	cmd_len = getcmdlen(simple_cmd);
 	if (simple_cmd != NULL)
-	{
-		init_std[0] = dup(STDIN_FILENO);
-		init_std[1] = dup(STDOUT_FILENO);
-		fdin = dup(init_std[0]);
-		fdout = dup(init_std[1]);
-	}
+		init_fds(fd);
 	else
 		return (2);
-	// printf("%d %d\n", fdin, fdout);
 	while (simple_cmd != NULL)
 	{
-		close(fdin);
-		fdin = get_infile(simple_cmd, fdin);
-		if (fdin == -1 && close(fdin) && close(fdout))	
+		fd[IN] = get_infile(simple_cmd, fd[IN]);
+		if (fd[IN] == -1 && close(fd[IN]) && close(fd[OUT]))	
 				return (2);	/* maybe unsafe */
-		dup2(fdin, STDIN_FILENO);
-		close(fdin);
-		if (simple_cmd->next == NULL)
-			get_outfile(simple_cmd, init_std, &fdout);
-		else
-		{
-			if(pipe(fdpipe) == -1)
-				return (4);
-			fdout = fdpipe[1];
-			fdin = fdpipe[0];
-		}
-		dup2(fdout, STDOUT_FILENO);
-		close(fdout);
+		dup2(fd[IN], STDIN_FILENO);
+		close(fd[IN]);
+		get_outfile(simple_cmd, fd[STDOUT_INIT], &fd[OUT], &fd[IN]);
 		g_data.state = 1;
 		ret = fork();
 		if (ret == 0)
@@ -180,12 +201,6 @@ int xecute(void)
 		else
 			simple_cmd = simple_cmd->next;
 	}
-	dup2(init_std[0], STDIN_FILENO);
-	dup2(init_std[1], STDOUT_FILENO);
-	close(init_std[0]);
-	close(init_std[1]);
 	waitpid(ret, &g_data.exit_status, 0);
-	// printf("es1 %d\n", g_data.exit_status);
-	
 	return (0);
 }
