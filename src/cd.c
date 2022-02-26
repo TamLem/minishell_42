@@ -1,42 +1,24 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   echo.c                                             :+:      :+:    :+:   */
+/*   cd.c                                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: tlemma <tlemma@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/02/01 12:22:51 by nlenoch           #+#    #+#             */
-/*   Updated: 2022/02/26 12:40:01 by tlemma           ###   ########.fr       */
+/*   Created: 2022/02/01 18:52:36 by nlenoch           #+#    #+#             */
+/*   Updated: 2022/02/26 12:40:43 by tlemma           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-// string can be in "qotes" or without
-// if string includes '$PWD' return print current working directory with rest of string
-// if option '-n' do not print a newline
-#include <stdio.h>
-#include <stdlib.h>
-
 int	main(int argc, char **argv)
 {
-	int i;
+	// char *pwd;
 
-	i = 1;
-	if ((ft_strcmp(argv[0], "-n")) == 0)
+	// printf("%s\n", getwd(pwd));
+	if (ft_strcmp(argv[1], "cd") == 0)
 	{
-		while (argv[i])
-		{
-			printf("%s", argv[i]);
-			i++;
-		}
-	}
-	else
-	{
-		while (argv[i])
-		{
-			printf("%s", argv[i]);
-			i++;
-		}
-		printf("\n");
+		chdir(argv[2]);
+		// printf("%s\n", getwd(pwd));
 	}
 	return (0);
 }

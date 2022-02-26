@@ -22,25 +22,31 @@ void	child_exit(int signum)
 	exit(130);
 }
 
-int	exec_builtin(int argc, char **argv, char **env)
+int	exec_builtin(t_simple_cmd *simple_cmd)
 {
 	int	res;
+	int	argc;
+	char	**argv;
+	char	**env;
 
 	res = 0;
-	if (ft_strcmp(argv[0], "cd") == 0)
-		res = ft_cd(argc, argv, env);
-	else if (ft_strcmp(argv[0], "echo") == 0)
-		res = ft_echo(argc, argv, env);
-	else if (ft_strcmp(argv[0], "env") == 0)
+	argv = NULL;
+	env = g_data.env;
+	argc = init_args(simple_cmd, &argv);
+	// // if (ft_strcmp(argv[0], "cd") == 0)
+	// // 	res = ft_cd(argc, argv, env);
+	// else if (ft_strcmp(argv[0], "echo") == 0)
+	// 	res = ft_echo(argc, argv, env);
+	if (ft_strcmp(argv[0], "env") == 0)
 		res = ft_env(argc, argv, env);
 	else if (ft_strcmp(argv[0], "export") == 0)
 		res = ft_export(argc, argv, env);
 	else if (ft_strcmp(argv[0], "unset") == 0)
 		res = ft_unset(argc, argv, env);
-	else if (ft_strcmp(argv[0], "pwd") == 0)
-		res = ft_pwd(argc, argv, env);
-	else if (ft_strcmp(argv[0], "exit") == 0)
-		res = ft_exit(argc, argv, env);
+	// else if (ft_strcmp(argv[0], "pwd") == 0)
+	// 	res = ft_pwd();
+	// else if (ft_strcmp(argv[0], "exit") == 0)
+	// 	res = ft_exit(argc, argv, env);
 	return (res);
 }
 
@@ -61,13 +67,8 @@ int	child_process(t_simple_cmd *simple_cmd)
 	}
 	path = ft_getpath(g_data.env, simple_cmd->cmd);
 	argc = init_args(simple_cmd, &args);
-	if (is_builtin(simple_cmd->cmd))
-		res = exec_builtin(argc, args, g_data.env); //env save to str_arr
-	else
-	{
-		while (execve(*path, args, g_data.env) && *path)
-			path++;
-	}
+	while (execve(*path, args, g_data.env) && *path)
+		path++;
 	free_dp(args);
 	free_dp(path);
 	close(STDIN_FILENO);
@@ -192,14 +193,18 @@ int xecute(void)
 		close(fd[IN]);
 		get_outfile(simple_cmd, fd[STDOUT_INIT], &fd[OUT], &fd[IN]);
 		g_data.state = 1;
-		ret = fork();
-		if (ret == 0)
-		{
-			child_process(simple_cmd);
-			exit(1);
-		}
+		if (is_builtin(simple_cmd->cmd))
+			exec_builtin(simple_cmd);
 		else
-			simple_cmd = simple_cmd->next;
+		{
+			ret = fork();
+			if (ret == 0)
+			{
+				child_process(simple_cmd);
+				exit(1);
+			}
+		}
+		simple_cmd = simple_cmd->next;
 	}
 	waitpid(ret, &g_data.exit_status, 0);
 	return (0);

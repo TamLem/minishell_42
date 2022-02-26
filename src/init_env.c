@@ -14,6 +14,7 @@ int	init_env(int argc, char **argv, char **envp)
 		split = ft_split(*envp, '=');
 		tmp_env->name = split[0];
 		tmp_env->value = split[1];
+		tmp_env->is_env = true;
 		tmp_env->next = malloc(sizeof(t_env_list));
 		if (!tmp_env->next)
 			return (4);

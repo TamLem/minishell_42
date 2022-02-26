@@ -6,30 +6,30 @@
 /*   By: tlemma <tlemma@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/08 12:32:47 by nlenoch           #+#    #+#             */
-/*   Updated: 2022/02/25 19:25:13 by tlemma           ###   ########.fr       */
+/*   Updated: 2022/02/26 13:38:05 by tlemma           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "xecutor.h"
 #include "minishell.h"
 
-void	order_env(char **env)
+void	order_env(char ***env)
 {
 	char	*tmp;
 	int		i;
 	int		j;
 
 	i = 0;
-	while (env[i])
+	while ((*env)[i])
 	{
 		j = 0;
-		while (env[j])
+		while ((*env)[j])
 		{
-			if (ft_strcmp(env[i], env[j]) < 0)
+			if (ft_strcmp((*env)[i], (*env)[j]) < 0)
 			{
-				tmp = env[i];
-				env[i] = env[j];
-				env[j] = tmp;
+				tmp = (*env)[i];
+				(*env)[i] = (*env)[j];
+				(*env)[j] = tmp;
 			}
 			j++;
 		}
@@ -42,21 +42,21 @@ void    print_env_or_export(char *cmd, char **env_arr)
     t_env_list  *tmp_env;
 
     tmp_env = g_data.env_list;
-    if (ft_strcmp(cmd, "env"))
+    if (ft_strcmp(cmd, "env") == 0)
     {
         while (tmp_env != NULL)
         {
 			if (tmp_env->is_env)
-            	printf("%s=%s", tmp_env->name, tmp_env->value);
+            	dprintf(2, "%s=%s\n", tmp_env->name, tmp_env->value);
             tmp_env = tmp_env->next;
         }
     }
     else
     {
-        order_env(env_arr);
+        order_env(&env_arr);
 		while (*env_arr)
 		{
-			printf("declare -x %s\n", *env_arr);
+			dprintf(2, "declare -x %s\n", *env_arr);
 			env_arr++;
 		}
 		free_dp(env_arr);

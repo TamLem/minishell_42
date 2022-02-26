@@ -6,7 +6,7 @@
 /*   By: tlemma <tlemma@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/01 14:13:55 by tlemma            #+#    #+#             */
-/*   Updated: 2022/02/25 13:47:21 by tlemma           ###   ########.fr       */
+/*   Updated: 2022/02/26 12:20:27 by tlemma           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,6 +73,7 @@ int	main(int argc, char *argv[], char *envp[])
 	char	*line;
 	
 	g_data.env = envp;
+	init_env(argc, argv, envp);
 	// init_env(argc, argv, envp);
 	// ft_export();
 	// return (0);
