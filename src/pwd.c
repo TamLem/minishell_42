@@ -1,20 +1,29 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   exit.c                                             :+:      :+:    :+:   */
+/*   pwd.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: tlemma <tlemma@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/02/08 12:33:19 by nlenoch           #+#    #+#             */
-/*   Updated: 2022/02/25 19:28:18 by tlemma           ###   ########.fr       */
+/*   Created: 2022/02/08 12:22:28 by nlenoch           #+#    #+#             */
+/*   Updated: 2022/02/26 16:15:12 by tlemma           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-/* exits bash through either sending a signal or killing processes */
+#include "minishell.h"
 #include "xecutor.h"
 
-int ft_exit(int argc, char **argv)
+int	ft_pwd(void)
 {
-	exit(0);
+	char	*path;
+
+	path = getcwd(NULL, 0);
+	if (path == NULL)
+	{
+		printf("error\n");
+		return (1);
+	}
+	printf("%s\n", path);
+	free(path);
 	return (0);
 }

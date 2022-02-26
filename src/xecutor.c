@@ -24,8 +24,8 @@ void	child_exit(int signum)
 
 int	exec_builtin(t_simple_cmd *simple_cmd)
 {
-	int	res;
-	int	argc;
+	int		res;
+	int		argc;
 	char	**argv;
 	char	**env;
 
@@ -33,18 +33,18 @@ int	exec_builtin(t_simple_cmd *simple_cmd)
 	argv = NULL;
 	env = g_data.env;
 	argc = init_args(simple_cmd, &argv);
-	// // if (ft_strcmp(argv[0], "cd") == 0)
-	// // 	res = ft_cd(argc, argv, env);
-	// else if (ft_strcmp(argv[0], "echo") == 0)
-	// 	res = ft_echo(argc, argv, env);
-	if (ft_strcmp(argv[0], "env") == 0)
+	if (ft_strcmp(argv[0], "cd") == 0)
+		res = ft_cd(argc, argv, env);
+	else if (ft_strcmp(argv[0], "echo") == 0)
+		res = ft_echo(argc, argv);
+	else if (ft_strcmp(argv[0], "env") == 0)
 		res = ft_env(argc, argv, env);
 	else if (ft_strcmp(argv[0], "export") == 0)
 		res = ft_export(argc, argv, env);
 	else if (ft_strcmp(argv[0], "unset") == 0)
 		res = ft_unset(argc, argv, env);
-	// else if (ft_strcmp(argv[0], "pwd") == 0)
-	// 	res = ft_pwd();
+	else if (ft_strcmp(argv[0], "pwd") == 0)
+		res = ft_pwd();
 	// else if (ft_strcmp(argv[0], "exit") == 0)
 	// 	res = ft_exit(argc, argv, env);
 	return (res);

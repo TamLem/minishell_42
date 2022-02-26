@@ -30,6 +30,8 @@
      	- only written one by first cmd
    	- export twice
    	- export multiple args
+   	- passsing empty quotes to programs
+     	- check export
 ## Done
 
 

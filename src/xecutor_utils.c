@@ -6,14 +6,14 @@
 /*   By: tlemma <tlemma@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/17 19:46:04 by tlemma            #+#    #+#             */
-/*   Updated: 2022/02/25 18:26:24 by tlemma           ###   ########.fr       */
+/*   Updated: 2022/02/26 18:30:24 by tlemma           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 #include "xecutor.h"
 
-static char	*ft_strjoin2(char *s1, char *s2)
+char	*ft_strjoin2(char *s1, char *s2)
 {
 	char	*ret;
 	char	*cp_ret;

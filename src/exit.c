@@ -1,25 +1,21 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   env.c                                              :+:      :+:    :+:   */
+/*   exit.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: tlemma <tlemma@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/02/08 12:33:05 by nlenoch           #+#    #+#             */
-/*   Updated: 2022/02/23 18:21:05 by tlemma           ###   ########.fr       */
+/*   Created: 2022/02/08 12:33:19 by nlenoch           #+#    #+#             */
+/*   Updated: 2022/02/26 17:32:53 by tlemma           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../include/minishell.h"
+/* exits bash through either sending a signal or killing processes */
+#include "minishell.h"
+#include "xecutor.h"
 
-void	ft_env()
+int ft_exit(int argc, char **argv)
 {
-	t_env_list	*env_new;
-
-	env_new = &g_data.env_list;
-	while (env_new != NULL)
-	{
-		printf("%s=%s\n", env_new->name, env_new->value);
-		env_new = env_new->next;
-	}
+	exit(0);
+	return (0);
 }

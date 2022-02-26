@@ -6,7 +6,7 @@
 /*   By: tlemma <tlemma@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/08 12:32:47 by nlenoch           #+#    #+#             */
-/*   Updated: 2022/02/26 13:38:05 by tlemma           ###   ########.fr       */
+/*   Updated: 2022/02/26 18:43:35 by tlemma           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,7 +63,7 @@ void    print_env_or_export(char *cmd, char **env_arr)
     }
 }
 
-t_env_list *ft_getenv(char *name)
+t_env_list *ft_getenv_list(char *name)
 {
 	t_env_list *tmp_env;
 
@@ -74,6 +74,16 @@ t_env_list *ft_getenv(char *name)
 			return (tmp_env);
 		tmp_env = tmp_env->next;
 	}
+	return (NULL);
+}
+
+char	*ft_getenv_value(char *name)
+{
+	t_env_list *tmp_env;
+
+	tmp_env = ft_getenv_list(name);
+	if (tmp_env)
+		return (tmp_env->value);
 	return (NULL);
 }
 
@@ -92,46 +102,60 @@ void	print_export(char **exports)
 
 }
 
-int	add_env_args(int argc, char *argv[], char *envp[])
+int	add_env(char *name, char *value)
 {
-    t_env_list  *tmp_env;
-	t_env_list 	*existing;
-    int			i;
+	t_env_list 	*new;
+	t_env_list	*existing;
+
+	existing = ft_getenv_list(name);
+	if (existing && value)
+	{
+		free(existing->value);
+		existing->value = value;
+		existing->is_env = true;
+	}
+	else if (!existing)
+	{
+		new = g_data.env_list;
+		while (new && new->next)
+			new = new->next;
+		new->next = malloc(sizeof(t_env_list));
+		if (new->next == NULL) 
+			return (4);
+		new = new->next;
+		new->name = name;
+		new->value = value;
+		if (value)
+			new->is_env = true;
+		else
+			new->is_env = false;
+		new->next = NULL;
+	}
+	return (0);
+}
+
+/* Check for invalid chars in assignment */
+int	update_env(int argc, char *argv[], char *envp[])
+{
 	char		*assign;
 	char		*name;
 	char		*value;
 
-    i = 0;
-    tmp_env = g_data.env_list;
-	while(tmp_env && tmp_env->next)
-		tmp_env = tmp_env->next;
-	while (*argv)
+	argv++;
+	value = NULL;
+	while (*argv && **argv)
 	{
-		assign = ft_strchr(*argv, '=');
-		name = ft_substr(*argv, 0, assign - *argv - 1);
-		value = ft_substr(*argv, ft_strlen(*argv) - ft_strlen(assign) + 1, ft_strlen(assign + 1));
-		existing = ft_getenv(name);
-		if (existing && existing->value)
+		if (**argv)
 		{
-			free(existing->value);
-			existing->value = value;
-		}
-		else if (**argv)
-		{
-   	 		tmp_env->next = malloc(sizeof(t_env_list));
-			tmp_env = tmp_env->next;
+			assign = ft_strchr(*argv, '=');
 			if (assign)
 			{
-				tmp_env->name = name;
-				tmp_env->value = value;
-				tmp_env->is_env = true;
+				name = ft_substr(*argv, 0, assign - *argv);
+				value = ft_substr(*argv, ft_strlen(*argv) - ft_strlen(assign) + 1, ft_strlen(assign + 1));
 			}
 			else
-			{
-				tmp_env->name = ft_strdup(*envp);
-				tmp_env->is_env = false;
-			}
-			tmp_env->next = NULL;
+				name = *argv;
+			add_env(name, value);
 		}
 		argv++;
 	}
@@ -146,13 +170,12 @@ char **env_to_arr()
 	t_env_list	*env_lst;
 	char		*temp;
 
-	env_lst	= g_data.env_list;
 	len = 0;
 	i = 0;
+	env_lst	= g_data.env_list;
 	while (env_lst)
 	{
-		if (env_lst->is_env)
-			len++;
+		len++;
 		env_lst = env_lst->next;
 	}
 	env_lst = g_data.env_list;
@@ -160,15 +183,18 @@ char **env_to_arr()
 	env_arr[len] = NULL;
 	while (i < len)
 	{
-		if (env_lst->is_env)
+		if (env_lst->value)
 		{
-			temp = ft_strjoin(env_lst->name, "=\"");
+			env_arr[i] = ft_strjoin(env_lst->name, "=\"");
+			temp = env_arr[i];
 			env_arr[i] = ft_strjoin(temp, env_lst->value);
 			env_arr[i] = ft_append_char(env_arr[i], '"');
 			free(temp);
-			i++;
-		}
+		}	
+		else
+			env_arr[i] = ft_strdup(env_lst->name);
 		env_lst = env_lst->next;
+		i++;
 	}
 	return (env_arr);
 }
@@ -178,8 +204,11 @@ int	ft_export(int argc, char *argv[], char *envp[])
 	char	**env_arr;
 
 	if (argc > 1)
-		return (add_env_args(argc, argv, envp));
-	env_arr = env_to_arr();
-	print_env_or_export("export", env_arr);
+		return (update_env(argc, argv, envp));
+	else
+	{
+		env_arr = env_to_arr();
+		print_env_or_export("export", env_arr);
+	}
 	return (0);
 }

@@ -6,7 +6,7 @@
 /*   By: tlemma <tlemma@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/01 14:16:00 by tlemma            #+#    #+#             */
-/*   Updated: 2022/02/24 14:42:08 by tlemma           ###   ########.fr       */
+/*   Updated: 2022/02/26 16:50:41 by tlemma           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,6 +57,9 @@ void	free_dp(char **i);
 char	*ft_append_char(char *s1, char c);
 int		init_env(int argc, char **argv, char **envp);
 int		ft_export();
+char	*ft_getenv_value(char *name);
+
+
 
 
 #endif

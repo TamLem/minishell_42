@@ -6,7 +6,7 @@
 /*   By: tlemma <tlemma@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/01 16:26:02 by tlemma            #+#    #+#             */
-/*   Updated: 2022/02/25 10:56:22 by tlemma           ###   ########.fr       */
+/*   Updated: 2022/02/26 16:05:03 by tlemma           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -159,7 +159,7 @@ int	tokenize_operators()
 			else if(ft_strcmp(token->value, "||") == 0)
 				token->type = ERROR;
 			else if(ft_strchr(token->value, '=') && *(token->value) != ASSIGN)
-				token->type = ASSIGN;
+				token->type = WORD;
 			else if (token->type != REDIR)
 				token->type = WORD;
 			if ((token->type == LESS || token->type == DLESS 
