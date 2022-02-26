@@ -6,7 +6,7 @@
 /*   By: tlemma <tlemma@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/01 12:22:51 by nlenoch           #+#    #+#             */
-/*   Updated: 2022/02/26 19:24:57 by tlemma           ###   ########.fr       */
+/*   Updated: 2022/02/26 20:05:12 by tlemma           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@
 #include "minishell.h"
 #include "xecutor.h"
 
-static bool	check_flag(char *arg, char *flag)
+bool	check_flag(char *arg, char *flag)
 {
 	if (ft_strncmp(arg, flag, ft_strlen(flag)) != 0)
 		return (false);
@@ -30,26 +30,38 @@ static bool	check_flag(char *arg, char *flag)
 	}
 	return (true);
 }
+
 int	ft_echo(int argc, char **argv)
 {
-	int		i;
-	bool	flag_n;
-
+	int 	i;
+	bool	n_flag;
+	
+	i = 1;
+	n_flag = false;
 	if (argc == 1)
 	{
 		printf("\n");
 		return (0);
 	}
+	if (argv[1][0] == '-' && argv[1][1] == 'n')
+	{
+		n_flag = true;
+		while (argv[1][i] != '\0' || argv[1][i] == 'n')
+		{
+			if (argv[1][i] != 'n')
+				n_flag = false;
+			i++;
+		}
+	}
 	i = 1;
-	flag_n = check_flag(argv[1], "-n");
-	if (flag_n)
+	if (n_flag)
 		i = 2;
-	while (argv[i] && (i == 1 || printf(" ")))
+	while (argv[i] && (i == n_flag + 1 || printf(" ")))
 	{
 		printf("%s", argv[i]);
 		i++;
 	}
-	if (!flag_n)
+	if (!n_flag)
 		printf("\n");
-	return (0);
+	return(0);
 }
