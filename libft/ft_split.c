@@ -6,11 +6,12 @@
 /*   By: tlemma <tlemma@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/02 17:18:37 by tlemma            #+#    #+#             */
-/*   Updated: 2021/11/02 16:12:30 by tlemma           ###   ########.fr       */
+/*   Updated: 2022/02/27 20:06:34 by tlemma           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
+#include "../include/minishell.h"
 
 static int	*substrlen(const char *s, char c, int n)
 {
@@ -66,7 +67,7 @@ static char	**fill_substrs(const char *s, char c, int *len, char **substrs)
 	{
 		if (*s != c)
 		{
-			substrs[i] = malloc(sizeof(char) * len[i] + 1);
+			substrs[i] = ft_malloc(sizeof(char) * len[i] + 1);
 			if (!substrs[i])
 				return (NULL);
 			while (j < len[i])
@@ -91,7 +92,7 @@ char	**ft_split(const char *s, char c)
 		return (NULL);
 	n = get_n(s, c);
 	len = substrlen(s, c, n);
-	substrs = malloc(sizeof(char *) * (n + 1));
+	substrs = ft_malloc(sizeof(char *) * (n + 1));
 	if (!substrs)
 		return (NULL);
 	substrs[n] = NULL;

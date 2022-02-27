@@ -6,7 +6,7 @@
 /*   By: tlemma <tlemma@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/10 22:08:11 by tlemma            #+#    #+#             */
-/*   Updated: 2022/02/24 13:16:06 by tlemma           ###   ########.fr       */
+/*   Updated: 2022/02/27 11:38:46 by tlemma           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 
 int	init_cmd(t_simple_cmd **simple_cmd)
 {
-	*simple_cmd = malloc(sizeof(t_simple_cmd));
+	*simple_cmd = ft_malloc(sizeof(t_simple_cmd));
 	if (*simple_cmd == NULL)
 		return (2);
 	(*simple_cmd)->cmd = NULL;
@@ -33,7 +33,7 @@ int	add_args(t_args **args, char *value)
 
 	while (*args != NULL)
 		args = &(*args)->next;
-	*args = malloc(sizeof(t_args));
+	*args = ft_malloc(sizeof(t_args));
 	if (*args == NULL)
 		return (2);
 	// if (ft_strchr(value, ' '))
@@ -51,7 +51,7 @@ int	add_infiles(t_infiles **infile, char *file, int mode)
 {
 	while (*infile != NULL)
 		infile = &(*infile)->next;
-	*infile = malloc(sizeof(t_infiles));
+	*infile = ft_malloc(sizeof(t_infiles));
 	if (*infile == NULL)
 		return (2);
 	if (mode == LESS)
@@ -74,7 +74,7 @@ int	add_outfiles(t_outfiles **outfile , char *file, int mode)
 {
 	while (*outfile != NULL)
 		outfile = &(*outfile)->next;
-	*outfile = malloc(sizeof(t_outfiles));
+	*outfile = ft_malloc(sizeof(t_outfiles));
 	if (*outfile == NULL)
 		return (2);
 	if (mode == GREAT)

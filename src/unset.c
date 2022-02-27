@@ -6,7 +6,7 @@
 /*   By: tlemma <tlemma@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/08 12:33:09 by nlenoch           #+#    #+#             */
-/*   Updated: 2022/02/26 17:39:49 by tlemma           ###   ########.fr       */
+/*   Updated: 2022/02/27 20:04:46 by tlemma           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,8 +38,8 @@ int	ft_unset(int argc, char *argv[], char *envp[])
             if (next != NULL && ((ft_strcmp(argv[i], next->name)) == 0))
             {
                 tmp_env->next = next->next;
-                free((next->name));
-                free((next->value));
+                free(next->name);
+                free(next->value);
                 free(next);
             }
             tmp_env = tmp_env->next;

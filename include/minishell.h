@@ -6,7 +6,7 @@
 /*   By: tlemma <tlemma@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/01 14:16:00 by tlemma            #+#    #+#             */
-/*   Updated: 2022/02/26 16:50:41 by tlemma           ###   ########.fr       */
+/*   Updated: 2022/02/27 19:27:13 by tlemma           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,6 +49,8 @@ typedef	struct s_data
 	int				state;
 	int				exit_status;
 	int				rl_redisplay;
+	void			*mem_alloced;
+	int				malloc_count;
 }	t_data;
 
 
@@ -58,8 +60,7 @@ char	*ft_append_char(char *s1, char c);
 int		init_env(int argc, char **argv, char **envp);
 int		ft_export();
 char	*ft_getenv_value(char *name);
-
-
-
+void	*ft_malloc(size_t size);
+void	mem_free_all();
 
 #endif

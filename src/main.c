@@ -6,7 +6,7 @@
 /*   By: tlemma <tlemma@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/01 14:13:55 by tlemma            #+#    #+#             */
-/*   Updated: 2022/02/26 12:20:27 by tlemma           ###   ########.fr       */
+/*   Updated: 2022/02/27 20:03:59 by tlemma           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,21 +73,22 @@ int	main(int argc, char *argv[], char *envp[])
 	char	*line;
 	
 	g_data.env = envp;
+	g_data.malloc_count = 0;
+	g_data.mem_alloced = NULL;
 	init_env(argc, argv, envp);
-	// init_env(argc, argv, envp);
-	// ft_export();
-	// return (0);
 	g_data.exit_status = 0;
 	change_ctrlc_sym(false);
  	signal(SIGINT, sig_ctrlc);
    	signal(SIGQUIT, SIG_IGN);
 	line = NULL;
 	g_data.state = 0;
-	while(ft_strcmp(ft_strtrim(line, " \t\n"), "exit") != 0)
+	while(true)
 	{
 		line = readline(KGRN"$ "KNRM);
 		if (line)
 		{
+			if (ft_strcmp(ft_strtrim(line, " \t\n"), "exit") == 0)
+				exit(0);
 			if (*line)
 				add_history(line);
 			if(!lex(line))
@@ -95,16 +96,14 @@ int	main(int argc, char *argv[], char *envp[])
 				parse();
 				xecute();
 			}
-			free(line);
 			g_data.state = 0;
 		}
 		else
-		{
-			free(line);
 			break ;
-		}
-		// free(line);
+		free(line);
 	}
 	change_ctrlc_sym(true);
+	mem_free_all();
+	system("leaks minishell");
 	return (0);
 }

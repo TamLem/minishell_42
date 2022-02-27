@@ -6,7 +6,7 @@
 /*   By: tlemma <tlemma@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/01 16:26:02 by tlemma            #+#    #+#             */
-/*   Updated: 2022/02/26 16:05:03 by tlemma           ###   ########.fr       */
+/*   Updated: 2022/02/27 19:57:37 by tlemma           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ int	tokenize(char *line)
 	t_token *token;
 	int		state;
 
-	g_data.tokens = malloc(sizeof(t_token));
+	g_data.tokens = ft_malloc(sizeof(t_token));
 	token = g_data.tokens;
 	token->value = NULL;
 	g_data.state = 0;
@@ -42,7 +42,7 @@ int	tokenize(char *line)
 					token->split = true;
 				if (*(line + 1) != '\0')
 				{
-					token->next = malloc(sizeof(t_token));
+					token->next = ft_malloc(sizeof(t_token));
 					if (token->next == NULL)
 						return (2);
 					token = token->next;
@@ -100,7 +100,7 @@ char	*strip_quotes(char *line)
 			quoted++;
 		}
 		token->value = stripped;
-		//free quoted;
+		////free quoted;
 		token = token->next;
 	}
 	return (stripped);
@@ -124,7 +124,7 @@ int	param_expansion()
 			}
 			else if (token->split == true && exp_env != NULL)
 			{
-				//free token->value
+				free(token->value);
 				token->value = field_split(exp_env);
 			}
 			else

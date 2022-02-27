@@ -6,7 +6,7 @@
 /*   By: tlemma <tlemma@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/17 19:46:04 by tlemma            #+#    #+#             */
-/*   Updated: 2022/02/26 18:30:24 by tlemma           ###   ########.fr       */
+/*   Updated: 2022/02/27 19:36:43 by tlemma           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,7 +79,7 @@ int	init_args(t_simple_cmd *simple_cmd, char ***p_arg_array)
 	args = simple_cmd->args;
 	while(args && ++len)
 		args = args->next;
-	*p_arg_array = malloc(sizeof(char *) * (len + 1));
+	*p_arg_array = ft_malloc(sizeof(char *) * (len + 1));
 	if (*p_arg_array == NULL)
 		return (4);
 	arg_array = *p_arg_array;

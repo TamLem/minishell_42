@@ -5,7 +5,7 @@ int	init_env(int argc, char **argv, char **envp)
 	char 		**split;
 	t_env_list 	*tmp_env;
 
-	g_data.env_list = malloc(sizeof(t_env_list));
+	g_data.env_list = ft_malloc(sizeof(t_env_list));
 	if (!g_data.env_list)
 		return(4);
 	tmp_env =g_data.env_list;
@@ -15,7 +15,7 @@ int	init_env(int argc, char **argv, char **envp)
 		tmp_env->name = split[0];
 		tmp_env->value = split[1];
 		tmp_env->is_env = true;
-		tmp_env->next = malloc(sizeof(t_env_list));
+		tmp_env->next = ft_malloc(sizeof(t_env_list));
 		if (!tmp_env->next)
 			return (4);
 		if (*(envp + 1) == NULL)

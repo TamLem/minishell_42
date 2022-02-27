@@ -6,7 +6,7 @@
 /*   By: tlemma <tlemma@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/08 12:32:47 by nlenoch           #+#    #+#             */
-/*   Updated: 2022/02/26 18:43:35 by tlemma           ###   ########.fr       */
+/*   Updated: 2022/02/27 19:34:54 by tlemma           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -119,7 +119,7 @@ int	add_env(char *name, char *value)
 		new = g_data.env_list;
 		while (new && new->next)
 			new = new->next;
-		new->next = malloc(sizeof(t_env_list));
+		new->next = ft_malloc(sizeof(t_env_list));
 		if (new->next == NULL) 
 			return (4);
 		new = new->next;
@@ -179,7 +179,7 @@ char **env_to_arr()
 		env_lst = env_lst->next;
 	}
 	env_lst = g_data.env_list;
-	env_arr = malloc(sizeof(char *) * (len + 1));
+	env_arr = ft_malloc(sizeof(char *) * (len + 1));
 	env_arr[len] = NULL;
 	while (i < len)
 	{

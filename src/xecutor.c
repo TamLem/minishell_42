@@ -191,21 +191,21 @@ int xecute(void)
 				return (2);	/* maybe unsafe */
 		dup2(fd[IN], STDIN_FILENO);
 		close(fd[IN]);
+		close(fd[OUT]);
 		get_outfile(simple_cmd, fd[STDOUT_INIT], &fd[OUT], &fd[IN]);
 		g_data.state = 1;
-		if (is_builtin(simple_cmd->cmd))
-			exec_builtin(simple_cmd);
-		else
+		ret = fork();
+		if (ret == 0)
 		{
-			ret = fork();
-			if (ret == 0)
-			{
+			if (is_builtin(simple_cmd->cmd))
+				exec_builtin(simple_cmd);
+			else
 				child_process(simple_cmd);
-				exit(1);
-			}
+			exit(1);
 		}
 		simple_cmd = simple_cmd->next;
 	}
+	reset_fds(fd);
 	waitpid(ret, &g_data.exit_status, 0);
 	return (0);
 }
