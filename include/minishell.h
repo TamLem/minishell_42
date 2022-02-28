@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tlemma <tlemma@student.42.fr>              +#+  +:+       +#+        */
+/*   By: nlenoch <nlenoch@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/01 14:16:00 by tlemma            #+#    #+#             */
-/*   Updated: 2022/02/28 18:19:35 by tlemma           ###   ########.fr       */
+/*   Updated: 2022/02/28 18:37:48 by nlenoch          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,6 @@
 # define KMAG  "\x1B[35m"
 # define KCYN  "\x1B[36m"
 # define KWHT  "\x1B[37m"
- 
 # include <stdio.h>
 # include <readline/readline.h>
 # include <readline/history.h>
@@ -40,10 +39,10 @@ typedef struct s_env_list
 	struct s_env_list	*next;
 }	t_env_list;
 
-typedef	struct s_data
+typedef struct s_data
 {
 	t_token			*tokens;
-	t_simple_cmd 	*cmds;
+	t_simple_cmd	*cmds;
 	char			**env;
 	t_env_list		*env_list;
 	int				state;
@@ -53,24 +52,18 @@ typedef	struct s_data
 	int				malloc_count;
 }	t_data;
 
-
 t_data	g_data;
 void		free_dp(char **i);
 char		*ft_append_char(char *s1, char c);
 int			init_env(int argc, char **argv, char **envp);
-int			ft_export();
+int			ft_export(void);
 void		*ft_malloc(size_t size);
-void		mem_free_all();
+void		mem_free_all(void);
 int			check_syntax(void);
-int 		is_valid_name(char *argv);
-int    		err_handle(int error_code, char *error_input);
+int			is_valid_name(char *argv);
+int			err_handle(int error_code, char *error_input);
 char		*ft_getenv(char *name);
-t_env_list *ft_getenv_list(char *name);
-char 		**env_to_arr();
-
-
-
-
-
+t_env_list	*ft_getenv_list(char *name);
+char		**env_to_arr(void);
 
 #endif

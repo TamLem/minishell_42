@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lexer.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tlemma <tlemma@student.42.fr>              +#+  +:+       +#+        */
+/*   By: nlenoch <nlenoch@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/01 16:26:02 by tlemma            #+#    #+#             */
-/*   Updated: 2022/02/28 18:15:55 by tlemma           ###   ########.fr       */
+/*   Updated: 2022/02/28 18:48:24 by nlenoch          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 
 int	tokenize(char *line)
 {
-	t_token *token;
+	t_token	*token;
 	int		state;
 
 	g_data.tokens = ft_malloc(sizeof(t_token));
@@ -30,7 +30,7 @@ int	tokenize(char *line)
 		if (!is_WSPACE(*line) || state != 0)
 		{
 			token->value = ft_append_char(token->value, *line);
-			if(shall_split(line, token->value, state))
+			if (shall_split(line, token->value, state))
 			{
 				if (is_operator(*line))
 					token->type = OPERATOR;
@@ -61,11 +61,11 @@ char	*field_split(char *str)
 	char	*split;
 
 	split = NULL;
-	while(*str)
+	while (*str)
 	{
 		if (!is_WSPACE(*str))
 		{
-			split =ft_append_char(split, *str);
+			split = ft_append_char(split, *str);
 			if (is_WSPACE(*(str + 1)))
 				split = ft_append_char(split, WWSPACE);
 		}
@@ -84,18 +84,16 @@ int	strip_quotes(void)
 
 	token = g_data.tokens;
 	g_data.state = 0;
-	while(token)
+	while (token)
 	{
 		stripped = NULL;
 		quoted = token->value;
 		while (quoted && *quoted)
 		{
 			state = get_state(*quoted);
-			if ((*quoted != QUOTE && *quoted != DQUOTE) 
+			if ((*quoted != QUOTE && *quoted != DQUOTE)
 				|| (state != *quoted && state != 0))
-				{
-					stripped = ft_append_char(stripped, *quoted);
-				}
+				stripped = ft_append_char(stripped, *quoted);
 			quoted++;
 		}
 		// free(token->value);
@@ -106,13 +104,13 @@ int	strip_quotes(void)
 	return (true);
 }
 
-int	param_expansion()
+int	param_expansion(void)
 {
 	t_token	*token;
 	char	*exp_env;
 
 	token = g_data.tokens;
-	while(token)
+	while (token)
 	{
 		if (token->type == TOKEN && *(token->value) == DOLLAR)
 		{
@@ -137,47 +135,47 @@ int	param_expansion()
 	return (0);
 }
 
-int	tokenize_operators()
+int	tokenize_operators(void)
 {
-	t_token *token;
+	t_token	*token;
 
 	token = g_data.tokens;
-	while(token)
+	while (token)
 	{
 		if (token && token->value)
 		{
-			if(ft_strcmp(token->value, "<") == 0)
+			if (ft_strcmp(token->value, "<") == 0)
 				token->type = LESS;
-			else if(ft_strcmp(token->value, "<<") == 0)
+			else if (ft_strcmp(token->value, "<<") == 0)
 				token->type = DLESS;
-			else if(ft_strcmp(token->value, ">") == 0)
+			else if (ft_strcmp(token->value, ">") == 0)
 				token->type = GREAT;
-			else if(ft_strcmp(token->value, ">>") == 0)
+			else if (ft_strcmp(token->value, ">>") == 0)
 				token->type = DGREAT;
-			else if(ft_strcmp(token->value, "|") == 0)
+			else if (ft_strcmp(token->value, "|") == 0)
 				token->type = PIPE;
-			else if(ft_strcmp(token->value, "||") == 0)
+			else if (ft_strcmp(token->value, "||") == 0)
 				token->type = ERROR;
-			else if(ft_strchr(token->value, '=') && *(token->value) != ASSIGN)
+			else if (ft_strchr(token->value, '=') && *(token->value) != ASSIGN)
 				token->type = WORD;
 			else if (token->type != REDIR)
 				token->type = WORD;
-			if ((token->type == LESS || token->type == DLESS 
-				|| token->type == GREAT || token->type == DGREAT) && token->next)
-					token->next->type = REDIR;	
+			if ((token->type == LESS || token->type == DLESS || token->type
+					== GREAT || token->type == DGREAT) && token->next)
+					token->next->type = REDIR;
 		}
 		token = token->next;
 	}
 	return (0);
 }
 
-void	del_empty_tokens()
+void	del_empty_tokens(void)
 {
 	t_token	*token;
-	t_token *next_token;
+	t_token	*next_token;
 
 	token = g_data.tokens;
-	while(token)
+	while (token)
 	{
 		next_token = token->next;
 		if (next_token && next_token->value == NULL)
@@ -192,7 +190,7 @@ void	del_empty_tokens()
 
 int	lex(char *input)
 {
-	t_token *temp;
+	t_token	*temp;
 	char	*line;
 	char	*quoted;
 

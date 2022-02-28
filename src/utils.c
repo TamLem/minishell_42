@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tlemma <tlemma@student.42.fr>              +#+  +:+       +#+        */
+/*   By: nlenoch <nlenoch@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/03 17:53:52 by tlemma            #+#    #+#             */
-/*   Updated: 2022/02/28 16:17:43 by tlemma           ###   ########.fr       */
+/*   Updated: 2022/02/28 18:56:51 by nlenoch          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,8 @@
 
 typedef struct s_mem_alloc
 {
-	long	address;
-	struct 	s_mem_alloc *next;
+	long				address;
+	struct s_mem_alloc	*next;
 }				t_mem_alloc;
 
 void	free_dp(char **i)
@@ -27,18 +27,18 @@ void	free_dp(char **i)
 	}
 }
 
-int is_valid_name(char *argv)
+int	is_valid_name(char *argv)
 {
-    int i;
+	int	i;
 
-    i = 0;
-    while (argv[i] != '\0')
-    {
-        if (!ft_isalnum(argv[i]) && argv[i] != '_')
-            return (0);
-        i++;
-    }
-    return (1);
+	i = 0;
+	while (argv[i] != '\0')
+	{
+		if (!ft_isalnum(argv[i]) && argv[i] != '_')
+			return (0);
+		i++;
+	}
+	return (1);
 }
 
 char	*ft_append_char(char *s1, char c)
@@ -78,9 +78,9 @@ void	*ft_malloc(size_t size)
 		g_data.mem_alloced = malloc(sizeof(void *) * 100);
 	if (g_data.malloc_count % 100 == 0 && g_data.malloc_count != 0)
 	{
-		g_data.mem_alloced = 
-			ft_realloc_more(g_data.mem_alloced, sizeof(void *) * g_data.malloc_count, 
-				sizeof(void *) * (g_data.malloc_count + 100)) ;
+		g_data.mem_alloced = ft_realloc_more(g_data.mem_alloced, sizeof(void *)
+				* g_data.malloc_count, sizeof(void *)
+				* (g_data.malloc_count + 100));
 	}
 	if (g_data.mem_alloced == NULL)
 		return (NULL);
@@ -95,7 +95,7 @@ void	*ft_malloc(size_t size)
 	return (ret);
 }
 
-void mem_free_all()
+void	mem_free_all(void)
 {
 	int	i;
 

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   env_export_utils.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tlemma <tlemma@student.42.fr>              +#+  +:+       +#+        */
+/*   By: nlenoch <nlenoch@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/28 17:48:19 by tlemma            #+#    #+#             */
-/*   Updated: 2022/02/28 17:55:44 by tlemma           ###   ########.fr       */
+/*   Updated: 2022/02/28 18:36:10 by nlenoch          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,14 +14,14 @@
 
 int	init_env(int argc, char **argv, char **envp)
 {	
-	char 		**split;
-	t_env_list 	*tmp_env;
+	char		**split;
+	t_env_list	*tmp_env;
 
 	g_data.env_list = ft_malloc(sizeof(t_env_list));
 	if (!g_data.env_list)
-		return(4);
-	tmp_env =g_data.env_list;
-	while(*envp)
+		return (4);
+	tmp_env = g_data.env_list;
+	while (*envp)
 	{
 		split = ft_split(*envp, '=');
 		tmp_env->name = split[0];
@@ -63,9 +63,9 @@ static void	order_env(char ***env)
 	}
 }
 
-void    print_env_or_export(char *cmd, char **env_arr)
+void	print_env_or_export(char *cmd, char **env_arr)
 {
-    t_env_list  *tmp_env;
+    t_env_list	*tmp_env;
 
     tmp_env = g_data.env_list;
     if (ft_strcmp(cmd, "env") == 0)
@@ -89,9 +89,9 @@ void    print_env_or_export(char *cmd, char **env_arr)
     }
 }
 
-t_env_list *ft_getenv_list(char *name)
+t_env_list	*ft_getenv_list(char *name)
 {
-	t_env_list *tmp_env;
+	t_env_list	*tmp_env;
 
 	tmp_env = g_data.env_list;
 	while (tmp_env != NULL)

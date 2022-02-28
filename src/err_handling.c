@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   err_handling.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tlemma <tlemma@student.42.fr>              +#+  +:+       +#+        */
+/*   By: nlenoch <nlenoch@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/27 15:43:40 by tlemma            #+#    #+#             */
-/*   Updated: 2022/02/28 16:25:22 by tlemma           ###   ########.fr       */
+/*   Updated: 2022/02/28 18:41:20 by nlenoch          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,7 @@ int	print_err(char *format, char *s1, char *s2)
 	res = dup2(STDERR_FILENO, STDOUT_FILENO);
 	printf(format, s1, s2);
 	dup2(STDOUT_FILENO, init_stdout);
-	return(0);
+	return (0);
 }
 
 int	lex_err(void)
@@ -75,7 +75,7 @@ int	is_io_redir(t_token *token)
 	return (false);
 }
 
-int check_syntax(void)
+int	check_syntax(void)
 {
 	int		args;
 	t_token *token;
@@ -84,42 +84,38 @@ int check_syntax(void)
 	token = g_data.tokens;
 	while (token)
 	{
-
 		if (is_io_redir(token) && token->next && is_io_redir(token->next))
-			return(err_handle(4, token->value));
+			return (err_handle(4, token->value));
 		token = token->next;
 		// if (arg == 0 && token->type != REDIR && token->type != WORD)
 		// 	return (error_handle())
-
 	}
 	return (0);
 }
 
-int    err_handle(int error_code, char *error_input)
+int	err_handle(int error_code, char *error_input)
 {
-    char 	*err[6];
+	char	*err[6];
 	char	*err_prefix;
 
 	err_prefix = "minishell: ";
-    err[0] = "missing ]";
-    err[1] = "command not found";
-    err[2] = "not an valid identifier";
-    err[3] = "no such file or directory";
-    err[4] = "syntax error near unexpected token";
-    err[5] = "syntax error near unexpected token newline";    
- 
-    if (error_code == 0)
-        print_err("minishell: %s: %s\n", error_input, err[0]);
-    if (error_code == 1)
-        print_err("minishell: %s: %s\n", error_input, err[1]);
-    if (error_code == 2)
-        print_err("minishell: %s: %s\n", error_input, err[2]);
-    if (error_code == 3)
-        print_err("minishell: %s: %s\n", error_input, err[3]);
-    if (error_code == 4)
-        print_err("minishell: %s: `%s'\n", err[4], error_input);
-    if (error_code == 5)
-        print_err("minishell: %s %s\n", "", err[5]);
-
+	err[0] = "missing ]";
+	err[1] = "command not found";
+	err[2] = "not an valid identifier";
+	err[3] = "no such file or directory";
+	err[4] = "syntax error near unexpected token";
+	err[5] = "syntax error near unexpected token newline";
+	if (error_code == 0)
+		print_err("minishell: %s: %s\n", error_input, err[0]);
+	if (error_code == 1)
+		print_err("minishell: %s: %s\n", error_input, err[1]);
+	if (error_code == 2)
+		print_err("minishell: %s: %s\n", error_input, err[2]);
+	if (error_code == 3)
+		print_err("minishell: %s: %s\n", error_input, err[3]);
+	if (error_code == 4)
+		print_err("minishell: %s: `%s'\n", err[4], error_input);
+	if (error_code == 5)
+		print_err("minishell: %s %s\n", "", err[5]);
 	return (error_code);
 }

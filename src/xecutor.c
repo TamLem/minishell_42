@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   xecutor.c                                          :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: nlenoch <nlenoch@student.42.fr>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/02/28 18:58:11 by nlenoch           #+#    #+#             */
+/*   Updated: 2022/02/28 19:00:02 by nlenoch          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 #include "xecutor.h"
 
@@ -6,7 +18,7 @@ int	getcmdlen(t_simple_cmd *cmds)
 	int	len;
 
 	len = 0;
-	while(cmds)
+	while (cmds)
 	{
 		cmds = cmds->next;
 		len++;
@@ -60,8 +72,8 @@ int	child_process(t_simple_cmd *simple_cmd)
 
 	res = 0;
 	args = NULL;
-	env = env_to_arr();
-   	signal(SIGINT, child_exit);
+	env = g_data.env;
+	signal(SIGINT, child_exit);
 	if (!check_cmds(simple_cmd->cmd))
 	{
 		dprintf(2, "minishell: %s: command not found\n", simple_cmd->cmd);
@@ -79,7 +91,7 @@ int	child_process(t_simple_cmd *simple_cmd)
 	return (res);
 }
 
-int read_heredocs(char	*dlmtr)
+int	read_heredocs(char	*dlmtr)
 {
 	int			fd;
 	char		*line;
@@ -128,7 +140,6 @@ int	get_infile(t_simple_cmd *simple_cmd, int fdin)
 	return (fdin);
 }
 
-
 int	get_outfile(t_simple_cmd *simple_cmd, int stdout_init, int *fdout, int *fdin)
 {
 	int			fdpipe[2];
@@ -139,11 +150,11 @@ int	get_outfile(t_simple_cmd *simple_cmd, int stdout_init, int *fdout, int *fdin
 		outfile = outfile->next;
 	if (outfile)
 		*fdout = outfile->value;
-	else if(simple_cmd->next == NULL)
+	else if (simple_cmd->next == NULL)
 		*fdout = dup2(stdout_init, *fdout);
 	if (simple_cmd->next != NULL)
 	{
-		if(pipe(fdpipe) == -1)
+		if (pipe(fdpipe) == -1)
 			return (4);
 		*fdout = fdpipe[1];
 		*fdin = fdpipe[0];
@@ -156,7 +167,7 @@ int	get_outfile(t_simple_cmd *simple_cmd, int stdout_init, int *fdout, int *fdin
 	return (0);
 }
 
-void init_fds(int fd[4])
+void	init_fds(int fd[4])
 {
 	fd[STDIN_INIT] = dup(STDIN_FILENO);
 	fd[STDOUT_INIT] = dup(STDOUT_FILENO);
@@ -164,7 +175,7 @@ void init_fds(int fd[4])
 	fd[OUT] = dup(fd[STDOUT_INIT]);
 }
 
-void reset_fds(int fd[4])
+void	reset_fds(int fd[4])
 {
 	dup2(fd[STDIN_INIT], STDIN_FILENO);
 	dup2(fd[STDOUT_INIT], STDOUT_FILENO);
@@ -172,14 +183,13 @@ void reset_fds(int fd[4])
 	close(fd[STDOUT_INIT]);
 }
 
-int xecute(void)
+int	xecute(void)
 {
 	int				ret;
 	int				cmd_len;
 	int				fd[4];
 	t_simple_cmd	*simple_cmd;
 
-	
 	ret = 0;
 	simple_cmd = g_data.cmds;
 	cmd_len = getcmdlen(simple_cmd);
@@ -190,8 +200,8 @@ int xecute(void)
 	while (simple_cmd != NULL)
 	{
 		fd[IN] = get_infile(simple_cmd, fd[IN]);
-		if (fd[IN] == -1 && close(fd[IN]) && close(fd[OUT]))	
-				return (2);	/* maybe unsafe */
+		if (fd[IN] == -1 && close(fd[IN]) && close(fd[OUT]))
+			return (2);	/* maybe unsafe */
 		dup2(fd[IN], STDIN_FILENO);
 		close(fd[IN]);
 		close(fd[OUT]);

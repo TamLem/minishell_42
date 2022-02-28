@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   xecutor_utils.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tlemma <tlemma@student.42.fr>              +#+  +:+       +#+        */
+/*   By: nlenoch <nlenoch@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/17 19:46:04 by tlemma            #+#    #+#             */
-/*   Updated: 2022/02/27 19:36:43 by tlemma           ###   ########.fr       */
+/*   Updated: 2022/02/28 18:57:54 by nlenoch          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,13 +71,13 @@ int	init_args(t_simple_cmd *simple_cmd, char ***p_arg_array)
 {
 	int		i;
 	int		len;
-	t_args 	*args;
+	t_args	*args;
 	char	**arg_array;
 
 	i = 0;
 	len = 0;
 	args = simple_cmd->args;
-	while(args && ++len)
+	while (args && ++len)
 		args = args->next;
 	*p_arg_array = ft_malloc(sizeof(char *) * (len + 1));
 	if (*p_arg_array == NULL)
@@ -96,10 +96,11 @@ int	init_args(t_simple_cmd *simple_cmd, char ***p_arg_array)
 
 bool	is_builtin(char	*cmd)
 {
-	if (!ft_strcmp(cmd, "cd") || !ft_strcmp(cmd, "echo") || !ft_strcmp(cmd, "cd")
-		|| !ft_strcmp(cmd, "env") || !ft_strcmp(cmd, "export") || !ft_strcmp(cmd, "unset")
+	if (!ft_strcmp(cmd, "cd") || !ft_strcmp(cmd, "echo")
+		|| !ft_strcmp(cmd, "cd") || !ft_strcmp(cmd, "env")
+		|| !ft_strcmp(cmd, "export") || !ft_strcmp(cmd, "unset")
 		|| !ft_strcmp(cmd, "pwd") || !ft_strcmp(cmd, "export"))
-			return (true);
+		return (true);
 	return (false);
 }
 

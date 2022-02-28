@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lexer_utils.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tlemma <tlemma@student.42.fr>              +#+  +:+       +#+        */
+/*   By: nlenoch <nlenoch@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/10 21:26:47 by tlemma            #+#    #+#             */
-/*   Updated: 2022/02/28 15:46:29 by tlemma           ###   ########.fr       */
+/*   Updated: 2022/02/28 18:43:22 by nlenoch          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,18 +24,19 @@ bool	is_WSPACE(char c)
 
 bool	is_operator(char c)
 {
-	if (c == LESS || c == GREAT || c == PIPE) 
+	if (c == LESS || c == GREAT || c == PIPE)
 		return (true);
 	return (false);
 }
 
-bool shall_split(char *line, char *appended, int state)
+bool	shall_split(char *line, char *appended, int state)
 {
 	if (*(line + 1) == '\0')
 		return (true);
 	if (*(line + 1) == DOLLAR && state != QUOTE)
 		return (true);
-	if (*appended == DOLLAR && !(ft_isdigit(*(line + 1)) || ft_isalpha(*(line + 1))))
+	if (*appended == DOLLAR && !(ft_isdigit(*(line + 1))
+			|| ft_isalpha(*(line + 1))))
 		return (true);
 	if (is_WSPACE(*(line + 1)) && state == 0)
 		return (true);
@@ -68,7 +69,7 @@ int	get_state(char pos)
 int	quotes_matched(char *line)
 {
 	g_data.state = 0;
-	while(*line)
+	while (*line)
 	{
 		get_state(*line);
 		line++;

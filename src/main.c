@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tlemma <tlemma@student.42.fr>              +#+  +:+       +#+        */
+/*   By: nlenoch <nlenoch@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/01 14:13:55 by tlemma            #+#    #+#             */
-/*   Updated: 2022/02/28 18:08:01 by tlemma           ###   ########.fr       */
+/*   Updated: 2022/02/28 18:49:20 by nlenoch          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@
 
 int	change_ctrlc_sym(bool	value)
 {
-	struct termios attr;
+	struct termios	attr;
 
 	tcgetattr(STDIN_FILENO, &attr);
 	if (value == true)
@@ -44,7 +44,7 @@ void	sig_ctrlc(int sig)
 	{
 		if (g_data.state == 1)
 			printf("^C");
-		printf("\n");	
+		printf("\n");
 		rl_replace_line("", 0);
 		rl_on_new_line();
 	}
@@ -77,19 +77,19 @@ int	init_session(int argc, char *argv[], char *envp[])
 	init_env(argc, argv, envp);
 	g_data.exit_status = 0;
 	change_ctrlc_sym(false);
- 	signal(SIGINT, sig_ctrlc);
-   	signal(SIGQUIT, SIG_IGN);
+	signal(SIGINT, sig_ctrlc);
+	signal(SIGQUIT, SIG_IGN);
 	return (0);
 }
 
 int	main(int argc, char *argv[], char *envp[])
 {
 	char	*line;
-	
+
 	init_session(argc, argv, envp);
 	line = NULL;
 	g_data.state = 0;
-	while(true)
+	while (true)
 	{
 		line = readline("$ ");
 		if (line)
@@ -98,7 +98,7 @@ int	main(int argc, char *argv[], char *envp[])
 				break ;
 			if (*line)
 				add_history(line);
-			if(!lex(line))
+			if (!lex(line))
 			{
 				parse();
 				xecute();
@@ -109,5 +109,5 @@ int	main(int argc, char *argv[], char *envp[])
 			break ;
 		free(line);
 	}
-	return(end_session());
+	return (end_session());
 }
