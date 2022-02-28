@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tlemma <tlemma@student.42.fr>              +#+  +:+       +#+        */
+/*   By: nlenoch <nlenoch@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/10 22:08:11 by tlemma            #+#    #+#             */
-/*   Updated: 2022/02/27 11:38:46 by tlemma           ###   ########.fr       */
+/*   Updated: 2022/02/28 18:50:34 by nlenoch          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,7 +70,7 @@ int	add_infiles(t_infiles **infile, char *file, int mode)
 	return (0);
 }
 
-int	add_outfiles(t_outfiles **outfile , char *file, int mode)
+int	add_outfiles(t_outfiles **outfile, char *file, int mode)
 {
 	while (*outfile != NULL)
 		outfile = &(*outfile)->next;
@@ -96,7 +96,7 @@ int	parse_redir(t_simple_cmd *cmd, t_token *token)
 	last_op = 0;
 	while (token != NULL && token->type != PIPE)
 	{
-		if (token->type == LESS || token->type == DLESS 
+		if (token->type == LESS || token->type == DLESS
 				|| token->type == GREAT || token->type == DGREAT)
 			last_op = token->type;
 		if (token->type == REDIR)

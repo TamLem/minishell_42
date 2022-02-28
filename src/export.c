@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   export.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tlemma <tlemma@student.42.fr>              +#+  +:+       +#+        */
+/*   By: nlenoch <nlenoch@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/08 12:32:47 by nlenoch           #+#    #+#             */
-/*   Updated: 2022/02/28 18:01:33 by tlemma           ###   ########.fr       */
+/*   Updated: 2022/02/28 18:42:26 by nlenoch          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@
 
 int	add_env(char *name, char *value)
 {
-	t_env_list 	*new;
+	t_env_list	*new;
 	t_env_list	*existing;
 
 	existing = ft_getenv_list(name);
@@ -32,7 +32,7 @@ int	add_env(char *name, char *value)
 		while (new && new->next)
 			new = new->next;
 		new->next = ft_malloc(sizeof(t_env_list));
-		if (new->next == NULL) 
+		if (new->next == NULL)
 			return (4);
 		new = new->next;
 		new->name = name;
@@ -62,7 +62,8 @@ static int	update_env(int argc, char *argv[], char *envp[])
 			if (assign)
 			{
 				name = ft_substr(*argv, 0, assign - *argv);
-				value = ft_substr(*argv, ft_strlen(*argv) - ft_strlen(assign) + 1, ft_strlen(assign + 1));
+				value = ft_substr(*argv, ft_strlen(*argv)
+						- ft_strlen(assign) + 1, ft_strlen(assign + 1));
 			}
 			else
 				name = *argv;

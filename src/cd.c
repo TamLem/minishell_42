@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cd.c                                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tlemma <tlemma@student.42.fr>              +#+  +:+       +#+        */
+/*   By: nlenoch <nlenoch@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/01 18:52:36 by nlenoch           #+#    #+#             */
-/*   Updated: 2022/02/28 17:57:23 by tlemma           ###   ########.fr       */
+/*   Updated: 2022/02/28 18:33:06 by nlenoch          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ int	ft_cd(int argc, char **argv, char **envp)
 	else if (!ft_strcmp(path, "-"))
 	{
 		path = ft_getenv("OLDPWD");
-		if(path && !chdir(path))
+		if (path && !chdir(path))
 			printf("%s\n", path);
 	}
 	else

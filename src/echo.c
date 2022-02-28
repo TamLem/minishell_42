@@ -3,16 +3,12 @@
 /*                                                        :::      ::::::::   */
 /*   echo.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tlemma <tlemma@student.42.fr>              +#+  +:+       +#+        */
+/*   By: nlenoch <nlenoch@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/01 12:22:51 by nlenoch           #+#    #+#             */
-/*   Updated: 2022/02/26 20:05:12 by tlemma           ###   ########.fr       */
+/*   Updated: 2022/02/28 18:33:55 by nlenoch          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-
-// string can be in "qotes" or without
-// if string includes '$PWD' return print current working directory with rest of string
-// if option '-n' do not print a newline
 
 #include "minishell.h"
 #include "xecutor.h"
@@ -33,9 +29,9 @@ bool	check_flag(char *arg, char *flag)
 
 int	ft_echo(int argc, char **argv)
 {
-	int 	i;
+	int		i;
 	bool	n_flag;
-	
+
 	i = 1;
 	n_flag = false;
 	if (argc == 1)
@@ -63,5 +59,5 @@ int	ft_echo(int argc, char **argv)
 	}
 	if (!n_flag)
 		printf("\n");
-	return(0);
+	return (0);
 }
