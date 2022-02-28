@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nlenoch <nlenoch@student.42.fr>            +#+  +:+       +#+        */
+/*   By: tlemma <tlemma@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/01 14:16:00 by tlemma            #+#    #+#             */
-/*   Updated: 2022/02/28 18:37:48 by nlenoch          ###   ########.fr       */
+/*   Updated: 2022/02/28 20:46:06 by tlemma           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,6 @@ t_data	g_data;
 void		free_dp(char **i);
 char		*ft_append_char(char *s1, char c);
 int			init_env(int argc, char **argv, char **envp);
-int			ft_export(void);
 void		*ft_malloc(size_t size);
 void		mem_free_all(void);
 int			check_syntax(void);
