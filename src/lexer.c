@@ -6,7 +6,7 @@
 /*   By: tlemma <tlemma@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/01 16:26:02 by tlemma            #+#    #+#             */
-/*   Updated: 2022/02/27 19:57:37 by tlemma           ###   ########.fr       */
+/*   Updated: 2022/02/28 18:15:55 by tlemma           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,7 +67,7 @@ char	*field_split(char *str)
 		{
 			split =ft_append_char(split, *str);
 			if (is_WSPACE(*(str + 1)))
-			split = ft_append_char(split, WWSPACE);
+				split = ft_append_char(split, WWSPACE);
 		}
 		str++;
 	}
@@ -75,7 +75,7 @@ char	*field_split(char *str)
 	return (split);
 }
 
-char	*strip_quotes(char *line)
+int	strip_quotes(void)
 {
 	char	*stripped;
 	int		state;
@@ -95,15 +95,15 @@ char	*strip_quotes(char *line)
 				|| (state != *quoted && state != 0))
 				{
 					stripped = ft_append_char(stripped, *quoted);
-
 				}
 			quoted++;
 		}
+		// free(token->value);
 		token->value = stripped;
-		////free quoted;
+		//free quoted;
 		token = token->next;
 	}
-	return (stripped);
+	return (true);
 }
 
 int	param_expansion()
@@ -116,15 +116,15 @@ int	param_expansion()
 	{
 		if (token->type == TOKEN && *(token->value) == DOLLAR)
 		{
-			exp_env = getenv(token->value + 1);
+			exp_env = ft_getenv(token->value + 1);
 			if (exp_env == NULL)
 			{	
-				free(token->value);
+				// free(token->value);
 				token->value = NULL;
 			}
 			else if (token->split == true && exp_env != NULL)
 			{
-				free(token->value);
+				// free(token->value);
 				token->value = field_split(exp_env);
 			}
 			else
@@ -192,22 +192,29 @@ void	del_empty_tokens()
 
 int	lex(char *input)
 {
-	// char	*stripped;
 	t_token *temp;
 	char	*line;
+	char	*quoted;
 
 	line = ft_strdup(input);
 	g_data.state = 0;	
 	while (!quotes_matched(line))
-		line = ft_strjoin(line, ft_strdup(readline(KGRN"> "KNRM)));
+	{
+		quoted = readline("> ");
+		if (quoted)
+			line = ft_strjoin(line, ft_strdup(quoted));
+		else
+			break ;
+	}
 	line = ft_strtrim(line, "\n\t ");
 	if (!*line)
 		return (1);
 	tokenize(line);
 	param_expansion();
-	line = strip_quotes(line);
+	strip_quotes();
 	tokenize_operators();
 	del_empty_tokens();
+	check_syntax();
 	temp = g_data.tokens;
 	// while (temp != NULL)
 	// {

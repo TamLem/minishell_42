@@ -31,7 +31,7 @@ int	exec_builtin(t_simple_cmd *simple_cmd)
 
 	res = 0;
 	argv = NULL;
-	env = g_data.env;
+	env = env_to_arr();
 	argc = init_args(simple_cmd, &argv);
 	if (ft_strcmp(argv[0], "cd") == 0)
 		res = ft_cd(argc, argv, env);
@@ -56,19 +56,22 @@ int	child_process(t_simple_cmd *simple_cmd)
 	char	**args;
 	int		argc;
 	int		res;
+	char	**env;
 
 	res = 0;
 	args = NULL;
+	env = env_to_arr();
    	signal(SIGINT, child_exit);
 	if (!check_cmds(simple_cmd->cmd))
 	{
 		dprintf(2, "minishell: %s: command not found\n", simple_cmd->cmd);
 		return (1);
 	}
-	path = ft_getpath(g_data.env, simple_cmd->cmd);
+	path = ft_getpath(env, simple_cmd->cmd);
 	argc = init_args(simple_cmd, &args);
-	while (execve(*path, args, g_data.env) && *path)
+	while (execve(*path, args, env) && *path)
 		path++;
+	perror("err");
 	free_dp(args);
 	free_dp(path);
 	close(STDIN_FILENO);
@@ -194,14 +197,16 @@ int xecute(void)
 		close(fd[OUT]);
 		get_outfile(simple_cmd, fd[STDOUT_INIT], &fd[OUT], &fd[IN]);
 		g_data.state = 1;
-		ret = fork();
-		if (ret == 0)
+		if (is_builtin(simple_cmd->cmd))
+			exec_builtin(simple_cmd);
+		else
 		{
-			if (is_builtin(simple_cmd->cmd))
-				exec_builtin(simple_cmd);
-			else
+			ret = fork();
+			if (ret == 0)
+			{
 				child_process(simple_cmd);
-			exit(1);
+				exit(1);
+			}
 		}
 		simple_cmd = simple_cmd->next;
 	}

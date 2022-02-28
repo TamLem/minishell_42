@@ -6,7 +6,7 @@
 /*   By: tlemma <tlemma@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/03 17:53:52 by tlemma            #+#    #+#             */
-/*   Updated: 2022/02/27 20:03:15 by tlemma           ###   ########.fr       */
+/*   Updated: 2022/02/28 16:17:43 by tlemma           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,20 @@ void	free_dp(char **i)
 	}
 }
 
+int is_valid_name(char *argv)
+{
+    int i;
+
+    i = 0;
+    while (argv[i] != '\0')
+    {
+        if (!ft_isalnum(argv[i]) && argv[i] != '_')
+            return (0);
+        i++;
+    }
+    return (1);
+}
+
 char	*ft_append_char(char *s1, char c)
 {
 	size_t	i;
@@ -41,7 +55,7 @@ char	*ft_append_char(char *s1, char c)
 		len = ft_strlen(s1);
 	else
 		len = 0;
-	ret = malloc(sizeof(char) * (int)len + 2);
+	ret = ft_malloc(sizeof(char) * (int)len + 2);
 	if (!ret)
 		return (NULL);
 	while (i < len)
@@ -51,7 +65,7 @@ char	*ft_append_char(char *s1, char c)
 	}
 	ret[i] = c;
 	ret[i + 1] = '\0';
-	free(s1);
+	// free(s1);
 	return (ret);
 }
 
@@ -78,7 +92,6 @@ void	*ft_malloc(size_t size)
 		((void **)g_data.mem_alloced)[g_data.malloc_count] = ret;
 		g_data.malloc_count++;
 	}
-	dprintf(2, "mem alloced %d\n", g_data.malloc_count);
 	return (ret);
 }
 

@@ -6,21 +6,13 @@
 /*   By: tlemma <tlemma@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/01 14:13:55 by tlemma            #+#    #+#             */
-/*   Updated: 2022/02/27 20:03:59 by tlemma           ###   ########.fr       */
+/*   Updated: 2022/02/28 18:08:01 by tlemma           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 #include <signal.h>
 #include <termios.h>
-
-void	test()
-{
-	printf("%x\n", O_RDONLY);
-	printf("%x\n", O_TRUNC);
-	printf("%x\n", O_RDONLY | O_TRUNC);
-	printf("%x\n", O_RDONLY | O_TRUNC | O_APPEND);
-}
 
 int	change_ctrlc_sym(bool	value)
 {
@@ -68,10 +60,17 @@ int	ft_free()
 	return (0);
 }
 
-int	main(int argc, char *argv[], char *envp[])
+int	end_session(void)
 {
-	char	*line;
-	
+	change_ctrlc_sym(true);
+	rl_clear_history();
+	mem_free_all();
+	printf("exit\n");
+	return (0);
+}
+
+int	init_session(int argc, char *argv[], char *envp[])
+{
 	g_data.env = envp;
 	g_data.malloc_count = 0;
 	g_data.mem_alloced = NULL;
@@ -80,15 +79,23 @@ int	main(int argc, char *argv[], char *envp[])
 	change_ctrlc_sym(false);
  	signal(SIGINT, sig_ctrlc);
    	signal(SIGQUIT, SIG_IGN);
+	return (0);
+}
+
+int	main(int argc, char *argv[], char *envp[])
+{
+	char	*line;
+	
+	init_session(argc, argv, envp);
 	line = NULL;
 	g_data.state = 0;
 	while(true)
 	{
-		line = readline(KGRN"$ "KNRM);
+		line = readline("$ ");
 		if (line)
 		{
 			if (ft_strcmp(ft_strtrim(line, " \t\n"), "exit") == 0)
-				exit(0);
+				break ;
 			if (*line)
 				add_history(line);
 			if(!lex(line))
@@ -102,8 +109,5 @@ int	main(int argc, char *argv[], char *envp[])
 			break ;
 		free(line);
 	}
-	change_ctrlc_sym(true);
-	mem_free_all();
-	system("leaks minishell");
-	return (0);
+	return(end_session());
 }

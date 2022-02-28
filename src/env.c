@@ -1,26 +1,34 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   pwd.c                                              :+:      :+:    :+:   */
+/*   env.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: tlemma <tlemma@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/02/08 12:22:28 by nlenoch           #+#    #+#             */
-/*   Updated: 2022/02/28 16:19:26 by tlemma           ###   ########.fr       */
+/*   Created: 2022/02/28 17:47:24 by tlemma            #+#    #+#             */
+/*   Updated: 2022/02/28 18:04:01 by tlemma           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-#include "xecutor.h"
+#include "env.h"
 
-int	ft_pwd(void)
+int	ft_env(int argc, char *argv[], char *envp[])
 {
-	char	*path;
+	if (argc == 1)
+	{
+		print_env_or_export("env", NULL);
+		return (0);
+	}
+	return (1);
+}
 
-	path = getcwd(NULL, 0);
-	if (path == NULL)
-		return (err_handle(1, path));
-	printf("%s\n", path);
-	free(path);
-	return (0);
+char	*ft_getenv(char *name)
+{
+	t_env_list *tmp_env;
+
+	tmp_env = ft_getenv_list(name);
+	if (tmp_env)
+		return (tmp_env->value);
+	return (NULL);
 }

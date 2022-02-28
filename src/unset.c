@@ -6,7 +6,7 @@
 /*   By: tlemma <tlemma@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/08 12:33:09 by nlenoch           #+#    #+#             */
-/*   Updated: 2022/02/27 20:04:46 by tlemma           ###   ########.fr       */
+/*   Updated: 2022/02/28 16:19:15 by tlemma           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,9 +22,11 @@ int	ft_unset(int argc, char *argv[], char *envp[])
 	int i;
 
     i = 1;
+    tmp_env = g_data.env_list;
     while(argv[i])
     {
-        tmp_env = g_data.env_list;
+        if (!is_valid_name(argv[i]))
+            err_handle(2, argv[i]);
         if ((ft_strcmp(argv[i], tmp_env->value) == 0))
         {
             free(tmp_env->name);

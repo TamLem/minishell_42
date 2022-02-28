@@ -6,7 +6,7 @@
 /*   By: tlemma <tlemma@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/01 14:16:00 by tlemma            #+#    #+#             */
-/*   Updated: 2022/02/27 19:27:13 by tlemma           ###   ########.fr       */
+/*   Updated: 2022/02/28 18:19:35 by tlemma           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,12 +55,22 @@ typedef	struct s_data
 
 
 t_data	g_data;
-void	free_dp(char **i);
-char	*ft_append_char(char *s1, char c);
-int		init_env(int argc, char **argv, char **envp);
-int		ft_export();
-char	*ft_getenv_value(char *name);
-void	*ft_malloc(size_t size);
-void	mem_free_all();
+void		free_dp(char **i);
+char		*ft_append_char(char *s1, char c);
+int			init_env(int argc, char **argv, char **envp);
+int			ft_export();
+void		*ft_malloc(size_t size);
+void		mem_free_all();
+int			check_syntax(void);
+int 		is_valid_name(char *argv);
+int    		err_handle(int error_code, char *error_input);
+char		*ft_getenv(char *name);
+t_env_list *ft_getenv_list(char *name);
+char 		**env_to_arr();
+
+
+
+
+
 
 #endif
