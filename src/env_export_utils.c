@@ -6,7 +6,7 @@
 /*   By: tlemma <tlemma@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/28 17:48:19 by tlemma            #+#    #+#             */
-/*   Updated: 2022/02/28 17:55:44 by tlemma           ###   ########.fr       */
+/*   Updated: 2022/02/28 19:00:40 by tlemma           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -126,10 +126,10 @@ char **env_to_arr(void)
 	{
 		if (env_lst->value)
 		{
-			env_arr[i] = ft_strjoin(env_lst->name, "=\"");
+			env_arr[i] = ft_strjoin(env_lst->name, "=");
 			temp = env_arr[i];
 			env_arr[i] = ft_strjoin(temp, env_lst->value);
-			env_arr[i] = ft_append_char(env_arr[i], '"');
+			// env_arr[i] = ft_append_char(env_arr[i], '"');
 		}	
 		else
 			env_arr[i] = ft_strdup(env_lst->name);
