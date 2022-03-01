@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lexer.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nlenoch <nlenoch@student.42.fr>            +#+  +:+       +#+        */
+/*   By: tlemma <tlemma@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/01 16:26:02 by tlemma            #+#    #+#             */
-/*   Updated: 2022/02/28 18:48:24 by nlenoch          ###   ########.fr       */
+/*   Updated: 2022/03/01 14:38:02 by tlemma           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,6 +47,7 @@ int	tokenize(char *line)
 						return (2);
 					token = token->next;
 					token->value = NULL;
+					token->special = true;
 				}
 			}
 		}
@@ -95,6 +96,7 @@ int	strip_quotes(void)
 				|| (state != *quoted && state != 0))
 				stripped = ft_append_char(stripped, *quoted);
 			quoted++;
+			token->special = false;
 		}
 		// free(token->value);
 		token->value = stripped;
@@ -103,6 +105,13 @@ int	strip_quotes(void)
 	}
 	return (true);
 }
+
+// int	exand_param(t_token *tokenize)
+// {
+// 	char	*value;
+
+	
+// }
 
 int	param_expansion(void)
 {
@@ -117,8 +126,8 @@ int	param_expansion(void)
 			exp_env = ft_getenv(token->value + 1);
 			if (exp_env == NULL)
 			{	
-				// free(token->value);
-				token->value = NULL;
+				if (*(token->value + 1))
+					token->value = NULL;
 			}
 			else if (token->split == true && exp_env != NULL)
 			{
@@ -142,7 +151,7 @@ int	tokenize_operators(void)
 	token = g_data.tokens;
 	while (token)
 	{
-		if (token && token->value)
+		if (token && token->value && token->special)
 		{
 			if (ft_strcmp(token->value, "<") == 0)
 				token->type = LESS;
@@ -156,14 +165,12 @@ int	tokenize_operators(void)
 				token->type = PIPE;
 			else if (ft_strcmp(token->value, "||") == 0)
 				token->type = ERROR;
-			else if (ft_strchr(token->value, '=') && *(token->value) != ASSIGN)
-				token->type = WORD;
-			else if (token->type != REDIR)
-				token->type = WORD;
 			if ((token->type == LESS || token->type == DLESS || token->type
 					== GREAT || token->type == DGREAT) && token->next)
 					token->next->type = REDIR;
 		}
+		else if (token->type != REDIR)
+			token->type = WORD;
 		token = token->next;
 	}
 	return (0);

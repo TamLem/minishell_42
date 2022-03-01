@@ -6,7 +6,7 @@
 /*   By: tlemma <tlemma@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/28 18:58:11 by nlenoch           #+#    #+#             */
-/*   Updated: 2022/02/28 20:45:38 by tlemma           ###   ########.fr       */
+/*   Updated: 2022/03/01 14:50:44 by tlemma           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,6 +43,8 @@ int	exec_builtin(t_simple_cmd *simple_cmd)
 
 	res = 0;
 	argv = NULL;
+	if (ft_getenv("PATH") == NULL)
+		return (1);
 	env = env_to_arr();
 	argc = init_args(simple_cmd, &argv);
 	if (ft_strcmp(argv[0], "cd") == 0)
@@ -72,7 +74,7 @@ int	child_process(t_simple_cmd *simple_cmd)
 
 	res = 0;
 	args = NULL;
-	env = g_data.env;
+	env =env_to_arr();
 	signal(SIGINT, child_exit);
 	if (!check_cmds(simple_cmd->cmd))
 	{

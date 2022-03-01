@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lexer_utils.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nlenoch <nlenoch@student.42.fr>            +#+  +:+       +#+        */
+/*   By: tlemma <tlemma@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/10 21:26:47 by tlemma            #+#    #+#             */
-/*   Updated: 2022/02/28 18:43:22 by nlenoch          ###   ########.fr       */
+/*   Updated: 2022/03/01 13:31:41 by tlemma           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,18 +31,23 @@ bool	is_operator(char c)
 
 bool	shall_split(char *line, char *appended, int state)
 {
-	if (*(line + 1) == '\0')
+	char	next;
+
+	next = *(line + 1);
+
+	if (next == '\0')
 		return (true);
-	if (*(line + 1) == DOLLAR && state != QUOTE)
+	if (next == DOLLAR && state != QUOTE)
 		return (true);
-	if (*appended == DOLLAR && !(ft_isdigit(*(line + 1))
-			|| ft_isalpha(*(line + 1))))
+	if (*appended == DOLLAR && 
+		!((ft_isdigit(next) && ft_strlen(appended) > 1)
+			|| ft_isalpha(next) || next == '_'))
 		return (true);
-	if (is_WSPACE(*(line + 1)) && state == 0)
+	if (is_WSPACE(next) && state == 0)
 		return (true);
-	if (!is_operator(*line) && is_operator(*(line + 1)))
+	if (!is_operator(*line) && is_operator(next))
 		return (true);
-	if (is_operator(*(line)) && !is_operator(*(line + 1)))
+	if (is_operator(*(line)) && !is_operator(next))
 		return (true);
 	if (is_operator(*line) && (*line != *appended || ft_strlen(appended) > 1))
 		return (true);
