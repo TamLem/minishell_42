@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nlenoch <nlenoch@student.42.fr>            +#+  +:+       +#+        */
+/*   By: tlemma <tlemma@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/03 17:53:52 by tlemma            #+#    #+#             */
-/*   Updated: 2022/02/28 18:56:51 by nlenoch          ###   ########.fr       */
+/*   Updated: 2022/03/01 19:56:41 by tlemma           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,12 @@ typedef struct s_mem_alloc
 	long				address;
 	struct s_mem_alloc	*next;
 }				t_mem_alloc;
+
+void	free_to_null(void **addr)
+{	
+	free(*addr);
+	*addr = NULL;
+}
 
 void	free_dp(char **i)
 {

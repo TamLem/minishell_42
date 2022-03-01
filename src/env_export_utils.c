@@ -6,7 +6,7 @@
 /*   By: tlemma <tlemma@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/28 17:48:19 by tlemma            #+#    #+#             */
-/*   Updated: 2022/02/28 20:42:06 by tlemma           ###   ########.fr       */
+/*   Updated: 2022/03/01 19:25:26 by tlemma           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,7 +73,7 @@ void	print_env_or_export(char *cmd, char **env_arr)
         while (tmp_env != NULL)
         {
 			if (tmp_env->is_env)
-            	dprintf(2, "%s=%s\n", tmp_env->name, tmp_env->value);
+            	printf("%s=%s\n", tmp_env->name, tmp_env->value);
             tmp_env = tmp_env->next;
         }
     }
@@ -82,7 +82,7 @@ void	print_env_or_export(char *cmd, char **env_arr)
         order_env(&env_arr);
 		while (*env_arr)
 		{
-			dprintf(2, "declare -x %s\n", *env_arr);
+			printf("declare -x %s\n", *env_arr);
 			env_arr++;
 		}
 		free_dp(env_arr);

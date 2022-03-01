@@ -6,7 +6,7 @@
 /*   By: tlemma <tlemma@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/27 15:43:40 by tlemma            #+#    #+#             */
-/*   Updated: 2022/03/01 14:24:34 by tlemma           ###   ########.fr       */
+/*   Updated: 2022/03/01 21:21:28 by tlemma           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,7 +85,16 @@ int	check_syntax(void)
 	while (token)
 	{
 		if (is_io_redir(token) && token->next && is_io_redir(token->next))
+		{
+			token->error = true;
 			return (err_handle(4, token->value));
+		}
+		if (is_io_redir(token) && (!token->next || token->type != REDIR))
+		{
+			token->error = true;
+			return (err_handle(5, token->value));
+		}
+		token->error = false;
 		token = token->next;
 		// if (arg == 0 && token->type != REDIR && token->type != WORD)
 		// 	return (error_handle())
@@ -104,7 +113,7 @@ int	err_handle(int error_code, char *error_input)
 	err[2] = "not an valid identifier";
 	err[3] = "no such file or directory";
 	err[4] = "syntax error near unexpected token";
-	err[5] = "syntax error near unexpected token newline";
+	err[5] = "syntax error near unexpected token 'newline'";
 	if (error_code == 0)
 		print_err("minishell: %s: %s\n", error_input, err[0]);
 	if (error_code == 1)
@@ -116,6 +125,8 @@ int	err_handle(int error_code, char *error_input)
 	if (error_code == 4)
 		print_err("minishell: %s: `%s'\n", err[4], error_input);
 	if (error_code == 5)
-		print_err("minishell: %s %s\n", "", err[5]);
+		print_err("minishell:%s %s\n", "", err[5]);
+	
+	g_data.exit_status = error_code;
 	return (error_code);
 }

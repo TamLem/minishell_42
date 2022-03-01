@@ -6,7 +6,7 @@
 /*   By: tlemma <tlemma@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/15 16:13:15 by tlemma            #+#    #+#             */
-/*   Updated: 2022/02/26 19:11:28 by tlemma           ###   ########.fr       */
+/*   Updated: 2022/03/01 20:22:49 by tlemma           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@
 #include <stdbool.h>
 
 int 	xecute(void);
-char	**ft_getpath(char *keypairs[], char *cmd);
+char	**ft_getpath(char *cmd);
 bool	check_cmds(char	*cmd);
 bool	is_builtin(char	*cmd);
 int		add_env(char *name, char *value);

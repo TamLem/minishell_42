@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nlenoch <nlenoch@student.42.fr>            +#+  +:+       +#+        */
+/*   By: tlemma <tlemma@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/10 22:08:11 by tlemma            #+#    #+#             */
-/*   Updated: 2022/02/28 18:50:34 by nlenoch          ###   ########.fr       */
+/*   Updated: 2022/03/01 20:48:02 by tlemma           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,24 +24,17 @@ int	init_cmd(t_simple_cmd **simple_cmd)
 	(*simple_cmd)->infile = NULL;
 	(*simple_cmd)->outfile = NULL;
 	(*simple_cmd)->heredocs = NULL;
+	(*simple_cmd)->error = false;
 	return (0);
 }
 
 int	add_args(t_args **args, char *value)
 {
-	// char	**split;
-
 	while (*args != NULL)
 		args = &(*args)->next;
 	*args = ft_malloc(sizeof(t_args));
 	if (*args == NULL)
 		return (2);
-	// if (ft_strchr(value, ' '))
-	// {
-	// 	split = ft_split(value, ' ');
-	// 	while (*split)
-	// 		add_args(args, *split++);
-	// }
 	(*args)->value = value;
 	(*args)->next = NULL;
 	return (0);
@@ -58,7 +51,7 @@ int	add_infiles(t_infiles **infile, char *file, int mode)
 	{
 		(*infile)->value = open(file, O_RDONLY);
 		if ((*infile)->value == -1)
-			printf("open: %s\n", file);
+			printf("open: %s\n", file);//err 
 		(*infile)->dlmtr = NULL;
 	}
 	else if (mode == DLESS)
@@ -126,6 +119,8 @@ int	parse(void)
 		parse_redir(simple_cmd, token);
 		while (token && token->type != PIPE)
 		{
+			if (token->error)
+				simple_cmd->error = true;
 			if (token->type == WORD)
 			{
 				if (simple_cmd->cmd == NULL)

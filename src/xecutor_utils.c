@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   xecutor_utils.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nlenoch <nlenoch@student.42.fr>            +#+  +:+       +#+        */
+/*   By: tlemma <tlemma@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/17 19:46:04 by tlemma            #+#    #+#             */
-/*   Updated: 2022/02/28 18:57:54 by nlenoch          ###   ########.fr       */
+/*   Updated: 2022/03/01 20:35:04 by tlemma           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,35 +38,6 @@ char	*ft_strjoin2(char *s1, char *s2)
 	return (ret);
 }
 
-char	**ft_getpath(char *keypairs[], char *cmd)
-{
-	int		i;
-	char	*keypair;
-	char	**path;
-
-	i = 0;
-	keypair = NULL;
-	path = NULL;
-	while (keypairs[i++])
-	{
-		keypair = ft_strnstr(keypairs[i], "PATH=/", 6);
-		if (keypair != NULL)
-		{
-			keypair = ft_strnstr(keypair, "/", 6);
-			path = ft_split(keypair, ':');
-			break ;
-		}
-	}
-	i = 0;
-	while (path[i])
-	{
-		path[i] = ft_strjoin2(path[i], "/");
-		path[i] = ft_strjoin2(path[i], cmd);
-		i++;
-	}
-	return (path);
-}
-
 int	init_args(t_simple_cmd *simple_cmd, char ***p_arg_array)
 {
 	int		i;
@@ -94,6 +65,34 @@ int	init_args(t_simple_cmd *simple_cmd, char ***p_arg_array)
 	return (len);
 }
 
+char	**ft_getpath(char *cmd)
+{
+	int		i;
+	char	*keypair;
+	char	**path;
+
+	i = 0;
+	keypair = NULL;
+	path = ft_split(ft_getenv("PATH"), ':');
+	i = 0;
+	if (path == NULL)
+	{
+		path = malloc(sizeof(char *) * 2);
+		path[0] = cmd;
+		path[1] = NULL;
+	}
+	else
+	{
+		while (path && path[i])
+		{
+			path[i] = ft_strjoin(path[i], "/");
+			path[i] = ft_strjoin(path[i], cmd);
+			i++;
+		}
+	}
+	return (path);
+}
+
 bool	is_builtin(char	*cmd)
 {
 	if (!ft_strcmp(cmd, "cd") || !ft_strcmp(cmd, "echo")
@@ -112,8 +111,8 @@ bool	check_cmds(char	*cmd)
 
 	i = 0;
 	res = false;
-	path = ft_getpath(g_data.env, cmd);
-	while (path[i])
+	path = ft_getpath(cmd);
+	while (path && path[i])
 	{
 		if (access(path[i], F_OK | X_OK) == 0)
 			res = true;
@@ -121,5 +120,7 @@ bool	check_cmds(char	*cmd)
 	}
 	if (is_builtin(cmd))
 		res = false;
+	if (path != NULL)
+		free_dp(path);
 	return (res);
 }

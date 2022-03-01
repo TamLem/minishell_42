@@ -6,7 +6,7 @@
 /*   By: tlemma <tlemma@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/01 16:26:02 by tlemma            #+#    #+#             */
-/*   Updated: 2022/03/01 14:38:02 by tlemma           ###   ########.fr       */
+/*   Updated: 2022/03/01 21:04:54 by tlemma           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ int	tokenize(char *line)
 			token->value = ft_append_char(token->value, *line);
 			if (shall_split(line, token->value, state))
 			{
-				if (is_operator(*line))
+				if (is_operator(*line) && state == 0)
 					token->type = OPERATOR;
 				else
 					token->type = TOKEN;
@@ -47,7 +47,7 @@ int	tokenize(char *line)
 						return (2);
 					token = token->next;
 					token->value = NULL;
-					token->special = true;
+					token->expanded = false;
 				}
 			}
 		}
@@ -96,7 +96,6 @@ int	strip_quotes(void)
 				|| (state != *quoted && state != 0))
 				stripped = ft_append_char(stripped, *quoted);
 			quoted++;
-			token->special = false;
 		}
 		// free(token->value);
 		token->value = stripped;
@@ -121,21 +120,23 @@ int	param_expansion(void)
 	token = g_data.tokens;
 	while (token)
 	{
-		if (token->type == TOKEN && *(token->value) == DOLLAR)
+		if ((token->type == TOKEN && *(token->value) == DOLLAR )|| ft_strchr(token->value, '$'))
 		{
-			exp_env = ft_getenv(token->value + 1);
-			if (exp_env == NULL)
-			{	
-				if (*(token->value + 1))
-					token->value = NULL;
-			}
-			else if (token->split == true && exp_env != NULL)
-			{
-				// free(token->value);
-				token->value = field_split(exp_env);
-			}
+			if (*(token->value + 1) == QMARK)
+				exp_env = ft_itoa(g_data.exit_status);
 			else
-				token->value = exp_env;
+				exp_env = ft_getenv(token->value + 1);
+			if (exp_env == NULL && *(token->value + 1))
+					token->value = NULL;
+			else 
+			{
+				if (token->split == true && *(token->value + 1) == QMARK)
+					token->value = field_split(exp_env);
+				else
+					token->value = exp_env;
+				token->expanded = true;
+				// free(token->value);
+			}
 		}
 		else if (token->type == TOKEN && ft_strchr(token->value, PLACE_HOLDER))
 			*(ft_strchr(token->value, PLACE_HOLDER)) = DOLLAR;
@@ -151,7 +152,7 @@ int	tokenize_operators(void)
 	token = g_data.tokens;
 	while (token)
 	{
-		if (token && token->value && token->special)
+		if (token && token->value && token->type == OPERATOR)
 		{
 			if (ft_strcmp(token->value, "<") == 0)
 				token->type = LESS;
@@ -166,7 +167,8 @@ int	tokenize_operators(void)
 			else if (ft_strcmp(token->value, "||") == 0)
 				token->type = ERROR;
 			if ((token->type == LESS || token->type == DLESS || token->type
-					== GREAT || token->type == DGREAT) && token->next)
+					== GREAT || token->type == DGREAT) && token->next &&
+						token->next->type == TOKEN)
 					token->next->type = REDIR;
 		}
 		else if (token->type != REDIR)

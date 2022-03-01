@@ -6,7 +6,7 @@
 /*   By: tlemma <tlemma@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/10 21:26:47 by tlemma            #+#    #+#             */
-/*   Updated: 2022/03/01 13:31:41 by tlemma           ###   ########.fr       */
+/*   Updated: 2022/03/01 21:08:44 by tlemma           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,15 +41,15 @@ bool	shall_split(char *line, char *appended, int state)
 		return (true);
 	if (*appended == DOLLAR && 
 		!((ft_isdigit(next) && ft_strlen(appended) > 1)
-			|| ft_isalpha(next) || next == '_'))
+			|| ft_isalpha(next) || next == '_' || next == QMARK))
 		return (true);
 	if (is_WSPACE(next) && state == 0)
 		return (true);
-	if (!is_operator(*line) && is_operator(next))
+	if (!is_operator(*line) && is_operator(next) && state == 0)
 		return (true);
-	if (is_operator(*(line)) && !is_operator(next))
+	if (is_operator(*line) && !is_operator(next) && state == 0)
 		return (true);
-	if (is_operator(*line) && (*line != *appended || ft_strlen(appended) > 1))
+	if ((is_operator(*line) && (*line != *appended || ft_strlen(appended) > 1)) && state == 0)
 		return (true);
 	else
 		return (false);

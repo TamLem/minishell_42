@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nlenoch <nlenoch@student.42.fr>            +#+  +:+       +#+        */
+/*   By: tlemma <tlemma@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/01 14:13:55 by tlemma            #+#    #+#             */
-/*   Updated: 2022/02/28 18:49:20 by nlenoch          ###   ########.fr       */
+/*   Updated: 2022/03/01 15:02:24 by tlemma           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,7 +94,7 @@ int	main(int argc, char *argv[], char *envp[])
 		line = readline("$ ");
 		if (line)
 		{
-			if (ft_strcmp(ft_strtrim(line, " \t\n"), "exit") == 0)
+			if (ft_strcmp(ft_strtrim(line, " \t\n"), "exit") == 0) //ft_exit
 				break ;
 			if (*line)
 				add_history(line);

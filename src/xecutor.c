@@ -6,7 +6,7 @@
 /*   By: tlemma <tlemma@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/28 18:58:11 by nlenoch           #+#    #+#             */
-/*   Updated: 2022/03/01 14:50:44 by tlemma           ###   ########.fr       */
+/*   Updated: 2022/03/01 20:47:02 by tlemma           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,8 +43,6 @@ int	exec_builtin(t_simple_cmd *simple_cmd)
 
 	res = 0;
 	argv = NULL;
-	if (ft_getenv("PATH") == NULL)
-		return (1);
 	env = env_to_arr();
 	argc = init_args(simple_cmd, &argv);
 	if (ft_strcmp(argv[0], "cd") == 0)
@@ -74,14 +72,14 @@ int	child_process(t_simple_cmd *simple_cmd)
 
 	res = 0;
 	args = NULL;
-	env =env_to_arr();
+	env = env_to_arr();
 	signal(SIGINT, child_exit);
 	if (!check_cmds(simple_cmd->cmd))
 	{
 		dprintf(2, "minishell: %s: command not found\n", simple_cmd->cmd);
 		return (1);
 	}
-	path = ft_getpath(env, simple_cmd->cmd);
+	path = ft_getpath(simple_cmd->cmd);
 	argc = init_args(simple_cmd, &args);
 	while (execve(*path, args, env) && *path)
 		path++;
@@ -201,6 +199,11 @@ int	xecute(void)
 		return (2);
 	while (simple_cmd != NULL)
 	{
+		if (simple_cmd->error)
+		{
+			simple_cmd = simple_cmd->next;
+			continue ;
+		}
 		fd[IN] = get_infile(simple_cmd, fd[IN]);
 		if (fd[IN] == -1 && close(fd[IN]) && close(fd[OUT]))
 			return (2);	/* maybe unsafe */

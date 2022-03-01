@@ -6,13 +6,14 @@
 /*   By: tlemma <tlemma@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/10 22:08:29 by tlemma            #+#    #+#             */
-/*   Updated: 2022/02/24 16:52:18 by tlemma           ###   ########.fr       */
+/*   Updated: 2022/03/01 21:02:53 by tlemma           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef PARSER_H
 #define	PARSER_H
 
+#include <stdbool.h>
 typedef struct s_args
 {
 	char			*value;
@@ -45,8 +46,8 @@ typedef struct s_simple_cmd
 	t_infiles			*infile;
 	t_outfiles			*outfile;
 	t_heredocs			*heredocs;
+	bool				error;
 	struct s_simple_cmd	*next;
-	int					order;
 } 		t_simple_cmd;
 
 int		parse(void);
