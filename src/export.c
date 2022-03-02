@@ -3,16 +3,23 @@
 /*                                                        :::      ::::::::   */
 /*   export.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tlemma <tlemma@student.42.fr>              +#+  +:+       +#+        */
+/*   By: nlenoch <nlenoch@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/08 12:32:47 by nlenoch           #+#    #+#             */
-/*   Updated: 2022/03/02 02:48:16 by tlemma           ###   ########.fr       */
+/*   Updated: 2022/03/02 11:50:06 by nlenoch          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "xecutor.h"
 #include "env.h"
 #include "minishell.h"
+
+void	add_env_help(t_env_list *existing, char *value)
+{
+	free_to_null(&existing->value);
+	existing->value = value;
+	existing->is_env = true;
+}
 
 int	add_env(char *name, char *value)
 {
@@ -21,11 +28,7 @@ int	add_env(char *name, char *value)
 
 	existing = ft_getenv_list(name);
 	if (existing && value)
-	{
-		free_to_null(&existing->value);
-		existing->value = value;
-		existing->is_env = true;
-	}
+		add_env_help(existing, value);
 	else if (!existing)
 	{
 		new = g_data.env_list;
@@ -44,6 +47,14 @@ int	add_env(char *name, char *value)
 		new->next = NULL;
 	}
 	return (0);
+}
+
+void	ft_update_env_end(char *name, char *value)
+{
+	if (!is_valid_name(name))
+		err_handle(2, name);
+	else
+		add_env(name, value);
 }
 
 static int	update_env(int argc, char *argv[], char *envp[])
@@ -67,10 +78,7 @@ static int	update_env(int argc, char *argv[], char *envp[])
 			}
 			else
 				name = *argv;
-			if (!is_valid_name(name))
-				err_handle(2, name);
-			else
-				add_env(name, value);
+			ft_update_env_end(name, value);
 		}
 		argv++;
 	}

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tlemma <tlemma@student.42.fr>              +#+  +:+       +#+        */
+/*   By: nlenoch <nlenoch@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/10 22:08:11 by tlemma            #+#    #+#             */
-/*   Updated: 2022/03/02 01:46:39 by tlemma           ###   ########.fr       */
+/*   Updated: 2022/03/02 12:44:03 by nlenoch          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,7 +100,6 @@ int	add_outfiles(t_outfiles **outfile, char *file, int mode)
 		(*outfile)->value = open(file, O_WRONLY | O_APPEND | O_CREAT, S_IRWXU);
 	if ((*outfile)->value == -1)
 		err_handle(0, file);
-
 	(*outfile)->next = NULL;
 	return (0);
 }
@@ -128,6 +127,13 @@ int	parse_redir(t_simple_cmd *cmd, t_token *token)
 	return (0);
 }
 
+void	ft_parsehelp(t_simple_cmd *simple_cmd, t_token *token)
+{
+	if (simple_cmd->cmd == NULL)
+		simple_cmd->cmd = token->value;
+	add_args(&(simple_cmd->args), token->value);
+}
+
 int	parse(void)
 {
 	t_token			*token;
@@ -146,9 +152,10 @@ int	parse(void)
 				simple_cmd->error = true;
 			if (token->type == WORD)
 			{
-				if (simple_cmd->cmd == NULL)
-					simple_cmd->cmd = token->value;
-				add_args(&(simple_cmd->args), token->value);
+				ft_parsehelp(simple_cmd, token);
+				// if (simple_cmd->cmd == NULL)
+				// 	simple_cmd->cmd = token->value;
+				// add_args(&(simple_cmd->args), token->value);
 			}	
 			token = token->next;
 		}

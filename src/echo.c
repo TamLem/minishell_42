@@ -6,7 +6,7 @@
 /*   By: nlenoch <nlenoch@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/01 12:22:51 by nlenoch           #+#    #+#             */
-/*   Updated: 2022/02/28 18:33:55 by nlenoch          ###   ########.fr       */
+/*   Updated: 2022/03/02 11:15:16 by nlenoch          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,22 @@ bool	check_flag(char *arg, char *flag)
 		arg++;
 	}
 	return (true);
+}
+
+void	ft_printhelp(bool n_flag, char **argv)
+{
+	int	i;
+
+	i = 1;
+	if (n_flag)
+		i = 2;
+	while (argv[i] && (i == n_flag + 1 || printf(" ")))
+	{
+		printf("%s", argv[i]);
+		i++;
+	}
+	if (!n_flag)
+		printf("\n");
 }
 
 int	ft_echo(int argc, char **argv)
@@ -49,15 +65,6 @@ int	ft_echo(int argc, char **argv)
 			i++;
 		}
 	}
-	i = 1;
-	if (n_flag)
-		i = 2;
-	while (argv[i] && (i == n_flag + 1 || printf(" ")))
-	{
-		printf("%s", argv[i]);
-		i++;
-	}
-	if (!n_flag)
-		printf("\n");
+	ft_printhelp(n_flag, argv);
 	return (0);
 }

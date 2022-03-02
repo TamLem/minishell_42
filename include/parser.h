@@ -3,17 +3,18 @@
 /*                                                        :::      ::::::::   */
 /*   parser.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tlemma <tlemma@student.42.fr>              +#+  +:+       +#+        */
+/*   By: nlenoch <nlenoch@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/10 22:08:29 by tlemma            #+#    #+#             */
-/*   Updated: 2022/03/01 21:02:53 by tlemma           ###   ########.fr       */
+/*   Updated: 2022/03/02 10:46:21 by nlenoch          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef PARSER_H
-#define	PARSER_H
+# define PARSER_H
 
-#include <stdbool.h>
+# include <stdbool.h>
+
 typedef struct s_args
 {
 	char			*value;
@@ -48,9 +49,8 @@ typedef struct s_simple_cmd
 	t_heredocs			*heredocs;
 	bool				error;
 	struct s_simple_cmd	*next;
-} 		t_simple_cmd;
+}	t_simple_cmd;
 
 int		parse(void);
-
 
 #endif

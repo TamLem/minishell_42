@@ -3,19 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   env.h                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tlemma <tlemma@student.42.fr>              +#+  +:+       +#+        */
+/*   By: nlenoch <nlenoch@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/28 17:53:10 by tlemma            #+#    #+#             */
-/*   Updated: 2022/03/01 12:31:31 by tlemma           ###   ########.fr       */
+/*   Updated: 2022/03/02 10:45:23 by nlenoch          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef ENV_H
-#define ENV_H
+# define ENV_H
 
 void		print_env_or_export(char *cmd, char **env_arr);
-
-
-
 
 #endif

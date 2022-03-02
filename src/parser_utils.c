@@ -6,7 +6,7 @@
 /*   By: nlenoch <nlenoch@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/21 16:39:24 by tlemma            #+#    #+#             */
-/*   Updated: 2022/02/28 18:49:37 by nlenoch          ###   ########.fr       */
+/*   Updated: 2022/03/02 12:40:50 by nlenoch          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@
 bool	is_io_modifier(int type)
 {
 	if (type == LESS || type == DLESS
-				|| type == GREAT || type == DGREAT)
+		|| type == GREAT || type == DGREAT)
 		return (true);
 	return (false);
 }

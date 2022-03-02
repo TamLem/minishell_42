@@ -3,21 +3,21 @@
 /*                                                        :::      ::::::::   */
 /*   lexer.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tlemma <tlemma@student.42.fr>              +#+  +:+       +#+        */
+/*   By: nlenoch <nlenoch@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/03 13:03:11 by tlemma            #+#    #+#             */
-/*   Updated: 2022/03/01 20:41:30 by tlemma           ###   ########.fr       */
+/*   Updated: 2022/03/02 10:45:48 by nlenoch          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef LEXER_H
 # define LEXER_H
 
-#define RESET 'y'
-#define NO_RESET 'n'
-#define	PLACE_HOLDER 0x1D
+# define RESET 'y'
+# define NO_RESET 'n'
+# define PLACE_HOLDER 0x1D
 
-#include <stdbool.h>
+# include <stdbool.h>
 
 typedef struct s_token
 {
@@ -28,7 +28,6 @@ typedef struct s_token
 	bool			expanded;
 	struct s_token	*next;
 }		t_token;
-
 
 enum e_IFS{
 	WWSPACE=' ',
@@ -54,7 +53,6 @@ enum e_grammer{
 enum e_TOKENS{
 	TOKEN=-2,
 	OPERATOR=-3,
-
 	ERROR=-9,
 	FLAG='-',
 	QUOTE='\'',

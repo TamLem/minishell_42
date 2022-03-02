@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   err_handling.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tlemma <tlemma@student.42.fr>              +#+  +:+       +#+        */
+/*   By: nlenoch <nlenoch@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/27 15:43:40 by tlemma            #+#    #+#             */
-/*   Updated: 2022/03/01 22:16:55 by tlemma           ###   ########.fr       */
+/*   Updated: 2022/03/02 11:43:13 by nlenoch          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,7 +78,7 @@ int	is_io_redir(t_token *token)
 int	check_syntax(void)
 {
 	int		args;
-	t_token *token;
+	t_token	*token;
 
 	args = 0;
 	token = g_data.tokens;
@@ -89,7 +89,7 @@ int	check_syntax(void)
 			token->error = true;
 			return (err_handle(4, token->value));
 		}
-		if ((is_io_redir(token) && token->type != DLESS) 
+		if ((is_io_redir(token) && token->type != DLESS)
 			&& (!token->next && token->type != REDIR))
 		{
 			token->error = true;
@@ -106,9 +106,7 @@ int	check_syntax(void)
 int	err_handle(int error_code, char *error_input)
 {
 	char	*err[7];
-	char	*err_prefix;
 
-	err_prefix = "minishell: ";
 	err[0] = "missing ]";
 	err[1] = "command not found";
 	err[2] = "not an valid identifier";
@@ -116,7 +114,6 @@ int	err_handle(int error_code, char *error_input)
 	err[4] = "syntax error near unexpected token";
 	err[5] = "syntax error near unexpected token 'newline'";
 	err[6] = "No such file or directory";
-
 	if (error_code == 0)
 		print_err("minishell: %s: %s\n", error_input, err[0]);
 	if (error_code == 1)
@@ -131,7 +128,6 @@ int	err_handle(int error_code, char *error_input)
 		print_err("minishell:%s %s\n", "", err[5]);
 	if (error_code == 6)
 		print_err("minishell:%s %s\n", "", err[6]);
-	
 	g_data.exit_status = error_code;
 	return (error_code);
 }

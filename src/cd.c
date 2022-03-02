@@ -6,12 +6,20 @@
 /*   By: nlenoch <nlenoch@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/01 18:52:36 by nlenoch           #+#    #+#             */
-/*   Updated: 2022/02/28 18:33:06 by nlenoch          ###   ########.fr       */
+/*   Updated: 2022/03/02 11:01:14 by nlenoch          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "xecutor.h"
 #include "minishell.h"
+
+void	ft_end(int dir, char *path, char *oldpath)
+{
+	if (dir == -1)
+		err_handle(3, path);
+	else
+		add_env("OLDPWD", oldpath);
+}
 
 int	ft_cd(int argc, char **argv, char **envp)
 {
@@ -37,9 +45,6 @@ int	ft_cd(int argc, char **argv, char **envp)
 	}
 	else
 		dir = chdir(path);
-	if (dir == -1)
-		err_handle(3, path);
-	else
-		add_env("OLDPWD", oldpath);
+	ft_end(dir, path, oldpath);
 	return (1);
 }

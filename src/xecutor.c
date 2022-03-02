@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   xecutor.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tlemma <tlemma@student.42.fr>              +#+  +:+       +#+        */
+/*   By: nlenoch <nlenoch@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/28 18:58:11 by nlenoch           #+#    #+#             */
-/*   Updated: 2022/03/02 01:47:15 by tlemma           ###   ########.fr       */
+/*   Updated: 2022/03/02 12:53:35 by nlenoch          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,8 +57,8 @@ int	exec_builtin(t_simple_cmd *simple_cmd)
 		res = ft_unset(argc, argv, env);
 	else if (ft_strcmp(argv[0], "pwd") == 0)
 		res = ft_pwd();
-	// else if (ft_strcmp(argv[0], "exit") == 0)
-	// 	res = ft_exit(argc, argv, env);
+	else if (ft_strcmp(argv[0], "exit") == 0)
+		res = ft_exit(argc, argv);
 	return (res);
 }
 
@@ -79,7 +79,7 @@ int	child_process(t_simple_cmd *simple_cmd)
 		dprintf(2, "minishell: %s: command not found\n", simple_cmd->cmd);
 		return (1);
 	}
-	path = ft_getpath(simple_cmd->cmd);
+	path = ft_getpath(simple_cmd->cmd); // too few arguments needs (char **keypairs & char *cmd)
 	argc = init_args(simple_cmd, &args);
 	while (execve(*path, args, env) && *path)
 		path++;
@@ -90,8 +90,6 @@ int	child_process(t_simple_cmd *simple_cmd)
 	close(STDOUT_FILENO);
 	return (res);
 }
-
-
 
 int	get_infile(t_simple_cmd *simple_cmd, int fdin)
 {
@@ -155,6 +153,24 @@ void	reset_fds(int fd[4])
 	close(fd[STDOUT_INIT]);
 }
 
+void	ft_xecutehelp(t_simple_cmd *simple_cmd, int fd[])
+{
+	dup2(fd[IN], STDIN_FILENO);
+	close(fd[IN]);
+	close(fd[OUT]);
+	get_outfile(simple_cmd, fd[STDOUT_INIT], &fd[OUT], &fd[IN]);
+	g_data.state = 1;
+}
+
+void	ft_xecutehelp2(int ret, t_simple_cmd *simple_cmd)
+{
+	if (ret == 0)
+	{
+		child_process(simple_cmd);
+		exit(1);
+	}
+}
+
 int	xecute(void)
 {
 	int				ret;
@@ -179,21 +195,22 @@ int	xecute(void)
 		fd[IN] = get_infile(simple_cmd, fd[IN]);
 		if (fd[IN] == -1 && close(fd[IN]) && close(fd[OUT]))
 			return (2);	/* maybe unsafe */
-		dup2(fd[IN], STDIN_FILENO);
-		close(fd[IN]);
-		close(fd[OUT]);
-		get_outfile(simple_cmd, fd[STDOUT_INIT], &fd[OUT], &fd[IN]);
-		g_data.state = 1;
+		// dup2(fd[IN], STDIN_FILENO);
+		// close(fd[IN]);
+		// close(fd[OUT]);
+		// get_outfile(simple_cmd, fd[STDOUT_INIT], &fd[OUT], &fd[IN]);
+		// g_data.state = 1;
 		if (is_builtin(simple_cmd->cmd))
 			exec_builtin(simple_cmd);
 		else
 		{
 			ret = fork();
-			if (ret == 0)
-			{
-				child_process(simple_cmd);
-				exit(1);
-			}
+			ft_xecutehelp2(ret, simple_cmd);
+			// if (ret == 0)
+			// {
+			// 	child_process(simple_cmd);
+			// 	exit(1);
+			// }
 		}
 		simple_cmd = simple_cmd->next;
 	}

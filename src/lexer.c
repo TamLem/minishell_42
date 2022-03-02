@@ -3,15 +3,34 @@
 /*                                                        :::      ::::::::   */
 /*   lexer.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tlemma <tlemma@student.42.fr>              +#+  +:+       +#+        */
+/*   By: nlenoch <nlenoch@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/01 16:26:02 by tlemma            #+#    #+#             */
-/*   Updated: 2022/03/02 02:46:30 by tlemma           ###   ########.fr       */
+/*   Updated: 2022/03/02 12:39:56 by nlenoch          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "lexer.h"
 #include "minishell.h"
+
+void	ft_tokenhelp(t_token *token)
+{
+	token = token->next;
+	token->value = NULL;
+	token->expanded = false;
+}
+
+void	ft_tokenhelp2(char *line, int state, t_token *token)
+{
+	if (is_operator(*line) && state == 0)
+		token->type = OPERATOR;
+	else
+		token->type = TOKEN;
+	if (state == DQUOTE)
+		token->split = false;
+	else
+		token->split = true;
+}
 
 int	tokenize(char *line)
 {
@@ -32,22 +51,24 @@ int	tokenize(char *line)
 			token->value = ft_append_char(token->value, *line);
 			if (shall_split(line, token->value, state))
 			{
-				if (is_operator(*line) && state == 0)
-					token->type = OPERATOR;
-				else
-					token->type = TOKEN;
-				if (state == DQUOTE)
-					token->split = false;
-				else
-					token->split = true;
+				ft_tokenhelp2(line, state, token);
+				// if (is_operator(*line) && state == 0)
+				// 	token->type = OPERATOR;
+				// else
+				// 	token->type = TOKEN;
+				// if (state == DQUOTE)
+				// 	token->split = false;
+				// else
+				// 	token->split = true;
 				if (*(line + 1) != '\0')
 				{
 					token->next = ft_malloc(sizeof(t_token));
 					if (token->next == NULL)
 						return (2);
-					token = token->next;
-					token->value = NULL;
-					token->expanded = false;
+					ft_tokenhelp2(token);
+					// token = token->next;
+					// token->value = NULL;
+					// token->expanded = false;
 				}
 			}
 		}
@@ -105,6 +126,23 @@ int	strip_quotes(void)
 	return (true);
 }
 
+void	ft_paramhelp(t_token *token, char *exp_env)
+{
+	if (*(token->value + 1) == QMARK)
+		exp_env = ft_itoa(g_data.exit_status);
+	else
+		exp_env = ft_getenv(token->value + 1);
+}
+
+void	ft_paramhelp2(t_token *token, char *exp_env)
+{
+	if (token->split == true && *(token->value + 1) == QMARK)
+		token->value = field_split(exp_env);
+	else
+		token->value = exp_env;
+	token->expanded = true;
+}
+
 int	param_expansion(void)
 {
 	t_token	*token;
@@ -113,21 +151,24 @@ int	param_expansion(void)
 	token = g_data.tokens;
 	while (token)
 	{
-		if ((token->type == TOKEN && *(token->value) == DOLLAR )|| ft_strchr(token->value, '$'))
+		if ((token->type == TOKEN && *(token->value) == DOLLAR)
+			|| ft_strchr(token->value, '$'))
 		{
-			if (*(token->value + 1) == QMARK)
-				exp_env = ft_itoa(g_data.exit_status);
-			else
-				exp_env = ft_getenv(token->value + 1);
+			ft_paramhelp(token, exp_env);
+			// if (*(token->value + 1) == QMARK)
+			// 	exp_env = ft_itoa(g_data.exit_status);
+			// else
+			// 	exp_env = ft_getenv(token->value + 1);
 			if (exp_env == NULL && *(token->value + 1))
 					token->value = NULL;
-			else 
+			else
 			{
-				if (token->split == true && *(token->value + 1) == QMARK)
-					token->value = field_split(exp_env);
-				else
-					token->value = exp_env;
-				token->expanded = true;
+				ft_paramhelp2(token, exp_env);
+				// if (token->split == true && *(token->value + 1) == QMARK)
+				// 	token->value = field_split(exp_env);
+				// else
+				// 	token->value = exp_env;
+				// token->expanded = true;
 				// free(token->value);
 			}
 		}
@@ -160,8 +201,8 @@ int	tokenize_operators(void)
 			else if (ft_strcmp(token->value, "||") == 0)
 				token->type = ERROR;
 			if ((token->type == LESS || token->type == DLESS || token->type
-					== GREAT || token->type == DGREAT) && token->next &&
-						token->next->type == TOKEN)
+					== GREAT || token->type == DGREAT) && token->next
+				&& token->next->type == TOKEN)
 					token->next->type = REDIR;
 		}
 		else if (token->type != REDIR)
@@ -192,7 +233,7 @@ void	del_empty_tokens(void)
 
 void	print_tokens()
 {
-	t_token *temp;
+	t_token	*temp;
 
 	temp = g_data.tokens;
 	while (temp != NULL)
@@ -202,13 +243,14 @@ void	print_tokens()
 		temp = temp->next;
 	}
 }
+
 int	lex(char *input)
 {
 	char	*line;
 	char	*quoted;
 
 	line = ft_strdup(input);
-	g_data.state = 0;	
+	g_data.state = 0;
 	while (!quotes_matched(line))
 	{
 		quoted = readline("> ");
