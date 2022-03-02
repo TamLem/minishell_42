@@ -6,7 +6,7 @@
 /*   By: tlemma <tlemma@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/01 14:13:55 by tlemma            #+#    #+#             */
-/*   Updated: 2022/03/02 01:55:17 by tlemma           ###   ########.fr       */
+/*   Updated: 2022/03/02 21:58:43 by tlemma           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,6 +80,8 @@ int	init_session(int argc, char *argv[], char *envp[])
 	g_data.malloc_count = 0;
 	g_data.state = 0;
 	g_data.mem_alloced = NULL;
+	g_data.tokens = NULL;
+	g_data.cmds = NULL;
 	init_env(argc, argv, envp);
 	g_data.exit_status = 0;
 	change_ctrlc_sym(false);
@@ -114,11 +116,11 @@ int	main(int argc, char *argv[], char *envp[])
 	line = NULL;
 	while (true)
 	{
+		g_data.tokens = NULL;
+		g_data.cmds = NULL;
 		line = prompt();
 		if (line)
 		{
-			if (ft_strcmp(ft_strtrim(line, " \t\n"), "exit") == 0) //ft_exit
-				break ;
 			if (*line)
 				add_history(line);
 			if (!lex(line))

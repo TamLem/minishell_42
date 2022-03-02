@@ -6,22 +6,45 @@
 /*   By: tlemma <tlemma@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/01 16:26:02 by tlemma            #+#    #+#             */
-/*   Updated: 2022/03/02 02:46:30 by tlemma           ###   ########.fr       */
+/*   Updated: 2022/03/02 22:25:40 by tlemma           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "lexer.h"
 #include "minishell.h"
 
+int	save_token(char *line, char *value, int state)
+{
+	bool	split;
+	t_token **token;
+	int		type;
+
+	if (is_operator(*line) && state == 0)
+		type = OPERATOR;
+	else
+		type = TOKEN;
+	if (state == DQUOTE)
+		split = false;
+	else
+		split = true;
+	token = &g_data.tokens;
+	while (*token != NULL)
+		token = &((*token)->next);
+	*token = ft_malloc(sizeof(t_token));
+	(*token)->value = value;
+	(*token)->type = type;
+	(*token)->split = split;
+	(*token)->expanded = false;
+	(*token)->next = NULL;
+	return (0);
+}
+
 int	tokenize(char *line)
 {
-	t_token	*token;
 	int		state;
+	char	*token_val;
 
-	g_data.tokens = ft_malloc(sizeof(t_token));
-	token = g_data.tokens;
-	token->value = NULL;
-	g_data.state = 0;
+	token_val = NULL;
 	while (*line != '\0')
 	{
 		state = get_state(*line);
@@ -29,31 +52,15 @@ int	tokenize(char *line)
 			*line = PLACE_HOLDER;
 		if (!is_WSPACE(*line) || state != 0)
 		{
-			token->value = ft_append_char(token->value, *line);
-			if (shall_split(line, token->value, state))
+			token_val = ft_append_char(token_val, *line);
+			if (shall_split(line, token_val, state))
 			{
-				if (is_operator(*line) && state == 0)
-					token->type = OPERATOR;
-				else
-					token->type = TOKEN;
-				if (state == DQUOTE)
-					token->split = false;
-				else
-					token->split = true;
-				if (*(line + 1) != '\0')
-				{
-					token->next = ft_malloc(sizeof(t_token));
-					if (token->next == NULL)
-						return (2);
-					token = token->next;
-					token->value = NULL;
-					token->expanded = false;
-				}
+				save_token(line, token_val, state);
+				token_val = NULL;
 			}
 		}
 		line++;
 	}
-	token->next = NULL;
 	return (0);
 }
 
@@ -72,7 +79,7 @@ char	*field_split(char *str)
 		}
 		str++;
 	}
-	//free
+	// free(str);
 	return (split);
 }
 
@@ -105,35 +112,74 @@ int	strip_quotes(void)
 	return (true);
 }
 
-int	param_expansion(void)
+int	paramlen(char *param)
+{
+	int	len;
+
+	len = 1;
+	if (param[len] != '_' && !ft_isalpha(param[len]))
+		return (0);
+	while (param[len] == '_' || ft_isalnum(param[len]))
+		len++;
+	return (len);
+}
+
+char *expand_single(char *init_token, int var_pos, char *var, bool split)
+{
+	char	*before;
+	char	*before_mid;
+	char	*after;
+	char	*temp;
+	int		len;
+
+	len = paramlen(var + 1);
+	var = ft_substr(var, 1, len);
+	temp = ft_getenv(var);
+	if (temp)
+	{
+		if (split)
+			temp = field_split(temp);
+		free(var);
+		var = temp;
+	}
+	else
+		return (NULL);
+	before = ft_substr(init_token, 0, var_pos);
+	after = ft_substr(init_token, var_pos + len + 1, ft_strlen(init_token));
+	before_mid = ft_strjoin(before, var);
+	// free(before);
+	var = ft_strjoin(before_mid, after);
+	return (var);
+}
+
+int	param_expand(void)
 {
 	t_token	*token;
 	char	*exp_env;
+	char	*var;
+	int		var_pos;
+	int		len;
 
 	token = g_data.tokens;
 	while (token)
 	{
-		if ((token->type == TOKEN && *(token->value) == DOLLAR )|| ft_strchr(token->value, '$'))
+		var = ft_strchr(token->value, DOLLAR);
+		var_pos = ft_strchr_pos(token->value, DOLLAR);
+		if (var && *(token->value + 1))
 		{
-			if (*(token->value + 1) == QMARK)
+			len = paramlen(var + 1);
+			if (*(var + 1) == QMARK)
 				exp_env = ft_itoa(g_data.exit_status);
-			else
-				exp_env = ft_getenv(token->value + 1);
-			if (exp_env == NULL && *(token->value + 1))
-					token->value = NULL;
-			else 
-			{
-				if (token->split == true && *(token->value + 1) == QMARK)
-					token->value = field_split(exp_env);
-				else
-					token->value = exp_env;
-				token->expanded = true;
-				// free(token->value);
-			}
+			else if (len != 0)
+				exp_env = expand_single(token->value, var_pos, var, token->split);
+			// free(token->value);
+			token->value = exp_env;
+			// free(before_mid);
 		}
 		else if (token->type == TOKEN && ft_strchr(token->value, PLACE_HOLDER))
 			*(ft_strchr(token->value, PLACE_HOLDER)) = DOLLAR;
-		token = token->next;
+		if (!ft_strchr(token->value, DOLLAR))
+			token = token->next;
 	}
 	return (0);
 }
@@ -157,12 +203,8 @@ int	tokenize_operators(void)
 				token->type = DGREAT;
 			else if (ft_strcmp(token->value, "|") == 0)
 				token->type = PIPE;
-			else if (ft_strcmp(token->value, "||") == 0)
-				token->type = ERROR;
-			if ((token->type == LESS || token->type == DLESS || token->type
-					== GREAT || token->type == DGREAT) && token->next &&
-						token->next->type == TOKEN)
-					token->next->type = REDIR;
+			if (is_io_redir(token) && token->next && token->next->type == TOKEN)
+				token->next->type = REDIR;
 		}
 		else if (token->type != REDIR)
 			token->type = WORD;
@@ -202,6 +244,7 @@ void	print_tokens()
 		temp = temp->next;
 	}
 }
+
 int	lex(char *input)
 {
 	char	*line;
@@ -221,11 +264,12 @@ int	lex(char *input)
 	if (!*line)
 		return (1);
 	tokenize(line);
-	param_expansion();
+	param_expand();
+	// return(1);
 	strip_quotes();
 	tokenize_operators();
 	del_empty_tokens();
-	print_tokens();
+	// print_tokens();
 	check_syntax();
 	return (0);
 }

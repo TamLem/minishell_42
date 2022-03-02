@@ -33,6 +33,7 @@
    	- passsing empty quotes to programs
      	- check export
    	- add case insensivity to cmds
+   	- ls || wc
 ## Done
 
 

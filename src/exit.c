@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exit.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nlenoch <nlenoch@student.42.fr>            +#+  +:+       +#+        */
+/*   By: tlemma <tlemma@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/08 12:33:19 by nlenoch           #+#    #+#             */
-/*   Updated: 2022/02/28 18:41:26 by nlenoch          ###   ########.fr       */
+/*   Updated: 2022/03/02 22:03:55 by tlemma           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,27 @@
 
 int	ft_exit(int argc, char **argv)
 {
-	exit(0);
+	int	i;
+
+	i = 0;
+	if (argc >= 2)
+	{
+		while (argv[1][i])
+		{
+			if (!ft_isdigit(argv[1][i]))
+			{
+				err_handle(1, argv[1]);
+				break ;
+			}
+			i++;
+		}
+		exit(ft_atoi(argv[1]));
+	}
+	else
+	{
+		system("leaks minishell");
+		exit(0);
+	}
+	
 	return (0);
 }

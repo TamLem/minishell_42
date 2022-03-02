@@ -6,7 +6,7 @@
 /*   By: tlemma <tlemma@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/01 14:16:00 by tlemma            #+#    #+#             */
-/*   Updated: 2022/03/02 02:55:55 by tlemma           ###   ########.fr       */
+/*   Updated: 2022/03/02 22:07:10 by tlemma           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,6 +65,8 @@ char		*ft_getenv(char *name);
 t_env_list	*ft_getenv_list(char *name);
 char		**env_to_arr(void);
 void		free_to_null(void *addr);
+int			is_io_redir(t_token *token);
+
 
 
 #endif

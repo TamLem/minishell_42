@@ -6,7 +6,7 @@
 #    By: tlemma <tlemma@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/08/23 18:12:02 by tlemma            #+#    #+#              #
-#    Updated: 2022/03/01 13:13:06 by tlemma           ###   ########.fr        #
+#    Updated: 2022/03/02 21:56:53 by tlemma           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -22,7 +22,7 @@ AR = ar rs
 
 SDIR = src
 SRCS = main.c lexer.c utils.c lexer_utils.c parser.c xecutor.c xecutor_utils.c env.c export.c\
-		unset.c cd.c pwd.c echo.c err_handling.c env_export_utils.c \
+		unset.c cd.c pwd.c echo.c err_handling.c env_export_utils.c exit.c\
 
 ODIR = objs
 OBJS = $(patsubst %.c, %.o, $(SRCS))

@@ -6,7 +6,7 @@
 /*   By: tlemma <tlemma@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/15 16:13:15 by tlemma            #+#    #+#             */
-/*   Updated: 2022/03/01 22:40:41 by tlemma           ###   ########.fr       */
+/*   Updated: 2022/03/02 21:56:28 by tlemma           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,8 @@ int		ft_cd(int argc, char **argv, char **envp);
 int		ft_pwd(void);
 int		ft_unset(int argc, char *argv[], char *envp[]);
 int		ft_echo(int argc, char **argv);
+int		ft_exit(int argc, char **argv);
+
 
 
 enum STATE

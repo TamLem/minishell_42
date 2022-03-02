@@ -6,7 +6,7 @@
 /*   By: tlemma <tlemma@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/17 19:46:04 by tlemma            #+#    #+#             */
-/*   Updated: 2022/03/02 02:50:08 by tlemma           ###   ########.fr       */
+/*   Updated: 2022/03/02 21:57:42 by tlemma           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ char	*ft_strjoin2(char *s1, char *s2)
 		return (s1);
 	if (s1 == NULL)
 		return (s2);
-	ret = malloc(ft_strlen(s1) + ft_strlen(s2) + 1);
+	ret = ft_malloc(ft_strlen(s1) + ft_strlen(s2) + 1);
 	if (!ret)
 		return (NULL);
 	cp_ret = ret;
@@ -98,7 +98,7 @@ bool	is_builtin(char	*cmd)
 	if (!ft_strcmp(cmd, "cd") || !ft_strcmp(cmd, "echo")
 		|| !ft_strcmp(cmd, "cd") || !ft_strcmp(cmd, "env")
 		|| !ft_strcmp(cmd, "export") || !ft_strcmp(cmd, "unset")
-		|| !ft_strcmp(cmd, "pwd") || !ft_strcmp(cmd, "export"))
+		|| !ft_strcmp(cmd, "pwd") || !ft_strcmp(cmd, "export") || !ft_strcmp(cmd, "exit"))
 		return (true);
 	return (false);
 }

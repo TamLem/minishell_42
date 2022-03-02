@@ -6,14 +6,14 @@
 /*   By: tlemma <tlemma@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/10 22:08:11 by tlemma            #+#    #+#             */
-/*   Updated: 2022/03/02 01:46:39 by tlemma           ###   ########.fr       */
+/*   Updated: 2022/03/02 22:27:37 by tlemma           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 #include "parser.h"
 
-int	init_cmd(t_simple_cmd **simple_cmd)
+int	init_cmd_struct(t_simple_cmd **simple_cmd)
 {
 	*simple_cmd = ft_malloc(sizeof(t_simple_cmd));
 	if (*simple_cmd == NULL)
@@ -133,38 +133,26 @@ int	parse(void)
 	t_token			*token;
 	t_simple_cmd	*simple_cmd;
 
-	g_data.cmds = NULL;
 	token = g_data.tokens;
-	init_cmd(&(g_data.cmds));
+	init_cmd_struct(&(g_data.cmds));
 	simple_cmd = g_data.cmds;
-	while (token)
+	while (token && !parse_redir(simple_cmd, token))
 	{
-		parse_redir(simple_cmd, token);
 		while (token && token->type != PIPE)
 		{
 			if (token->error)
 				simple_cmd->error = true;
-			if (token->type == WORD)
-			{
-				if (simple_cmd->cmd == NULL)
-					simple_cmd->cmd = token->value;
+			if (token->type == WORD && simple_cmd->cmd == NULL)
+				simple_cmd->cmd = token->value;
+			if (token->type == WORD) 
 				add_args(&(simple_cmd->args), token->value);
-			}	
 			token = token->next;
 		}
-		if (!token)
+		if (!token || token->error)
 			break ;
-		init_cmd(&(simple_cmd->next));
+		init_cmd_struct(&(simple_cmd->next));
 		simple_cmd = simple_cmd->next;
 		token = token->next;
 	}
-	simple_cmd = g_data.cmds;
-	// while (simple_cmd)
-	// {
-	// 	// printf("%s %d %d\n", simple_cmd->cmd, simple_cmd->infile->value, simple_cmd->infile->value);
-	// 	if (simple_cmd->args)
-	// 		printf("Args; %s %s\n", simple_cmd->args->value, simple_cmd->args->next->value);
-	// 	simple_cmd = simple_cmd->next;
-	// }
 	return (0);
 }

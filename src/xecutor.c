@@ -6,7 +6,7 @@
 /*   By: tlemma <tlemma@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/28 18:58:11 by nlenoch           #+#    #+#             */
-/*   Updated: 2022/03/02 01:47:15 by tlemma           ###   ########.fr       */
+/*   Updated: 2022/03/02 21:53:57 by tlemma           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,8 +57,8 @@ int	exec_builtin(t_simple_cmd *simple_cmd)
 		res = ft_unset(argc, argv, env);
 	else if (ft_strcmp(argv[0], "pwd") == 0)
 		res = ft_pwd();
-	// else if (ft_strcmp(argv[0], "exit") == 0)
-	// 	res = ft_exit(argc, argv, env);
+	else if (ft_strcmp(argv[0], "exit") == 0)
+		res = ft_exit(argc, argv);
 	return (res);
 }
 
@@ -155,17 +155,42 @@ void	reset_fds(int fd[4])
 	close(fd[STDOUT_INIT]);
 }
 
+int	exec_cmd(t_simple_cmd *simple_cmd, int fd[4])
+{
+	int	ret;
+
+	ret = 0;
+	fd[IN] = get_infile(simple_cmd, fd[IN]);
+	if (fd[IN] == -1 && close(fd[IN]) && close(fd[OUT]))
+		return (2);	/* maybe unsafe */
+	dup2(fd[IN], STDIN_FILENO);
+	close(fd[IN]);
+	close(fd[OUT]);
+	get_outfile(simple_cmd, fd[STDOUT_INIT], &fd[OUT], &fd[IN]);
+	g_data.state = 1;
+	if (is_builtin(simple_cmd->cmd))
+		exec_builtin(simple_cmd);
+	else
+	{
+		ret = fork();
+		if (ret == 0)
+		{
+			child_process(simple_cmd);
+			exit(1);
+		}
+	}
+	return (ret);
+}
+
 int	xecute(void)
 {
-	int				ret;
-	int				cmd_len;
 	int				fd[4];
 	t_simple_cmd	*simple_cmd;
+	int				ret;
 
 	ret = 0;
 	simple_cmd = g_data.cmds;
-	cmd_len = getcmdlen(simple_cmd);
-	if (simple_cmd != NULL)
+	if (simple_cmd != NULL && getcmdlen(simple_cmd) != 0)
 		init_fds(fd);
 	else
 		return (2);
@@ -176,25 +201,9 @@ int	xecute(void)
 			simple_cmd = simple_cmd->next;
 			continue ;
 		}
-		fd[IN] = get_infile(simple_cmd, fd[IN]);
-		if (fd[IN] == -1 && close(fd[IN]) && close(fd[OUT]))
-			return (2);	/* maybe unsafe */
-		dup2(fd[IN], STDIN_FILENO);
-		close(fd[IN]);
-		close(fd[OUT]);
-		get_outfile(simple_cmd, fd[STDOUT_INIT], &fd[OUT], &fd[IN]);
-		g_data.state = 1;
-		if (is_builtin(simple_cmd->cmd))
-			exec_builtin(simple_cmd);
-		else
-		{
-			ret = fork();
-			if (ret == 0)
-			{
-				child_process(simple_cmd);
-				exit(1);
-			}
-		}
+		ret = exec_cmd(simple_cmd, fd);
+		if (ret == 2)
+			return (2);
 		simple_cmd = simple_cmd->next;
 	}
 	reset_fds(fd);
