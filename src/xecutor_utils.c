@@ -6,7 +6,7 @@
 /*   By: tlemma <tlemma@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/17 19:46:04 by tlemma            #+#    #+#             */
-/*   Updated: 2022/03/01 20:35:04 by tlemma           ###   ########.fr       */
+/*   Updated: 2022/03/02 02:50:08 by tlemma           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ char	*ft_strjoin2(char *s1, char *s2)
 	while (*cp_s)
 		*cp_ret++ = *cp_s++;
 	*cp_ret = '\0';
-	free(s1);
+	free_to_null(&s1);
 	return (ret);
 }
 

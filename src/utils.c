@@ -6,7 +6,7 @@
 /*   By: tlemma <tlemma@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/03 17:53:52 by tlemma            #+#    #+#             */
-/*   Updated: 2022/03/01 19:56:41 by tlemma           ###   ########.fr       */
+/*   Updated: 2022/03/02 02:57:35 by tlemma           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,17 +18,17 @@ typedef struct s_mem_alloc
 	struct s_mem_alloc	*next;
 }				t_mem_alloc;
 
-void	free_to_null(void **addr)
+void	free_to_null(void *addr)
 {	
-	free(*addr);
-	*addr = NULL;
+	free(*((void **)addr));
+	*((void **)addr) = NULL;
 }
 
 void	free_dp(char **i)
 {
 	while (*i)
 	{
-		free(*i);
+		free_to_null(i);
 		i++;
 	}
 }
@@ -61,7 +61,7 @@ char	*ft_append_char(char *s1, char c)
 		len = ft_strlen(s1);
 	else
 		len = 0;
-	ret = ft_malloc(sizeof(char) * (int)len + 2);
+	ret = ft_malloc(sizeof(char) * (len + 2));
 	if (!ret)
 		return (NULL);
 	while (i < len)
@@ -108,7 +108,8 @@ void	mem_free_all(void)
 	i = 0;
 	while (i <= g_data.malloc_count)
 	{
-		free(((void **)g_data.mem_alloced)[i]);
+		if (((void **)g_data.mem_alloced)[i] != NULL)
+			free(((void **)g_data.mem_alloced)[i]);
 		i++;
 	}
 	free(g_data.mem_alloced);

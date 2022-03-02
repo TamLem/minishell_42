@@ -6,7 +6,7 @@
 #    By: tlemma <tlemma@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/08/23 18:12:02 by tlemma            #+#    #+#              #
-#    Updated: 2022/02/27 19:11:52 by tlemma           ###   ########.fr        #
+#    Updated: 2022/03/01 22:15:31 by tlemma           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -45,7 +45,7 @@ UP = "\033[A"
 CUT = "\033[K"
 
 $(NAME): $(SOURCES)
-	@echo	$(Y) echo Compiling libft...;  
+	@echo	$(Y)Compiling libft...;  
 	@$(CC) $(CFLAGS) -c $(SOURCES)
 	@$(AR) $(NAME) $(OBJECTS)
 	@echo	$(G) libft created! $(X) ;

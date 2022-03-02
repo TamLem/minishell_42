@@ -6,7 +6,7 @@
 /*   By: tlemma <tlemma@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/01 16:26:02 by tlemma            #+#    #+#             */
-/*   Updated: 2022/03/01 21:04:54 by tlemma           ###   ########.fr       */
+/*   Updated: 2022/03/02 02:46:30 by tlemma           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,6 +89,8 @@ int	strip_quotes(void)
 	{
 		stripped = NULL;
 		quoted = token->value;
+		if (ft_strcmp(quoted, "\"\"") == 0)
+			quoted = " ";
 		while (quoted && *quoted)
 		{
 			state = get_state(*quoted);
@@ -97,20 +99,11 @@ int	strip_quotes(void)
 				stripped = ft_append_char(stripped, *quoted);
 			quoted++;
 		}
-		// free(token->value);
 		token->value = stripped;
-		//free quoted;
 		token = token->next;
 	}
 	return (true);
 }
-
-// int	exand_param(t_token *tokenize)
-// {
-// 	char	*value;
-
-	
-// }
 
 int	param_expansion(void)
 {
@@ -197,9 +190,20 @@ void	del_empty_tokens(void)
 	}
 }
 
+void	print_tokens()
+{
+	t_token *temp;
+
+	temp = g_data.tokens;
+	while (temp != NULL)
+	{
+		printf("token\t");
+		printf("%d: %s\n", temp->type, temp->value);
+		temp = temp->next;
+	}
+}
 int	lex(char *input)
 {
-	t_token	*temp;
 	char	*line;
 	char	*quoted;
 
@@ -221,13 +225,7 @@ int	lex(char *input)
 	strip_quotes();
 	tokenize_operators();
 	del_empty_tokens();
+	print_tokens();
 	check_syntax();
-	temp = g_data.tokens;
-	// while (temp != NULL)
-	// {
-	// 	printf("token\t");
-	// 	printf("%d: %s\n", temp->type, temp->value);
-	// 	temp = temp->next;
-	// }
 	return (0);
 }

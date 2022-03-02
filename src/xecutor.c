@@ -6,7 +6,7 @@
 /*   By: tlemma <tlemma@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/28 18:58:11 by nlenoch           #+#    #+#             */
-/*   Updated: 2022/03/01 20:47:02 by tlemma           ###   ########.fr       */
+/*   Updated: 2022/03/02 01:47:15 by tlemma           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,32 +91,7 @@ int	child_process(t_simple_cmd *simple_cmd)
 	return (res);
 }
 
-int	read_heredocs(char	*dlmtr)
-{
-	int			fd;
-	char		*line;
 
-	line = NULL;
-	fd = open("heredocs", O_RDWR | O_CREAT | O_TRUNC, S_IRWXU);
-	g_data.state = 2;
-	line = readline("> ");
-	if (g_data.state == 0)
-	{
-		close(fd);
-		return (-1);
-	}
-	while (line && ft_strcmp(line, dlmtr))
-	{
-		write(fd, line, ft_strlen(line));
-		write(fd, "\n", 1);
-		free(line);
-		line = readline("> ");
-	}
-	free(line);
-	close(fd);
-	fd = open("heredocs", O_RDONLY);
-	return (fd);
-}
 
 int	get_infile(t_simple_cmd *simple_cmd, int fdin)
 {
@@ -128,10 +103,7 @@ int	get_infile(t_simple_cmd *simple_cmd, int fdin)
 	while (infile)
 	{
 		close(fdin);
-		if (infile->value == 0)
-			fdin = read_heredocs(infile->dlmtr);
-		else
-			fdin = infile->value;
+		fdin = infile->value;
 		if (fdin == -1)
 			return (-1);
 		// dprintf(2, "fdin %d\n", infile->value);
@@ -199,7 +171,7 @@ int	xecute(void)
 		return (2);
 	while (simple_cmd != NULL)
 	{
-		if (simple_cmd->error)
+		if (simple_cmd->error || !simple_cmd->cmd)
 		{
 			simple_cmd = simple_cmd->next;
 			continue ;

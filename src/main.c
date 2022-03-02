@@ -6,13 +6,15 @@
 /*   By: tlemma <tlemma@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/01 14:13:55 by tlemma            #+#    #+#             */
-/*   Updated: 2022/03/01 15:02:24 by tlemma           ###   ########.fr       */
+/*   Updated: 2022/03/02 01:55:17 by tlemma           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 #include <signal.h>
 #include <termios.h>
+
+char *prompt(void);
 
 int	change_ctrlc_sym(bool	value)
 {
@@ -33,22 +35,24 @@ int	change_ctrlc_sym(bool	value)
 
 void	sig_ctrlc(int sig)
 {
-	if (g_data.state == 2)
+	if (sig != SIGINT)
+		return ;
+	// dprintf(2, "state %d\n", g_data.state);
+	if (g_data.state == HEREDOC)
 	{
-		close(STDIN_FILENO);
-		// rl_replace_line("", 0);
-		// if (g_data.state == 0)
 		printf("\n");
+		prompt();
+		close(STDIN_FILENO);
 	}
 	else
 	{
-		if (g_data.state == 1)
+		if (g_data.state == EXEC)
 			printf("^C");
 		printf("\n");
 		rl_replace_line("", 0);
 		rl_on_new_line();
 	}
-	if (g_data.state == 0)
+	if (g_data.state == IDLE)
 		rl_redisplay();
 	g_data.state = 0;
 }
@@ -66,6 +70,7 @@ int	end_session(void)
 	rl_clear_history();
 	mem_free_all();
 	printf("exit\n");
+	system("leaks minishell");
 	return (0);
 }
 
@@ -73,6 +78,7 @@ int	init_session(int argc, char *argv[], char *envp[])
 {
 	g_data.env = envp;
 	g_data.malloc_count = 0;
+	g_data.state = 0;
 	g_data.mem_alloced = NULL;
 	init_env(argc, argv, envp);
 	g_data.exit_status = 0;
@@ -82,16 +88,33 @@ int	init_session(int argc, char *argv[], char *envp[])
 	return (0);
 }
 
+char *prompt(void)
+{
+	char	*line;
+	char	*prompt;
+	char	*cwd;
+	char	*last;
+
+	line = NULL;
+	prompt = "$ ";
+	cwd = getcwd(NULL, 0);
+	last = ft_strrchr(cwd, '/');
+	last++;
+	prompt = ft_strjoin(last, prompt);
+	free(cwd);
+	line = readline(prompt);
+	return (line);
+}
+
 int	main(int argc, char *argv[], char *envp[])
 {
 	char	*line;
 
 	init_session(argc, argv, envp);
 	line = NULL;
-	g_data.state = 0;
 	while (true)
 	{
-		line = readline("$ ");
+		line = prompt();
 		if (line)
 		{
 			if (ft_strcmp(ft_strtrim(line, " \t\n"), "exit") == 0) //ft_exit

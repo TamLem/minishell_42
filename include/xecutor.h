@@ -6,7 +6,7 @@
 /*   By: tlemma <tlemma@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/15 16:13:15 by tlemma            #+#    #+#             */
-/*   Updated: 2022/03/01 20:22:49 by tlemma           ###   ########.fr       */
+/*   Updated: 2022/03/01 22:40:41 by tlemma           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,12 @@ int		ft_unset(int argc, char *argv[], char *envp[]);
 int		ft_echo(int argc, char **argv);
 
 
-
+enum STATE
+{
+	IDLE = 0,
+	EXEC = 1,
+	HEREDOC = 2,
+};
 
 
 

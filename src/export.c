@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   export.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nlenoch <nlenoch@student.42.fr>            +#+  +:+       +#+        */
+/*   By: tlemma <tlemma@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/08 12:32:47 by nlenoch           #+#    #+#             */
-/*   Updated: 2022/02/28 18:42:26 by nlenoch          ###   ########.fr       */
+/*   Updated: 2022/03/02 02:48:16 by tlemma           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ int	add_env(char *name, char *value)
 	existing = ft_getenv_list(name);
 	if (existing && value)
 	{
-		free(existing->value);
+		free_to_null(&existing->value);
 		existing->value = value;
 		existing->is_env = true;
 	}

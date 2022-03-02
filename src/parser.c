@@ -6,7 +6,7 @@
 /*   By: tlemma <tlemma@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/10 22:08:11 by tlemma            #+#    #+#             */
-/*   Updated: 2022/03/01 20:48:02 by tlemma           ###   ########.fr       */
+/*   Updated: 2022/03/02 01:46:39 by tlemma           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,6 +40,33 @@ int	add_args(t_args **args, char *value)
 	return (0);
 }
 
+int	read_heredocs(char	*dlmtr)
+{
+	int			fd;
+	char		*line;
+
+	line = NULL;
+	fd = open("heredocs", O_RDWR | O_CREAT | O_TRUNC, S_IRWXU);
+	g_data.state = 2;
+	line = readline("> ");
+	if (g_data.state == 0)
+	{
+		close(fd);
+		return (-1);
+	}
+	while (line && ft_strcmp(line, dlmtr))
+	{
+		write(fd, line, ft_strlen(line));
+		write(fd, "\n", 1);
+		free(line);
+		line = readline("> ");
+	}
+	free(line);
+	close(fd);
+	fd = open("heredocs", O_RDONLY);
+	return (fd);
+}
+
 int	add_infiles(t_infiles **infile, char *file, int mode)
 {
 	while (*infile != NULL)
@@ -51,14 +78,11 @@ int	add_infiles(t_infiles **infile, char *file, int mode)
 	{
 		(*infile)->value = open(file, O_RDONLY);
 		if ((*infile)->value == -1)
-			printf("open: %s\n", file);//err 
+			err_handle(0, file);
 		(*infile)->dlmtr = NULL;
 	}
 	else if (mode == DLESS)
-	{
-		(*infile)->value = 0;
-		(*infile)->dlmtr = file;
-	}
+		(*infile)->value = read_heredocs(file);
 	(*infile)->next = NULL;
 	return (0);
 }
@@ -75,9 +99,8 @@ int	add_outfiles(t_outfiles **outfile, char *file, int mode)
 	else if (mode == DGREAT)
 		(*outfile)->value = open(file, O_WRONLY | O_APPEND | O_CREAT, S_IRWXU);
 	if ((*outfile)->value == -1)
-	{
-		printf("open: %s\n", file);
-	}
+		err_handle(0, file);
+
 	(*outfile)->next = NULL;
 	return (0);
 }
