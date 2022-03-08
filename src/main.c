@@ -6,7 +6,7 @@
 /*   By: tlemma <tlemma@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/01 14:13:55 by tlemma            #+#    #+#             */
-/*   Updated: 2022/03/08 16:12:26 by tlemma           ###   ########.fr       */
+/*   Updated: 2022/03/08 18:10:56 by tlemma           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,7 @@ int	init_session(int argc, char *argv[], char *envp[])
 	g_data.exit_status = 0;
 	change_ctrlc_sym(false);
 	signal(SIGINT, sig_ctrlc);
-	signal(SIGQUIT, (void *)(end_session));
+	signal(SIGQUIT, SIG_IGN);
 	return (0);
 }
 

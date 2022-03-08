@@ -6,7 +6,7 @@
 #    By: tlemma <tlemma@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/08/23 18:12:02 by tlemma            #+#    #+#              #
-#    Updated: 2022/03/08 16:12:12 by tlemma           ###   ########.fr        #
+#    Updated: 2022/03/08 18:10:40 by tlemma           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -21,12 +21,16 @@ RM = rm -rf
 AR = ar rs
 
 SDIR = src
-SRCS = main.c lexer.c utils.c lexer_utils.c parser.c  parser_utils.c xecutor.c xecutor_utils.c env.c export.c\
-		unset.c cd.c pwd.c echo.c err_handling.c env_export_utils.c exit.c xecutor_utils_2.c\
-		xec_builtins.c signals.c lexer_utils_2.c lexer_param_expansion.c\
+SRCS = $(SDIR)/main.c $(SDIR)/lexer/lexer.c $(SDIR)/lexer/lexer_utils.c $(SDIR)/lexer/lexer_param_expansion.c \
+		$(SDIR)/lexer/lexer_utils_2.c\
+		$(SDIR)/parser/parser.c $(SDIR)/parser/parser_utils.c \
+		$(SDIR)/xecutor/xecutor.c $(SDIR)/xecutor/xecutor_utils.c $(SDIR)/xecutor/xecutor_utils_2.c $(SDIR)/xecutor/xec_builtins.c\
+		$(SDIR)/builtins/unset.c $(SDIR)/builtins/cd.c $(SDIR)/builtins/pwd.c $(SDIR)/builtins/echo.c\
+		$(SDIR)/builtins/env_export_utils.c $(SDIR)/builtins/exit.c $(SDIR)/builtins/env.c $(SDIR)/builtins/export.c\
+		$(SDIR)/utils/signals.c $(SDIR)/utils/utils.c $(SDIR)/utils/err_handling.c \
 
 ODIR = objs
-OBJS = $(patsubst %.c, %.o, $(SRCS))
+OBJS = *.o
 
 # Colors
 Y = "\033[33m"
@@ -44,16 +48,16 @@ COM_STRING   = "Compiling"
 
 LIBFT = $(MAKE) -C libft 
 
-$(NAME): $(addprefix $(SDIR)/, $(SRCS))
+$(NAME): $(SRCS)
 	@echo 
 	@mkdir -p $(ODIR)
-	@echo	$(Y) Compiling minishell...; 
+	@echo $(Y) Compiling minishell... $(X); 
 	@$(CC) $(CFLAGS) $(READLINE_INC) -I ./include/ -c $^
-	@mv $(OBJS) $(ODIR)
+	@mv *.o $(ODIR)
 	@$(LIBFT)
 	@$(CC) $(CFLAGS) $(addprefix $(ODIR)/, $(OBJS)) $(READLINE_INC) $(READLINE) libft/libft.a -o $(NAME)
 	@$(MAKE) clean
-	@echo	$(G) $(NAME) created!$(X)
+	@echo $(G) $(NAME) created!$(X)
 
 all: $(NAME)
 

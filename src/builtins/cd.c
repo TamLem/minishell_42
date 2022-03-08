@@ -6,7 +6,7 @@
 /*   By: tlemma <tlemma@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/01 18:52:36 by nlenoch           #+#    #+#             */
-/*   Updated: 2022/03/08 16:04:49 by tlemma           ###   ########.fr       */
+/*   Updated: 2022/03/08 17:00:27 by tlemma           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 
 void	change_dir(int dir, char *path, char *oldpath)
 {
+	dir = chdir(path);
 	if (dir == -1)
 		err_handle(3, path);
 	else
@@ -33,19 +34,15 @@ int	ft_cd(int argc, char **argv, char **envp)
 	oldpath = getcwd(NULL, 0);
 	if (argc == 1)
 		path = "~";
-	if (!ft_strcmp(path, "~"))
-	{
+	if (ft_strcmp(path, "~") == 0)
 		path = ft_getenv("HOME");
-		dir = chdir(path);
-	}
-	else if (!ft_strcmp(path, "-"))
+	if (ft_strcmp(path, "-") == 0)
 	{
 		path = ft_getenv("OLDPWD");
-		if (path && !chdir(path))
+		if (path)
 			printf("%s\n", path);
 	}
-	else
-		dir = chdir(path);
-	change_dir(dir, path, oldpath);
+	if (path != NULL && *path)
+		change_dir(dir, path, oldpath);
 	return (1);
 }
