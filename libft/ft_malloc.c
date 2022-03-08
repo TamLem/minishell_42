@@ -6,7 +6,7 @@
 /*   By: tlemma <tlemma@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/27 11:28:12 by tlemma            #+#    #+#             */
-/*   Updated: 2022/02/27 19:10:40 by tlemma           ###   ########.fr       */
+/*   Updated: 2022/03/08 16:20:51 by tlemma           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,15 +20,14 @@ void	*ft_malloc(size_t size)
 	static int	i = 0;
 	static void	*mem_alloced;
 
-
 	ret = NULL;
 	if (i == 0)
 		mem_alloced = malloc(sizeof(void *) * 100);
 	if (i % 100 == 0 && i != 0)
 	{
-		mem_alloced = 
-			ft_realloc_more(mem_alloced, sizeof(void *) * i, 
-				sizeof(void *) * (i + 100)) ;
+		mem_alloced
+			= ft_realloc_more(mem_alloced, sizeof(void *) * i,
+				sizeof(void *) * (i + 100));
 	}
 	if (mem_alloced == NULL)
 		return (NULL);
@@ -40,6 +39,5 @@ void	*ft_malloc(size_t size)
 		((void **)mem_alloced)[i] = ret;
 		i++;
 	}
-	dprintf(2, "mem alloced %d\n", i);
 	return (ret);
 }

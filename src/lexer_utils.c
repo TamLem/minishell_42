@@ -6,7 +6,7 @@
 /*   By: tlemma <tlemma@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/10 21:26:47 by tlemma            #+#    #+#             */
-/*   Updated: 2022/03/02 22:14:52 by tlemma           ###   ########.fr       */
+/*   Updated: 2022/03/08 14:41:46 by tlemma           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 
 int	get_state(char pos);
 
-bool	is_WSPACE(char c)
+bool	is_wspace(char c)
 {
 	if (c == WWSPACE || c == WTAB || c == WNEWLINE)
 		return (true);
@@ -34,16 +34,9 @@ bool	shall_split(char *line, char *appended, int state)
 	char	next;
 
 	next = *(line + 1);
-
 	if (next == '\0')
 		return (true);
-	// if (next == DOLLAR && state != QUOTE)
-	// 	return (true);
-	// if (*appended == DOLLAR && 
-	// 	!((ft_isdigit(next) && ft_strlen(appended) > 1)
-	// 		|| ft_isalpha(next) || next == '_' || next == QMARK))
-	// 	return (true);
-	if (is_WSPACE(next) && state == 0)
+	if (is_wspace(next) && state == 0)
 		return (true);
 	if (!is_operator(*line) && is_operator(next) && state == 0)
 		return (true);
@@ -51,7 +44,8 @@ bool	shall_split(char *line, char *appended, int state)
 		return (true);
 	if (is_operator(*line) && !is_operator(next) && state == 0)
 		return (true);
-	if ((is_operator(*line) && (*line != *appended || ft_strlen(appended) > 1)) && state == 0)
+	if ((is_operator(*line) && (*line != *appended
+				|| ft_strlen(appended) > 1)) && state == 0)
 		return (true);
 	else
 		return (false);

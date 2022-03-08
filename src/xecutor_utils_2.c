@@ -1,41 +1,30 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   exit.c                                             :+:      :+:    :+:   */
+/*   xecutor_utils_2.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: tlemma <tlemma@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/02/08 12:33:19 by nlenoch           #+#    #+#             */
-/*   Updated: 2022/03/08 12:24:44 by tlemma           ###   ########.fr       */
+/*   Created: 2022/03/08 12:31:28 by tlemma            #+#    #+#             */
+/*   Updated: 2022/03/08 12:36:26 by tlemma           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-/* exits bash through either sending a signal or killing processes */
 #include "minishell.h"
 #include "xecutor.h"
 
-int	ft_exit(int argc, char **argv)
+void	init_fds(int fd[4])
 {
-	int	i;
+	fd[STDIN_INIT] = dup(STDIN_FILENO);
+	fd[STDOUT_INIT] = dup(STDOUT_FILENO);
+	fd[IN] = dup(fd[STDIN_INIT]);
+	fd[OUT] = dup(fd[STDOUT_INIT]);
+}
 
-	i = 0;
-	if (argc >= 2)
-	{
-		while (argv[1][i])
-		{
-			if (!ft_isdigit(argv[1][i]))
-			{
-				err_handle(1, argv[1]);
-				break ;
-			}
-			i++;
-		}
-		exit(ft_atoi(argv[1]));
-	}
-	else
-	{
-		system("leaks minishell");
-		exit(0);
-	}
-	return (0);
+void	reset_fds(int fd[4])
+{
+	dup2(fd[STDIN_INIT], STDIN_FILENO);
+	dup2(fd[STDOUT_INIT], STDOUT_FILENO);
+	close(fd[STDIN_INIT]);
+	close(fd[STDOUT_INIT]);
 }

@@ -6,7 +6,7 @@
 /*   By: tlemma <tlemma@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/28 17:48:19 by tlemma            #+#    #+#             */
-/*   Updated: 2022/03/01 19:25:26 by tlemma           ###   ########.fr       */
+/*   Updated: 2022/03/08 14:15:57 by tlemma           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,28 +65,27 @@ static void	order_env(char ***env)
 
 void	print_env_or_export(char *cmd, char **env_arr)
 {
-    t_env_list	*tmp_env;
+	t_env_list	*tmp_env;
 
-    tmp_env = g_data.env_list;
-    if (ft_strcmp(cmd, "env") == 0)
-    {
-        while (tmp_env != NULL)
-        {
+	tmp_env = g_data.env_list;
+	if (ft_strcmp(cmd, "env") == 0)
+	{
+		while (tmp_env != NULL)
+		{
 			if (tmp_env->is_env)
-            	printf("%s=%s\n", tmp_env->name, tmp_env->value);
-            tmp_env = tmp_env->next;
-        }
-    }
-    else
-    {
-        order_env(&env_arr);
+				printf("%s=%s\n", tmp_env->name, tmp_env->value);
+			tmp_env = tmp_env->next;
+		}
+	}
+	else
+	{
+		order_env(&env_arr);
 		while (*env_arr)
 		{
 			printf("declare -x %s\n", *env_arr);
 			env_arr++;
 		}
-		free_dp(env_arr);
-    }
+	}
 }
 
 t_env_list	*ft_getenv_list(char *name)
@@ -103,34 +102,26 @@ t_env_list	*ft_getenv_list(char *name)
 	return (NULL);
 }
 
-char **env_to_arr(void)
+char	**env_to_arr(void)
 {
 	int			i;
 	int			len;
 	char		**env_arr;
 	t_env_list	*env_lst;
-	char		*temp;
 
 	len = 0;
 	i = 0;
-	env_lst	= g_data.env_list;
-	while (env_lst)
-	{
-		len++;
+	env_lst = g_data.env_list;
+	while (env_lst && ++len)
 		env_lst = env_lst->next;
-	}
 	env_lst = g_data.env_list;
 	env_arr = ft_malloc(sizeof(char *) * (len + 1));
 	env_arr[len] = NULL;
 	while (i < len)
 	{
 		if (env_lst->value)
-		{
-			env_arr[i] = ft_strjoin(env_lst->name, "=");
-			temp = env_arr[i];
-			env_arr[i] = ft_strjoin(temp, env_lst->value);
-			// env_arr[i] = ft_append_char(env_arr[i], '"');
-		}	
+			env_arr[i]
+				= ft_strjoin(ft_strjoin(env_lst->name, "="), env_lst->value);
 		else
 			env_arr[i] = ft_strdup(env_lst->name);
 		env_lst = env_lst->next;

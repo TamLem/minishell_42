@@ -6,9 +6,11 @@
 /*   By: tlemma <tlemma@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/07 12:35:32 by tlemma            #+#    #+#             */
-/*   Updated: 2022/02/07 12:39:32 by tlemma           ###   ########.fr       */
+/*   Updated: 2022/03/08 16:21:17 by tlemma           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
+#include "libft.h"
 
 char	*ft_strndup(const char *s, int n)
 {

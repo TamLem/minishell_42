@@ -49,3 +49,13 @@
     	- Quote removal
 	- Shell Grammer
 
+/* 
+
+
+[redirection] [io_file] [cmd] [args..]
+
+[cmd] [redirection] [io_file] [args..]
+
+[cmd] [args..] [redirection] [io_file]
+
+ */

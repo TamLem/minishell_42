@@ -6,46 +6,11 @@
 /*   By: tlemma <tlemma@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/27 15:43:40 by tlemma            #+#    #+#             */
-/*   Updated: 2022/03/02 22:25:04 by tlemma           ###   ########.fr       */
+/*   Updated: 2022/03/08 15:40:03 by tlemma           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-/* 
-
-[simple command] = [executable [argument]*]
-
-[input redirection] = [<filename]
-
-[output redirection] = [>filename]
-
-[append redirection] = [>>filename]
-
-[heredoc] = [<<delimiter]
-
-[redirection] = [[input redirection] / [output redirection] / [append redirection] / [heredoc]]
-
-[command] = [[simple command] [redirection]*]
-
-[pipeline] = [[command]] [ | [command]]*]
-
-
-[redirection] [io_file] [cmd] [args..]
-
-[cmd] [redirection] [io_file] [args..]
-
-[cmd] [args..] [redirection] [io_file]
-
- */
-
-// void ft_perror(int	err_code, char *msg)
-// {
-// 	printf("error:\n%s", msg);
-// 	mem_free();
-// 	if (err_code_need_exit)
-// 		exit(0);
-// }
 
 int	print_err(char *format, char *s1, char *s2)
 {
@@ -59,47 +24,43 @@ int	print_err(char *format, char *s1, char *s2)
 	return (0);
 }
 
-int	lex_err(void)
-{
-	
-	return (0);
-}
-
 int	is_io_redir(t_token *token)
 {
 	int	type;
 
-	type = token->type;
-	if (type == LESS || type == DLESS || type == GREAT || type == DGREAT)
-		return (true);
+	if (token)
+	{
+		type = token->type;
+		if (type == LESS || type == DLESS || type == GREAT || type == DGREAT)
+			return (true);
+	}
 	return (false);
 }
 
 int	check_syntax(void)
 {
 	int		args;
-	t_token *token;
+	t_token	*token;
 
 	args = 0;
 	token = g_data.tokens;
 	while (token)
 	{
-		if ((is_io_redir(token) && token->next && is_io_redir(token->next)) ||
-			(token->type == PIPE && token->next->type == PIPE))
-		{
-			token->error = true;
-			return (1);
-		}
-		if ((is_io_redir(token) && token->type != DLESS) 
+		if ((is_io_redir(token) && token->next && is_io_redir(token->next))
+			|| (token->type == PIPE && token->next->type == PIPE))
+				token->error = true;
+		else if ((is_io_redir(token))
 			&& (!token->next && token->type != REDIR))
 		{
 			token->error = true;
 			return (err_handle(5, token->value));
 		}
-		token->error = false;
+		else if (args++ == 0 && is_io_redir(token->next) && token->type != WORD)
+		{
+			token->error = true;
+			return (err_handle(4, token->value));
+		}
 		token = token->next;
-		// if (arg == 0 && token->type != REDIR && token->type != WORD)
-		// 	return (error_handle())
 	}
 	return (0);
 }
@@ -107,9 +68,7 @@ int	check_syntax(void)
 int	err_handle(int error_code, char *error_input)
 {
 	char	*err[7];
-	char	*err_prefix;
 
-	err_prefix = "minishell: ";
 	err[0] = "missing ]";
 	err[1] = "command not found";
 	err[2] = "not an valid identifier";
@@ -117,7 +76,6 @@ int	err_handle(int error_code, char *error_input)
 	err[4] = "syntax error near unexpected token";
 	err[5] = "syntax error near unexpected token 'newline'";
 	err[6] = "No such file or directory";
-
 	if (error_code == 0)
 		print_err("minishell: %s: %s\n", error_input, err[0]);
 	if (error_code == 1)
@@ -132,7 +90,6 @@ int	err_handle(int error_code, char *error_input)
 		print_err("minishell:%s %s\n", "", err[5]);
 	if (error_code == 6)
 		print_err("minishell:%s %s\n", "", err[6]);
-	
 	g_data.exit_status = error_code;
 	return (error_code);
 }

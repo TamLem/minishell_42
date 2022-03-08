@@ -6,7 +6,7 @@
 /*   By: tlemma <tlemma@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/08 12:32:47 by nlenoch           #+#    #+#             */
-/*   Updated: 2022/03/02 02:48:16 by tlemma           ###   ########.fr       */
+/*   Updated: 2022/03/08 15:21:51 by tlemma           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,19 +14,25 @@
 #include "env.h"
 #include "minishell.h"
 
-int	add_env(char *name, char *value)
+void	update_existing(char *name, char *value)
 {
-	t_env_list	*new;
 	t_env_list	*existing;
 
 	existing = ft_getenv_list(name);
 	if (existing && value)
 	{
-		free_to_null(&existing->value);
 		existing->value = value;
 		existing->is_env = true;
 	}
-	else if (!existing)
+}
+
+int	add_env(char *name, char *value)
+{
+	t_env_list	*new;
+
+	if (ft_getenv_list(name))
+		update_existing(name, value);
+	else
 	{
 		new = g_data.env_list;
 		while (new && new->next)
@@ -52,9 +58,8 @@ static int	update_env(int argc, char *argv[], char *envp[])
 	char		*name;
 	char		*value;
 
-	argv++;
 	value = NULL;
-	while (*argv && **argv)
+	while (++argv && *argv)
 	{
 		if (**argv)
 		{
@@ -72,7 +77,6 @@ static int	update_env(int argc, char *argv[], char *envp[])
 			else
 				add_env(name, value);
 		}
-		argv++;
 	}
 	return (0);
 }
