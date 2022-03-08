@@ -6,7 +6,7 @@
 /*   By: tlemma <tlemma@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/01 14:13:55 by tlemma            #+#    #+#             */
-/*   Updated: 2022/03/08 18:10:56 by tlemma           ###   ########.fr       */
+/*   Updated: 2022/03/08 20:12:37 by tlemma           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,16 +40,24 @@ int	end_session(void)
 	return (0);
 }
 
-int	init_session(int argc, char *argv[], char *envp[])
+int	refresh_session(int argc, char *argv[], char *envp[])
 {
 	g_data.env = envp;
 	g_data.state = 0;
 	g_data.tokens = NULL;
 	g_data.cmds = NULL;
-	g_data.exit_status = 0;
 	change_ctrlc_sym(false);
 	signal(SIGINT, sig_ctrlc);
 	signal(SIGQUIT, SIG_IGN);
+	return (0);
+}
+
+int	init_session(int argc, char *argv[], char *envp[])
+{
+	g_data.exit_status = 0;
+	g_data.malloc_count = 0;
+	g_data.mem_alloced = NULL;
+	init_env(argc, argv, envp);
 	return (0);
 }
 
@@ -58,12 +66,10 @@ int	main(int argc, char *argv[], char *envp[])
 	char	*line;
 
 	line = NULL;
-	g_data.malloc_count = 0;
-	g_data.mem_alloced = NULL;
-	init_env(argc, argv, envp);
+	init_session(argc, argv, envp);
 	while (true)
 	{
-		init_session(argc, argv, envp);
+		refresh_session(argc, argv, envp);
 		line = prompt();
 		if (line)
 		{

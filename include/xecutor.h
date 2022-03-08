@@ -6,7 +6,7 @@
 /*   By: tlemma <tlemma@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/15 16:13:15 by tlemma            #+#    #+#             */
-/*   Updated: 2022/03/08 12:38:43 by tlemma           ###   ########.fr       */
+/*   Updated: 2022/03/08 18:30:56 by tlemma           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,6 @@ bool	check_cmds(char	*cmd);
 bool	is_builtin(char	*cmd);
 int		add_env(char *name, char *value);
 int		init_args(t_simple_cmd *simple_cmd, char ***arg_array);
-char	*ft_strjoin2(char *s1, char *s2);
 
 /* ----- Inbuilts Commands */
 int		ft_export(int argc, char *argv[], char *envp[]);

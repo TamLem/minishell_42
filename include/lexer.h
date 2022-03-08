@@ -6,7 +6,7 @@
 /*   By: tlemma <tlemma@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/03 13:03:11 by tlemma            #+#    #+#             */
-/*   Updated: 2022/03/08 16:10:35 by tlemma           ###   ########.fr       */
+/*   Updated: 2022/03/08 19:39:41 by tlemma           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,5 +77,6 @@ int		get_state(char pos);
 int		param_expand(void);
 char	*field_split(char *str);
 void	del_empty_tokens(void);
+void	print_tokens(void);
 
 #endif

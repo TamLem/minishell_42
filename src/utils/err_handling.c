@@ -6,7 +6,7 @@
 /*   By: tlemma <tlemma@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/27 15:43:40 by tlemma            #+#    #+#             */
-/*   Updated: 2022/03/08 15:40:03 by tlemma           ###   ########.fr       */
+/*   Updated: 2022/03/08 20:33:02 by tlemma           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,6 +90,5 @@ int	err_handle(int error_code, char *error_input)
 		print_err("minishell:%s %s\n", "", err[5]);
 	if (error_code == 6)
 		print_err("minishell:%s %s\n", "", err[6]);
-	g_data.exit_status = error_code;
 	return (error_code);
 }

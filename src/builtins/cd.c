@@ -6,7 +6,7 @@
 /*   By: tlemma <tlemma@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/01 18:52:36 by nlenoch           #+#    #+#             */
-/*   Updated: 2022/03/08 17:00:27 by tlemma           ###   ########.fr       */
+/*   Updated: 2022/03/08 20:24:24 by tlemma           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,10 @@ void	change_dir(int dir, char *path, char *oldpath)
 {
 	dir = chdir(path);
 	if (dir == -1)
+	{
 		err_handle(3, path);
+		g_data.exit_status = 1;
+	}
 	else
 		add_env("OLDPWD", ft_strdup(oldpath));
 	free(oldpath);

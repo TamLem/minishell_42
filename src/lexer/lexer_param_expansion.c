@@ -6,14 +6,14 @@
 /*   By: tlemma <tlemma@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/08 16:06:53 by tlemma            #+#    #+#             */
-/*   Updated: 2022/03/08 16:07:32 by tlemma           ###   ########.fr       */
+/*   Updated: 2022/03/08 20:16:34 by tlemma           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "lexer.h"
 #include "minishell.h"
 
-int	paramlen(char *param)
+static int	paramlen(char *param)
 {
 	int	len;
 
@@ -25,7 +25,7 @@ int	paramlen(char *param)
 	return (len);
 }
 
-char	*expand_single(char *init_token, int var_pos, char *var, bool split)
+static char	*expand_single(char *init_token, int var_pos, char *var, bool split)
 {
 	char	*before;
 	char	*before_mid;
@@ -51,6 +51,20 @@ char	*expand_single(char *init_token, int var_pos, char *var, bool split)
 	return (var);
 }
 
+static void	replace_placeholders(void)
+{
+	t_token	*token;
+
+	token = g_data.tokens;
+	while (token)
+	{
+		if (token->type == TOKEN && ft_strchr(token->value, PLACE_HOLDER))
+			*(ft_strchr(token->value, PLACE_HOLDER)) = DOLLAR;
+		if (!ft_strchr(token->value, PLACE_HOLDER))
+			token = token->next;
+	}
+}
+
 int	param_expand(void)
 {
 	t_token	*token;
@@ -63,18 +77,18 @@ int	param_expand(void)
 	{
 		var = ft_strchr(token->value, DOLLAR);
 		var_pos = ft_strchr_pos(token->value, DOLLAR);
-		if (var && *(token->value + 1))
+		if (var && (paramlen(var + 1) != 0 || *(var + 1) == QMARK))
 		{
 			if (*(var + 1) == QMARK)
 				exp = ft_itoa(g_data.exit_status);
-			else if (paramlen(var + 1) != 0)
+			else
 				exp = expand_single(token->value, var_pos, var, token->split);
 			token->value = exp;
 		}
-		else if (token->type == TOKEN && ft_strchr(token->value, PLACE_HOLDER))
-			*(ft_strchr(token->value, PLACE_HOLDER)) = DOLLAR;
-		if (!ft_strchr(token->value, DOLLAR))
+		if (!ft_strchr(token->value, DOLLAR)
+			|| !is_valid_name(ft_strchr(token->value, DOLLAR) + 1))
 			token = token->next;
 	}
+	replace_placeholders();
 	return (0);
 }

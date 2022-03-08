@@ -6,7 +6,7 @@
 /*   By: tlemma <tlemma@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/08 12:28:08 by tlemma            #+#    #+#             */
-/*   Updated: 2022/03/08 15:31:14 by tlemma           ###   ########.fr       */
+/*   Updated: 2022/03/08 21:01:26 by tlemma           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,8 @@ int	exec_builtin(t_simple_cmd *simple_cmd)
 		res = ft_cd(argc, argv, env);
 	else if (ft_strcmp(argv[0], "echo") == 0)
 		res = ft_echo(argc, argv);
-	else if (ft_strcmp(argv[0], "env") == 0)
+	else if (ft_strcmp(argv[0], "env") == 0 && (ft_getenv("PATH")
+			|| !err_handle(1, argv[0])))
 		res = ft_env(argc, argv, env);
 	else if (ft_strcmp(argv[0], "export") == 0)
 		res = ft_export(argc, argv, env);
@@ -63,13 +64,12 @@ int	child_process(t_simple_cmd *simple_cmd)
 	if (!check_cmds(simple_cmd->cmd))
 	{
 		err_handle(1, simple_cmd->cmd);
-		return (1);
+		exit (0);
 	}
 	path = ft_getpath(simple_cmd->cmd);
 	argc = init_args(simple_cmd, &args);
 	while (execve(*path, args, env) && *path)
 		path++;
-	perror("err");
 	free_dp(path);
 	close(STDIN_FILENO);
 	close(STDOUT_FILENO);
