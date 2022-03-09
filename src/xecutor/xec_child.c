@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   xec_builtins.c                                     :+:      :+:    :+:   */
+/*   xec_child.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: tlemma <tlemma@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/08 12:28:08 by tlemma            #+#    #+#             */
-/*   Updated: 2022/03/08 21:01:26 by tlemma           ###   ########.fr       */
+/*   Updated: 2022/03/09 17:25:41 by tlemma           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,7 +64,7 @@ int	child_process(t_simple_cmd *simple_cmd)
 	if (!check_cmds(simple_cmd->cmd))
 	{
 		err_handle(1, simple_cmd->cmd);
-		exit (0);
+		exit (127);
 	}
 	path = ft_getpath(simple_cmd->cmd);
 	argc = init_args(simple_cmd, &args);

@@ -6,7 +6,7 @@
 #    By: tlemma <tlemma@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/08/23 18:12:02 by tlemma            #+#    #+#              #
-#    Updated: 2022/03/08 18:10:40 by tlemma           ###   ########.fr        #
+#    Updated: 2022/03/09 11:41:44 by tlemma           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -24,7 +24,7 @@ SDIR = src
 SRCS = $(SDIR)/main.c $(SDIR)/lexer/lexer.c $(SDIR)/lexer/lexer_utils.c $(SDIR)/lexer/lexer_param_expansion.c \
 		$(SDIR)/lexer/lexer_utils_2.c\
 		$(SDIR)/parser/parser.c $(SDIR)/parser/parser_utils.c \
-		$(SDIR)/xecutor/xecutor.c $(SDIR)/xecutor/xecutor_utils.c $(SDIR)/xecutor/xecutor_utils_2.c $(SDIR)/xecutor/xec_builtins.c\
+		$(SDIR)/xecutor/xecutor.c $(SDIR)/xecutor/xecutor_utils.c $(SDIR)/xecutor/xecutor_utils_2.c $(SDIR)/xecutor/xec_child.c\
 		$(SDIR)/builtins/unset.c $(SDIR)/builtins/cd.c $(SDIR)/builtins/pwd.c $(SDIR)/builtins/echo.c\
 		$(SDIR)/builtins/env_export_utils.c $(SDIR)/builtins/exit.c $(SDIR)/builtins/env.c $(SDIR)/builtins/export.c\
 		$(SDIR)/utils/signals.c $(SDIR)/utils/utils.c $(SDIR)/utils/err_handling.c \

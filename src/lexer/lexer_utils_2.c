@@ -6,7 +6,7 @@
 /*   By: tlemma <tlemma@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/08 16:09:01 by tlemma            #+#    #+#             */
-/*   Updated: 2022/03/08 16:09:58 by tlemma           ###   ########.fr       */
+/*   Updated: 2022/03/09 18:46:35 by tlemma           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,4 +57,28 @@ void	print_tokens(void)
 		printf("%d: %s\n", temp->type, temp->value);
 		temp = temp->next;
 	}
+}
+
+char	*ft_strjoin_withnull(char *s1, char *s2)
+{
+	char	*ret;
+	char	*cp_ret;
+	char	*cp_s;
+
+	if (s2 == NULL)
+		return (s1);
+	if (s1 == NULL)
+		return (s2);
+	ret = ft_malloc(ft_strlen(s1) + ft_strlen(s2) + 1);
+	if (!ret)
+		return (NULL);
+	cp_ret = ret;
+	cp_s = s1;
+	while (*cp_s)
+		*cp_ret++ = *cp_s++;
+	cp_s = s2;
+	while (*cp_s)
+		*cp_ret++ = *cp_s++;
+	*cp_ret = '\0';
+	return (ret);
 }

@@ -1,18 +1,26 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   signls.c                                           :+:      :+:    :+:   */
+/*   signals.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: tlemma <tlemma@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/08 14:36:20 by tlemma            #+#    #+#             */
-/*   Updated: 2022/03/08 14:36:59 by tlemma           ###   ########.fr       */
+/*   Updated: 2022/03/09 18:47:14 by tlemma           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 #include <signal.h>
 #include <termios.h>
+
+void	bashify_signal(void)
+{
+	if (g_data.exit_status == 2)
+		g_data.exit_status = 130;
+	if (g_data.exit_status == 32512)
+		g_data.exit_status >>= 8;
+}
 
 int	change_ctrlc_sym(bool	value)
 {

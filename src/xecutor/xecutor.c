@@ -6,7 +6,7 @@
 /*   By: tlemma <tlemma@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/28 18:58:11 by nlenoch           #+#    #+#             */
-/*   Updated: 2022/03/08 20:56:24 by tlemma           ###   ########.fr       */
+/*   Updated: 2022/03/09 18:48:28 by tlemma           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,17 +100,16 @@ int	xecute(void)
 		return (2);
 	while (simple_cmd != NULL)
 	{
-		if (simple_cmd->error || !simple_cmd->cmd)
+		if (!(simple_cmd->error || !simple_cmd->cmd))
 		{
-			simple_cmd = simple_cmd->next;
-			continue ;
+			ret = exec_cmd(simple_cmd, fd);
+			if (ret == 2)
+				return (2);
 		}
-		ret = exec_cmd(simple_cmd, fd);
-		if (ret == 2)
-			return (2);
 		simple_cmd = simple_cmd->next;
 	}
 	reset_fds(fd);
 	waitpid(ret, &g_data.exit_status, 0);
+	bashify_signal();
 	return (0);
 }

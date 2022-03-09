@@ -6,7 +6,7 @@
 /*   By: tlemma <tlemma@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/08 16:06:53 by tlemma            #+#    #+#             */
-/*   Updated: 2022/03/08 20:16:34 by tlemma           ###   ########.fr       */
+/*   Updated: 2022/03/09 18:42:06 by tlemma           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,9 @@ static int	paramlen(char *param)
 {
 	int	len;
 
-	len = 1;
+	len = 0;
+	if (param[len] == QMARK)
+		return (1);
 	if (param[len] != '_' && !ft_isalpha(param[len]))
 		return (0);
 	while (param[len] == '_' || ft_isalnum(param[len]))
@@ -35,19 +37,17 @@ static char	*expand_single(char *init_token, int var_pos, char *var, bool split)
 
 	len = paramlen(var + 1);
 	var = ft_substr(var, 1, len);
-	temp = ft_getenv(var);
-	if (temp)
-	{
-		if (split)
-			temp = field_split(temp);
-		var = temp;
-	}
+	if (*var == QMARK)
+		temp = ft_itoa(g_data.exit_status);
 	else
-		return (NULL);
+		temp = ft_strdup(ft_getenv(var));
+	if (temp && split)
+		temp = field_split(temp);
+	var = temp;
 	before = ft_substr(init_token, 0, var_pos);
 	after = ft_substr(init_token, var_pos + len + 1, ft_strlen(init_token));
-	before_mid = ft_strjoin(before, var);
-	var = ft_strjoin(before_mid, after);
+	before_mid = ft_strjoin_withnull(before, var);
+	var = ft_strjoin_withnull(before_mid, after);
 	return (var);
 }
 
@@ -79,14 +79,11 @@ int	param_expand(void)
 		var_pos = ft_strchr_pos(token->value, DOLLAR);
 		if (var && (paramlen(var + 1) != 0 || *(var + 1) == QMARK))
 		{
-			if (*(var + 1) == QMARK)
-				exp = ft_itoa(g_data.exit_status);
-			else
-				exp = expand_single(token->value, var_pos, var, token->split);
+			exp = expand_single(token->value, var_pos, var, token->split);
 			token->value = exp;
 		}
 		if (!ft_strchr(token->value, DOLLAR)
-			|| !is_valid_name(ft_strchr(token->value, DOLLAR) + 1))
+			|| paramlen(ft_strchr(token->value, DOLLAR) + 1) == 0)
 			token = token->next;
 	}
 	replace_placeholders();

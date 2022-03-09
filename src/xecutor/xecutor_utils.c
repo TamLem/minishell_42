@@ -6,7 +6,7 @@
 /*   By: tlemma <tlemma@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/17 19:46:04 by tlemma            #+#    #+#             */
-/*   Updated: 2022/03/08 16:17:15 by tlemma           ###   ########.fr       */
+/*   Updated: 2022/03/09 12:28:36 by tlemma           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,7 @@ char	**ft_getpath(char *cmd)
 	keypair = NULL;
 	path = ft_split(ft_getenv("PATH"), ':');
 	i = 0;
-	if (path == NULL)
+	if (path == NULL || access(cmd, F_OK | X_OK) == 0)
 	{
 		path = malloc(sizeof(char *) * 2);
 		path[0] = cmd;

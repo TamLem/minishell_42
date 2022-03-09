@@ -6,7 +6,7 @@
 /*   By: tlemma <tlemma@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/01 12:22:51 by nlenoch           #+#    #+#             */
-/*   Updated: 2022/03/03 15:38:48 by tlemma           ###   ########.fr       */
+/*   Updated: 2022/03/09 18:46:55 by tlemma           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,29 +15,32 @@
 
 bool	check_flag(char *arg, char *flag)
 {
-	if (ft_strncmp(arg, flag, ft_strlen(flag)) != 0)
-		return (false);
-	arg = arg + ft_strlen(flag);
-	while (*arg)
+	bool	is_flag;
+	int		flaglen;
+
+	flaglen = ft_strlen(flag);
+	is_flag = false;
+	if (ft_strncmp(arg, flag, flaglen) == 0)
 	{
-		if (*arg != *(flag + 1))
-			return (false);
-		arg++;
+		is_flag = true;
+		while (arg[flaglen])
+		{
+			if (arg[flaglen] != flag[1])
+				is_flag = false;
+			flaglen++;
+		}
 	}
-	return (true);
+	return (is_flag);
 }
 
 void	echo_print(bool n_flag, char **argv)
 {
-	int	i;
-
-	i = 1;
-	if (n_flag)
-		i = 2;
-	while (argv[i] && (i == n_flag + 1 || printf(" ")))
+	while (*argv)
 	{
-		printf("%s", argv[i]);
-		i++;
+		printf("%s", *argv);
+		argv++;
+		if (*argv)
+			printf(" ");
 	}
 	if (!n_flag)
 		printf("\n");
@@ -55,16 +58,10 @@ int	ft_echo(int argc, char **argv)
 		printf("\n");
 		return (0);
 	}
-	if (argv[1][0] == '-' && argv[1][1] == 'n')
-	{
+	while (check_flag(argv[i], "-n"))
+		i++;
+	if (i > 1)
 		n_flag = true;
-		while (argv[1][i] != '\0' || argv[1][i] == 'n')
-		{
-			if (argv[1][i] != 'n')
-				n_flag = false;
-			i++;
-		}
-	}
-	echo_print(n_flag, argv);
+	echo_print(n_flag, &(argv[i]));
 	return (0);
 }
