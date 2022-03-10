@@ -6,7 +6,7 @@
 /*   By: tlemma <tlemma@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/01 14:13:55 by tlemma            #+#    #+#             */
-/*   Updated: 2022/03/09 16:46:33 by tlemma           ###   ########.fr       */
+/*   Updated: 2022/03/10 20:07:57 by tlemma           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,7 +75,7 @@ int	main(int argc, char *argv[], char *envp[])
 		{
 			if (*line)
 				add_history(line);
-			if (!lex(line) && !parse())
+			if (lex(line) != 6 && !parse())
 				xecute();
 			g_data.state = 0;
 		}

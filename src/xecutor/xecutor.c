@@ -6,12 +6,13 @@
 /*   By: tlemma <tlemma@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/28 18:58:11 by nlenoch           #+#    #+#             */
-/*   Updated: 2022/03/09 18:48:28 by tlemma           ###   ########.fr       */
+/*   Updated: 2022/03/10 19:50:21 by tlemma           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 #include "xecutor.h"
+#include <signal.h>
 
 int	get_infile(t_simple_cmd *simple_cmd, int fdin)
 {
@@ -31,8 +32,7 @@ int	get_infile(t_simple_cmd *simple_cmd, int fdin)
 	return (fdin);
 }
 
-int	get_outfile(t_simple_cmd *simple_cmd,
-	int stdout_init, int *fdout, int *fdin)
+int	get_outfile(t_simple_cmd *simple_cmd, int fd[4], int order)
 {
 	int			fdpipe[2];
 	t_outfiles	*outfile;
@@ -41,25 +41,25 @@ int	get_outfile(t_simple_cmd *simple_cmd,
 	while (outfile && outfile->next)
 		outfile = outfile->next;
 	if (outfile)
-		*fdout = outfile->value;
+		fd[OUT] = outfile->value;
 	else if (simple_cmd->next == NULL)
-		*fdout = dup2(stdout_init, *fdout);
+		dup2(fd[STDOUT_INIT], fd[OUT]);
 	if (simple_cmd->next != NULL)
 	{
 		if (pipe(fdpipe) == -1)
 			return (4);
-		*fdout = fdpipe[1];
-		*fdin = fdpipe[0];
+		fd[IN] = fdpipe[0];
+		fd[OUT] = fdpipe[1];
 	}
 	if (outfile != NULL)
 		dup2(outfile->value, STDOUT_FILENO);
 	else
-		dup2(*fdout, STDOUT_FILENO);
-	close(*fdout);
+		dup2(fd[OUT], STDOUT_FILENO);
+	close(fd[OUT]);
 	return (0);
 }
 
-int	exec_cmd(t_simple_cmd *simple_cmd, int fd[4])
+int	exec_cmd(t_simple_cmd *simple_cmd, int fd[4], int order)
 {
 	int	ret;
 
@@ -70,7 +70,7 @@ int	exec_cmd(t_simple_cmd *simple_cmd, int fd[4])
 	dup2(fd[IN], STDIN_FILENO);
 	close(fd[IN]);
 	close(fd[OUT]);
-	get_outfile(simple_cmd, fd[STDOUT_INIT], &fd[OUT], &fd[IN]);
+	get_outfile(simple_cmd, fd, order);
 	g_data.state = 1;
 	if (is_builtin(simple_cmd->cmd))
 		ret = exec_builtin(simple_cmd);
@@ -78,10 +78,7 @@ int	exec_cmd(t_simple_cmd *simple_cmd, int fd[4])
 	{
 		ret = fork();
 		if (ret == 0)
-		{
 			child_process(simple_cmd);
-			exit(0);
-		}
 	}
 	return (ret);
 }
@@ -91,25 +88,25 @@ int	xecute(void)
 	int				fd[4];
 	t_simple_cmd	*simple_cmd;
 	int				ret;
+	int				i;
 
 	ret = 0;
+	i = 0;
 	simple_cmd = g_data.cmds;
 	if (simple_cmd != NULL)
 		init_fds(fd);
 	else
 		return (2);
-	while (simple_cmd != NULL)
+	while (simple_cmd != NULL && ++i)
 	{
-		if (!(simple_cmd->error || !simple_cmd->cmd))
-		{
-			ret = exec_cmd(simple_cmd, fd);
-			if (ret == 2)
-				return (2);
-		}
+		if (!simple_cmd->error && simple_cmd->cmd)
+			ret = exec_cmd(simple_cmd, fd, i);
+		if (ret == 2)
+			return (2);
 		simple_cmd = simple_cmd->next;
 	}
 	reset_fds(fd);
-	waitpid(ret, &g_data.exit_status, 0);
-	bashify_signal();
-	return (0);
+	while (i--)
+		wait(&g_data.exit_status);
+	return (bashify_exit_status());
 }

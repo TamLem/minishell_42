@@ -6,7 +6,7 @@
 /*   By: tlemma <tlemma@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/10 22:08:11 by tlemma            #+#    #+#             */
-/*   Updated: 2022/03/08 13:26:10 by tlemma           ###   ########.fr       */
+/*   Updated: 2022/03/10 20:03:03 by tlemma           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,7 +75,7 @@ int	parse(void)
 				add_args(&(simple_cmd->args), token->value);
 			token = token->next;
 		}
-		if (!token || token->error)
+		if (!token)
 			break ;
 		init_cmd_struct(&(simple_cmd->next));
 		simple_cmd = simple_cmd->next;

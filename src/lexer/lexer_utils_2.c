@@ -6,7 +6,7 @@
 /*   By: tlemma <tlemma@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/08 16:09:01 by tlemma            #+#    #+#             */
-/*   Updated: 2022/03/09 18:46:35 by tlemma           ###   ########.fr       */
+/*   Updated: 2022/03/10 15:47:49 by tlemma           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,4 +81,12 @@ char	*ft_strjoin_withnull(char *s1, char *s2)
 		*cp_ret++ = *cp_s++;
 	*cp_ret = '\0';
 	return (ret);
+}
+
+bool	is_io_modifier(int type)
+{
+	if (type == LESS || type == DLESS
+		|| type == GREAT || type == DGREAT)
+		return (true);
+	return (false);
 }

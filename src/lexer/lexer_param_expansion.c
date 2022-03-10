@@ -6,7 +6,7 @@
 /*   By: tlemma <tlemma@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/08 16:06:53 by tlemma            #+#    #+#             */
-/*   Updated: 2022/03/09 18:42:06 by tlemma           ###   ########.fr       */
+/*   Updated: 2022/03/10 15:40:17 by tlemma           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ static int	paramlen(char *param)
 	return (len);
 }
 
-static char	*expand_single(char *init_token, int var_pos, char *var, bool split)
+char	*expand_single(char *init_token, int var_pos, char *var, bool split)
 {
 	char	*before;
 	char	*before_mid;

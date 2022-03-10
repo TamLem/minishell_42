@@ -6,7 +6,7 @@
 /*   By: tlemma <tlemma@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/01 16:26:02 by tlemma            #+#    #+#             */
-/*   Updated: 2022/03/09 18:19:53 by tlemma           ###   ########.fr       */
+/*   Updated: 2022/03/10 20:32:33 by tlemma           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -113,7 +113,7 @@ int	tokenize_operators(void)
 				token->type = DGREAT;
 			else if (ft_strcmp(token->value, "|") == 0)
 				token->type = PIPE;
-			if (is_io_redir(token) && token->next && token->next->type == TOKEN)
+			if (is_redir(token) && token->next && token->next->type == TOKEN)
 				token->next->type = REDIR;
 		}
 		else if (token->type != REDIR)

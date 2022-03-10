@@ -6,7 +6,7 @@
 /*   By: tlemma <tlemma@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/21 16:39:24 by tlemma            #+#    #+#             */
-/*   Updated: 2022/03/08 13:15:13 by tlemma           ###   ########.fr       */
+/*   Updated: 2022/03/10 15:53:35 by tlemma           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,21 @@ int	add_args(t_args **args, char *value)
 	return (0);
 }
 
+char	*heredoc_expand(char *line)
+{
+	char	*var;
+	int		var_pos;
+
+	var = ft_strchr(line, DOLLAR);
+	if (!var)
+		return (line);
+	var_pos = var - line;
+	free(line);
+	line = expand_single(line, var_pos, var, false);
+	line = ft_strndup(line, ft_strlen(line));
+	return (line);
+}
+
 int	read_heredocs(char	*dlmtr)
 {
 	int			fd;
@@ -41,6 +56,7 @@ int	read_heredocs(char	*dlmtr)
 	}
 	while (line && ft_strcmp(line, dlmtr))
 	{
+		line = heredoc_expand(line);
 		write(fd, line, ft_strlen(line));
 		write(fd, "\n", 1);
 		free(line);
@@ -88,12 +104,4 @@ int	add_outfiles(t_outfiles **outfile, char *file, int mode)
 		(*outfile)->value = open(file, O_WRONLY | O_APPEND | O_CREAT, S_IRWXU);
 	(*outfile)->next = NULL;
 	return (0);
-}
-
-bool	is_io_modifier(int type)
-{
-	if (type == LESS || type == DLESS
-		|| type == GREAT || type == DGREAT)
-		return (true);
-	return (false);
 }

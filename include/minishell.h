@@ -6,7 +6,7 @@
 /*   By: tlemma <tlemma@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/01 14:16:00 by tlemma            #+#    #+#             */
-/*   Updated: 2022/03/09 17:44:20 by tlemma           ###   ########.fr       */
+/*   Updated: 2022/03/10 19:57:30 by tlemma           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,10 +71,13 @@ char		*ft_getenv(char *name);
 t_env_list	*ft_getenv_list(char *name);
 char		**env_to_arr(void);
 void		free_to_null(void *addr);
-int			is_io_redir(t_token *token);
+int			is_redir(t_token *token);
 void		sig_ctrlc(int sig);
 int			change_ctrlc_sym(bool value);
 char		*prompt(void);
-void		bashify_signal(void);
+int			bashify_exit_status(void);
+char		*expand_single(char *init_token,
+				int var_pos, char *var, bool split);
+bool		is_io_modifier(int type);
 
 #endif
