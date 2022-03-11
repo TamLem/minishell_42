@@ -6,14 +6,12 @@
 /*   By: tlemma <tlemma@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/08 12:33:09 by nlenoch           #+#    #+#             */
-/*   Updated: 2022/03/11 15:44:39 by tlemma           ###   ########.fr       */
+/*   Updated: 2022/03/11 17:02:29 by tlemma           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "xecutor.h"
 #include "minishell.h"
-
-/* Check for invalid chars */
 
 int	ft_unset(int argc, char *argv[], char *envp[])
 {
@@ -26,7 +24,10 @@ int	ft_unset(int argc, char *argv[], char *envp[])
 	while (argv[i])
 	{
 		if (!is_valid_name(argv[i]))
+		{
 			err_handle(2, "unset", argv[i]);
+			g_data.exit_status = 1;
+		}
 		if ((ft_strcmp(argv[i], tmp_env->value) == 0))
 			g_data.env_list = tmp_env->next;
 		while (tmp_env != NULL)
@@ -38,5 +39,5 @@ int	ft_unset(int argc, char *argv[], char *envp[])
 		}
 		i++;
 	}
-	return (0);
+	return (g_data.exit_status);
 }

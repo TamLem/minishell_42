@@ -6,7 +6,7 @@
 /*   By: tlemma <tlemma@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/27 15:43:40 by tlemma            #+#    #+#             */
-/*   Updated: 2022/03/11 16:22:11 by tlemma           ###   ########.fr       */
+/*   Updated: 2022/03/11 16:59:18 by tlemma           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,6 +107,6 @@ int	err_handle(int error_code, char *prog, char *error_input)
 	if (error_code == 4 || error_code == 6)
 		print_err("minishell: %s: %s: `%s'\n", prog, err[4], error_input);
 	if (error_code == 5)
-		print_err("minishell:%s %s: %s\n", prog, "", err[5]);
+		print_err("minishell:%s %s: %s\n", prog, "", error_input);
 	return (error_code);
 }

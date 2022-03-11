@@ -6,7 +6,7 @@
 /*   By: tlemma <tlemma@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/08 12:33:19 by nlenoch           #+#    #+#             */
-/*   Updated: 2022/03/11 15:49:26 by tlemma           ###   ########.fr       */
+/*   Updated: 2022/03/11 16:56:03 by tlemma           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,14 +19,16 @@ int	ft_exit(int argc, char **argv)
 	int	i;
 
 	i = 0;
+	if (argc > 2)
+		err_handle(5, "exit", " too many arguments");
 	if (argc >= 2)
 	{
 		while (argv[1][i])
 		{
 			if (!ft_isdigit(argv[1][i]))
 			{
-				err_handle(1, "", argv[1]);
-				break ;
+				err_handle(5, "exit", "numeric argument required");
+				exit(255);
 			}
 			i++;
 		}
@@ -34,8 +36,7 @@ int	ft_exit(int argc, char **argv)
 	}
 	else
 	{
-		system("leaks minishell");
-		exit(0);
+		exit(g_data.exit_status);
 	}
 	return (g_data.exit_status);
 }
