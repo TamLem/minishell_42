@@ -6,7 +6,7 @@
 /*   By: tlemma <tlemma@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/27 15:43:40 by tlemma            #+#    #+#             */
-/*   Updated: 2022/03/11 10:52:21 by tlemma           ###   ########.fr       */
+/*   Updated: 2022/03/11 14:36:46 by tlemma           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,11 +46,11 @@ int	check_syntax(void)
 	token = g_data.tokens;
 	while (token)
 	{
-		if ((is_redir(token))
-			&& (!token->next && token->type != REDIR))
+		if (is_redir(token)
+			&& (token->next && token->type != REDIR))
 		{
 			token->error = true;
-			return (err_handle(5, token->value));
+			return (err_handle(6, token->value));
 		}
 		else if ((args++ == 0 && is_redir(token->next) && token->type != WORD)
 			|| (is_redir(token) && token->next && is_redir(token->next)))

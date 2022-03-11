@@ -6,7 +6,7 @@
 /*   By: tlemma <tlemma@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/10 21:26:47 by tlemma            #+#    #+#             */
-/*   Updated: 2022/03/11 10:49:25 by tlemma           ###   ########.fr       */
+/*   Updated: 2022/03/11 14:14:13 by tlemma           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,7 @@ bool	shall_split(char *line, char *appended, int state)
 		return (true);
 	if (is_operator(*line) && !is_operator(next) && state == 0)
 		return (true);
-	if ((is_operator(*line) && (*line != *appended
+	if ((is_operator(*line) && (next != *appended
 				|| ft_strlen(appended) > 1)) && state == 0)
 		return (true);
 	else

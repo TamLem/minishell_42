@@ -6,7 +6,7 @@
 /*   By: tlemma <tlemma@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/01 18:52:36 by nlenoch           #+#    #+#             */
-/*   Updated: 2022/03/08 20:24:24 by tlemma           ###   ########.fr       */
+/*   Updated: 2022/03/11 13:59:54 by tlemma           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,6 @@ void	change_dir(int dir, char *path, char *oldpath)
 	}
 	else
 		add_env("OLDPWD", ft_strdup(oldpath));
-	free(oldpath);
 }
 
 int	ft_cd(int argc, char **argv, char **envp)
@@ -47,5 +46,6 @@ int	ft_cd(int argc, char **argv, char **envp)
 	}
 	if (path != NULL && *path)
 		change_dir(dir, path, oldpath);
+	free(oldpath);
 	return (1);
 }

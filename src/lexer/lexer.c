@@ -6,7 +6,7 @@
 /*   By: tlemma <tlemma@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/01 16:26:02 by tlemma            #+#    #+#             */
-/*   Updated: 2022/03/11 10:50:42 by tlemma           ###   ########.fr       */
+/*   Updated: 2022/03/11 14:37:45 by tlemma           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -138,6 +138,7 @@ int	lex(char *input)
 			line = ft_strjoin(line, ft_strdup(quoted));
 		else
 			break ;
+		free(quoted);
 	}
 	if (!*line)
 		return (1);

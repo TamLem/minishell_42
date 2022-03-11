@@ -6,7 +6,7 @@
 /*   By: tlemma <tlemma@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/08 12:32:47 by nlenoch           #+#    #+#             */
-/*   Updated: 2022/03/08 15:21:51 by tlemma           ###   ########.fr       */
+/*   Updated: 2022/03/11 14:29:46 by tlemma           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,7 +86,16 @@ int	ft_export(int argc, char *argv[], char *envp[])
 	char	**env_arr;
 
 	if (argc > 1)
-		return (update_env(argc, argv, envp));
+	{
+		update_env(argc, argv, envp);
+		argv++;
+		while (*argv)
+		{
+			if (!is_valid_name(*argv))
+				return (1);
+			argv++;
+		}
+	}		
 	else
 	{
 		env_arr = env_to_arr();

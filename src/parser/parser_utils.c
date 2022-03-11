@@ -6,7 +6,7 @@
 /*   By: tlemma <tlemma@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/21 16:39:24 by tlemma            #+#    #+#             */
-/*   Updated: 2022/03/11 13:21:29 by tlemma           ###   ########.fr       */
+/*   Updated: 2022/03/11 13:46:19 by tlemma           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,7 @@ int	read_heredocs(char	*dlmtr)
 
 	line = NULL;
 	g_data.n_heredocs++;
-	heredoc = ft_append_char("heredoc", g_data.n_heredocs + 48);
+	heredoc = ft_strjoin("heredoc", ft_itoa(g_data.n_heredocs));
 	fd = open(heredoc, O_RDWR | O_CREAT | O_TRUNC, S_IRWXU);
 	g_data.state = 2;
 	line = readline("> ");

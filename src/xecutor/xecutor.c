@@ -6,7 +6,7 @@
 /*   By: tlemma <tlemma@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/28 18:58:11 by nlenoch           #+#    #+#             */
-/*   Updated: 2022/03/11 13:23:41 by tlemma           ###   ########.fr       */
+/*   Updated: 2022/03/11 14:32:28 by tlemma           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,7 +72,7 @@ int	exec_cmd(t_simple_cmd *simple_cmd, int fd[4], int order)
 	get_outfile(simple_cmd, fd, order);
 	g_data.state = 1;
 	if (is_builtin(simple_cmd->cmd))
-		ret = exec_builtin(simple_cmd);
+		g_data.exit_status = exec_builtin(simple_cmd);
 	else
 	{
 		ret = fork();

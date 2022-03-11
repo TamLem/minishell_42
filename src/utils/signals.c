@@ -6,7 +6,7 @@
 /*   By: tlemma <tlemma@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/08 14:36:20 by tlemma            #+#    #+#             */
-/*   Updated: 2022/03/10 19:49:05 by tlemma           ###   ########.fr       */
+/*   Updated: 2022/03/11 13:52:17 by tlemma           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ int	bashify_exit_status(void)
 {
 	if (g_data.exit_status == 2)
 		g_data.exit_status = 130;
-	if (g_data.exit_status > 256)
+	if (g_data.exit_status >= 256)
 		g_data.exit_status >>= 8;
 	return (g_data.exit_status);
 }
