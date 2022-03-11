@@ -6,7 +6,7 @@
 /*   By: tlemma <tlemma@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/10 21:26:47 by tlemma            #+#    #+#             */
-/*   Updated: 2022/03/11 14:14:13 by tlemma           ###   ########.fr       */
+/*   Updated: 2022/03/11 16:10:04 by tlemma           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,7 +78,8 @@ int	quotes_matched(char *line)
 		get_state(*line);
 		line++;
 	}
-	if (get_state(*line) != 0 || (pipe && *(pipe + 1) == '\0'))
+	if (get_state(*line) != 0 || (pipe && *(pipe + 1) == '\0'
+			&& ft_strlen(line) > 1))
 		return (false);
 	else
 		return (true);

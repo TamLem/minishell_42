@@ -6,7 +6,7 @@
 /*   By: tlemma <tlemma@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/01 14:16:00 by tlemma            #+#    #+#             */
-/*   Updated: 2022/03/11 13:15:07 by tlemma           ###   ########.fr       */
+/*   Updated: 2022/03/11 15:45:22 by tlemma           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,7 +67,7 @@ void		*ft_malloc(size_t size);
 void		mem_free_all(void);
 int			check_syntax(void);
 int			is_valid_name(char *argv);
-int			err_handle(int error_code, char *error_input);
+int			err_handle(int error_code, char *prog, char *error_input);
 char		*ft_getenv(char *name);
 t_env_list	*ft_getenv_list(char *name);
 char		**env_to_arr(void);

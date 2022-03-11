@@ -6,7 +6,7 @@
 /*   By: tlemma <tlemma@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/01 18:52:36 by nlenoch           #+#    #+#             */
-/*   Updated: 2022/03/11 13:59:54 by tlemma           ###   ########.fr       */
+/*   Updated: 2022/03/11 15:42:03 by tlemma           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ void	change_dir(int dir, char *path, char *oldpath)
 	dir = chdir(path);
 	if (dir == -1)
 	{
-		err_handle(3, path);
+		err_handle(3, "cd", path);
 		g_data.exit_status = 1;
 	}
 	else

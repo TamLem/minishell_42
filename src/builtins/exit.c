@@ -6,7 +6,7 @@
 /*   By: tlemma <tlemma@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/08 12:33:19 by nlenoch           #+#    #+#             */
-/*   Updated: 2022/03/08 12:24:44 by tlemma           ###   ########.fr       */
+/*   Updated: 2022/03/11 15:49:26 by tlemma           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ int	ft_exit(int argc, char **argv)
 		{
 			if (!ft_isdigit(argv[1][i]))
 			{
-				err_handle(1, argv[1]);
+				err_handle(1, "", argv[1]);
 				break ;
 			}
 			i++;
@@ -37,5 +37,5 @@ int	ft_exit(int argc, char **argv)
 		system("leaks minishell");
 		exit(0);
 	}
-	return (0);
+	return (g_data.exit_status);
 }

@@ -6,7 +6,7 @@
 /*   By: tlemma <tlemma@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/08 12:28:08 by tlemma            #+#    #+#             */
-/*   Updated: 2022/03/11 11:17:41 by tlemma           ###   ########.fr       */
+/*   Updated: 2022/03/11 15:49:14 by tlemma           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ int	exec_builtin(t_simple_cmd *simple_cmd)
 	else if (ft_strcmp(argv[0], "echo") == 0)
 		res = ft_echo(argc, argv);
 	else if (ft_strcmp(argv[0], "env") == 0 && (ft_getenv("PATH")
-			|| !err_handle(1, argv[0])))
+			|| !err_handle(1, "", argv[0])))
 		res = ft_env(argc, argv, env);
 	else if (ft_strcmp(argv[0], "export") == 0)
 		res = ft_export(argc, argv, env);
@@ -63,7 +63,7 @@ int	child_process(t_simple_cmd *simple_cmd)
 	signal(SIGINT, child_exit);
 	if (!check_cmds(simple_cmd->cmd))
 	{
-		err_handle(1, simple_cmd->cmd);
+		err_handle(1, "", simple_cmd->cmd);
 		exit (127);
 	}
 	path = ft_getpath(simple_cmd->cmd);

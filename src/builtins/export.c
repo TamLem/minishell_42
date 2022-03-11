@@ -6,7 +6,7 @@
 /*   By: tlemma <tlemma@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/08 12:32:47 by nlenoch           #+#    #+#             */
-/*   Updated: 2022/03/11 14:29:46 by tlemma           ###   ########.fr       */
+/*   Updated: 2022/03/11 15:45:36 by tlemma           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,7 +73,7 @@ static int	update_env(int argc, char *argv[], char *envp[])
 			else
 				name = *argv;
 			if (!is_valid_name(name))
-				err_handle(2, name);
+				err_handle(2, "export", name);
 			else
 				add_env(name, value);
 		}

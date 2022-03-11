@@ -6,7 +6,7 @@
 /*   By: tlemma <tlemma@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/21 16:39:24 by tlemma            #+#    #+#             */
-/*   Updated: 2022/03/11 13:46:19 by tlemma           ###   ########.fr       */
+/*   Updated: 2022/03/11 15:48:40 by tlemma           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,7 +80,7 @@ int	add_infiles(t_infiles **infile, char *file, int mode)
 		(*infile)->value = open(file, O_RDONLY);
 		if ((*infile)->value == -1)
 		{
-			err_handle(3, file);
+			err_handle(3, "", file);
 			return (3);
 		}
 		(*infile)->dlmtr = NULL;
