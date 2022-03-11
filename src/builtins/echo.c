@@ -6,7 +6,7 @@
 /*   By: tlemma <tlemma@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/01 12:22:51 by nlenoch           #+#    #+#             */
-/*   Updated: 2022/03/09 18:46:55 by tlemma           ###   ########.fr       */
+/*   Updated: 2022/03/11 12:48:40 by tlemma           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,7 @@ int	ft_echo(int argc, char **argv)
 		printf("\n");
 		return (0);
 	}
-	while (check_flag(argv[i], "-n"))
+	while (argv[i] && check_flag(argv[i], "-n"))
 		i++;
 	if (i > 1)
 		n_flag = true;

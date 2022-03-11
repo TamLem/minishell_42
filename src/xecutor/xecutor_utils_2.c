@@ -6,7 +6,7 @@
 /*   By: tlemma <tlemma@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/08 12:31:28 by tlemma            #+#    #+#             */
-/*   Updated: 2022/03/08 12:36:26 by tlemma           ###   ########.fr       */
+/*   Updated: 2022/03/11 12:17:32 by tlemma           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,8 @@ void	init_fds(int fd[4])
 
 void	reset_fds(int fd[4])
 {
+	close(fd[IN]);
+	close(fd[OUT]);
 	dup2(fd[STDIN_INIT], STDIN_FILENO);
 	dup2(fd[STDOUT_INIT], STDOUT_FILENO);
 	close(fd[STDIN_INIT]);

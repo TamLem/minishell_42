@@ -6,7 +6,7 @@
 /*   By: tlemma <tlemma@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/28 18:58:11 by nlenoch           #+#    #+#             */
-/*   Updated: 2022/03/11 11:15:30 by tlemma           ###   ########.fr       */
+/*   Updated: 2022/03/11 12:44:02 by tlemma           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,6 @@ int	get_outfile(t_simple_cmd *simple_cmd, int fd[4], int order)
 		dup2(outfile->value, STDOUT_FILENO);
 	else
 		dup2(fd[OUT], STDOUT_FILENO);
-	// close(fd[IN]);
 	close(fd[OUT]);
 	return (0);
 }
@@ -69,8 +68,6 @@ int	exec_cmd(t_simple_cmd *simple_cmd, int fd[4], int order)
 	if (fd[IN] == -1 && close(fd[IN]) && close(fd[OUT]))
 		return (2);
 	dup2(fd[IN], STDIN_FILENO);
-	close(fd[IN]);
-	// close(fd[OUT]);
 	get_outfile(simple_cmd, fd, order);
 	g_data.state = 1;
 	if (is_builtin(simple_cmd->cmd))
@@ -79,7 +76,10 @@ int	exec_cmd(t_simple_cmd *simple_cmd, int fd[4], int order)
 	{
 		ret = fork();
 		if (ret == 0)
+		{
+			close(fd[IN]);
 			child_process(simple_cmd);
+		}
 	}
 	return (ret);
 }
