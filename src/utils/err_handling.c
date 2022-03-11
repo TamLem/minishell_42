@@ -6,7 +6,7 @@
 /*   By: tlemma <tlemma@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/27 15:43:40 by tlemma            #+#    #+#             */
-/*   Updated: 2022/03/11 16:59:18 by tlemma           ###   ########.fr       */
+/*   Updated: 2022/03/11 18:42:26 by tlemma           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,7 @@ static int	check_syntax_helper(void)
 	token = g_data.tokens;
 	while (token && ++args)
 	{
-		if ((args == 1 && token->type != WORD && token->type != OPERATOR)
+		if ((args == 1 && token->type != WORD && !is_redir(token))
 			|| (args == 1 && !token->next && token->type != WORD))
 		{
 			token->error = true;
@@ -68,14 +68,12 @@ int	check_syntax(void)
 	check_syntax_helper();
 	while (token)
 	{
-		if (is_redir(token)
-			&& (token->next && token->type != REDIR))
+		if (is_redir(token) && token->next && token->next->type != REDIR)
 		{
 			token->error = true;
 			return (err_handle(6, "", token->value));
 		}
-		else if ((is_redir(token) && token->next && token->next->type != REDIR)
-			|| (is_redir(token) && token->next && is_redir(token->next)))
+		else if ((is_redir(token) && token->next && is_redir(token->next)))
 		{
 			token->error = true;
 			return (err_handle(4, "", token->value));
