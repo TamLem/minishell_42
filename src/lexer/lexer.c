@@ -6,7 +6,7 @@
 /*   By: tlemma <tlemma@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/01 16:26:02 by tlemma            #+#    #+#             */
-/*   Updated: 2022/03/10 20:32:33 by tlemma           ###   ########.fr       */
+/*   Updated: 2022/03/11 10:50:42 by tlemma           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -130,6 +130,7 @@ int	lex(char *input)
 
 	line = ft_strdup(input);
 	g_data.state = 0;
+	line = ft_strtrim(line, "\n\t ");
 	while (!quotes_matched(line))
 	{
 		quoted = readline("> ");
@@ -138,7 +139,6 @@ int	lex(char *input)
 		else
 			break ;
 	}
-	line = ft_strtrim(line, "\n\t ");
 	if (!*line)
 		return (1);
 	tokenize(line);
@@ -146,6 +146,5 @@ int	lex(char *input)
 	strip_quotes();
 	tokenize_operators();
 	del_empty_tokens();
-	check_syntax();
-	return (0);
+	return (check_syntax());
 }

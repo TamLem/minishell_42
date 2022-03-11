@@ -6,7 +6,7 @@
 /*   By: tlemma <tlemma@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/10 21:26:47 by tlemma            #+#    #+#             */
-/*   Updated: 2022/03/10 20:27:14 by tlemma           ###   ########.fr       */
+/*   Updated: 2022/03/11 10:49:25 by tlemma           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,14 +69,17 @@ int	get_state(char pos)
 
 int	quotes_matched(char *line)
 {
+	char	*pipe;
+
+	pipe = ft_strchr(line, PIPE);
 	g_data.state = 0;
 	while (*line)
 	{
 		get_state(*line);
 		line++;
 	}
-	if (get_state(*line) == 0 && *(line - 1) != PIPE)
-		return (true);
-	else
+	if (get_state(*line) != 0 || (pipe && *(pipe + 1) == '\0'))
 		return (false);
+	else
+		return (true);
 }
