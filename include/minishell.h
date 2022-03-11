@@ -6,7 +6,7 @@
 /*   By: tlemma <tlemma@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/01 14:16:00 by tlemma            #+#    #+#             */
-/*   Updated: 2022/03/10 19:57:30 by tlemma           ###   ########.fr       */
+/*   Updated: 2022/03/11 13:15:07 by tlemma           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,6 +50,7 @@ typedef struct s_data
 	int				rl_redisplay;
 	void			*mem_alloced;
 	int				malloc_count;
+	int				n_heredocs;
 }	t_data;
 
 typedef struct s_mem_alloc

@@ -6,7 +6,7 @@
 /*   By: tlemma <tlemma@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/28 18:58:11 by nlenoch           #+#    #+#             */
-/*   Updated: 2022/03/11 12:44:02 by tlemma           ###   ########.fr       */
+/*   Updated: 2022/03/11 13:23:41 by tlemma           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,6 +68,7 @@ int	exec_cmd(t_simple_cmd *simple_cmd, int fd[4], int order)
 	if (fd[IN] == -1 && close(fd[IN]) && close(fd[OUT]))
 		return (2);
 	dup2(fd[IN], STDIN_FILENO);
+	close(fd[IN]);
 	get_outfile(simple_cmd, fd, order);
 	g_data.state = 1;
 	if (is_builtin(simple_cmd->cmd))
