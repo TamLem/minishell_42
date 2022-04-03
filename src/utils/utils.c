@@ -6,29 +6,18 @@
 /*   By: tlemma <tlemma@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/03 17:53:52 by tlemma            #+#    #+#             */
-/*   Updated: 2022/03/02 02:57:35 by tlemma           ###   ########.fr       */
+/*   Updated: 2022/03/08 19:37:12 by tlemma           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-typedef struct s_mem_alloc
-{
-	long				address;
-	struct s_mem_alloc	*next;
-}				t_mem_alloc;
-
-void	free_to_null(void *addr)
-{	
-	free(*((void **)addr));
-	*((void **)addr) = NULL;
-}
-
 void	free_dp(char **i)
 {
 	while (*i)
 	{
-		free_to_null(i);
+		free(*i);
+		*i = NULL;
 		i++;
 	}
 }
@@ -38,13 +27,15 @@ int	is_valid_name(char *argv)
 	int	i;
 
 	i = 0;
+	if (!(ft_isalpha(argv[0]) || argv[0] == '_'))
+		return (false);
 	while (argv[i] != '\0')
 	{
-		if (!ft_isalnum(argv[i]) && argv[i] != '_')
-			return (0);
+		if (!(ft_isalnum(argv[i]) || argv[i] == '_'))
+			return (false);
 		i++;
 	}
-	return (1);
+	return (true);
 }
 
 char	*ft_append_char(char *s1, char c)
@@ -71,7 +62,6 @@ char	*ft_append_char(char *s1, char c)
 	}
 	ret[i] = c;
 	ret[i + 1] = '\0';
-	// free(s1);
 	return (ret);
 }
 
@@ -109,7 +99,10 @@ void	mem_free_all(void)
 	while (i <= g_data.malloc_count)
 	{
 		if (((void **)g_data.mem_alloced)[i] != NULL)
+		{
 			free(((void **)g_data.mem_alloced)[i]);
+			((void **)g_data.mem_alloced)[i] = NULL;
+		}
 		i++;
 	}
 	free(g_data.mem_alloced);

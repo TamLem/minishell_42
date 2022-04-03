@@ -1,30 +1,32 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_strdup.c                                        :+:      :+:    :+:   */
+/*   xecutor_utils_2.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: tlemma <tlemma@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/08/23 15:25:13 by tlemma            #+#    #+#             */
-/*   Updated: 2022/03/09 18:43:54 by tlemma           ###   ########.fr       */
+/*   Created: 2022/03/08 12:31:28 by tlemma            #+#    #+#             */
+/*   Updated: 2022/03/11 12:17:32 by tlemma           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
-#include "../include/minishell.h"
+#include "minishell.h"
+#include "xecutor.h"
 
-char	*ft_strdup(const char *s)
+void	init_fds(int fd[4])
 {
-	int		len;
-	char	*p;
+	fd[STDIN_INIT] = dup(STDIN_FILENO);
+	fd[STDOUT_INIT] = dup(STDOUT_FILENO);
+	fd[IN] = dup(fd[STDIN_INIT]);
+	fd[OUT] = dup(fd[STDOUT_INIT]);
+}
 
-	if (s == NULL)
-		return (NULL);
-	p = NULL;
-	len = ft_strlen(s);
-	p = ft_malloc(len * sizeof(char) + 1);
-	if (!p)
-		return (NULL);
-	ft_strlcpy(p, s, (len + 1));
-	return (p);
+void	reset_fds(int fd[4])
+{
+	close(fd[IN]);
+	close(fd[OUT]);
+	dup2(fd[STDIN_INIT], STDIN_FILENO);
+	dup2(fd[STDOUT_INIT], STDOUT_FILENO);
+	close(fd[STDIN_INIT]);
+	close(fd[STDOUT_INIT]);
 }

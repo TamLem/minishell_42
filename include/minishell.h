@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nlenoch <nlenoch@student.42.fr>            +#+  +:+       +#+        */
+/*   By: tlemma <tlemma@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/01 14:16:00 by tlemma            #+#    #+#             */
-/*   Updated: 2022/03/02 10:45:55 by nlenoch          ###   ########.fr       */
+/*   Updated: 2022/04/03 16:25:06 by tlemma           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,14 @@ typedef struct s_data
 	int				rl_redisplay;
 	void			*mem_alloced;
 	int				malloc_count;
+	int				n_heredocs;
 }	t_data;
+
+typedef struct s_mem_alloc
+{
+	long				address;
+	struct s_mem_alloc	*next;
+}				t_mem_alloc;
 
 t_data	g_data;
 void		free_dp(char **i);
@@ -60,10 +67,18 @@ void		*ft_malloc(size_t size);
 void		mem_free_all(void);
 int			check_syntax(void);
 int			is_valid_name(char *argv);
-int			err_handle(int error_code, char *error_input);
+int			err_handle(int error_code, char *prog, char *error_input);
 char		*ft_getenv(char *name);
 t_env_list	*ft_getenv_list(char *name);
 char		**env_to_arr(void);
 void		free_to_null(void *addr);
+int			is_redir(t_token *token);
+void		sig_ctrlc(int sig);
+int			change_ctrlc_sym(bool value);
+char		*prompt(void);
+int			bashify_exit_status(void);
+char		*expand_single(char *init_token,
+				int var_pos, char *var, bool split);
+bool		is_io_modifier(int type);
 
 #endif

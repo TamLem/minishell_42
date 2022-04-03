@@ -3,22 +3,26 @@
 /*                                                        :::      ::::::::   */
 /*   cd.c                                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nlenoch <nlenoch@student.42.fr>            +#+  +:+       +#+        */
+/*   By: tlemma <tlemma@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/01 18:52:36 by nlenoch           #+#    #+#             */
-/*   Updated: 2022/03/02 11:01:14 by nlenoch          ###   ########.fr       */
+/*   Updated: 2022/04/03 16:23:34 by tlemma           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "xecutor.h"
 #include "minishell.h"
 
-void	ft_end(int dir, char *path, char *oldpath)
+void	change_dir(int dir, char *path, char *oldpath)
 {
+	dir = chdir(path);
 	if (dir == -1)
-		err_handle(3, path);
+	{
+		err_handle(3, "cd", path);
+		g_data.exit_status = 1;
+	}
 	else
-		add_env("OLDPWD", oldpath);
+		add_env("OLDPWD", ft_strdup(oldpath));
 }
 
 int	ft_cd(int argc, char **argv, char **envp)
@@ -32,19 +36,16 @@ int	ft_cd(int argc, char **argv, char **envp)
 	oldpath = getcwd(NULL, 0);
 	if (argc == 1)
 		path = "~";
-	if (!ft_strcmp(path, "~"))
-	{
+	if (ft_strcmp(path, "~") == 0)
 		path = ft_getenv("HOME");
-		dir = chdir(path);
-	}
-	else if (!ft_strcmp(path, "-"))
+	if (ft_strcmp(path, "-") == 0)
 	{
 		path = ft_getenv("OLDPWD");
-		if (path && !chdir(path))
+		if (path)
 			printf("%s\n", path);
 	}
-	else
-		dir = chdir(path);
-	ft_end(dir, path, oldpath);
+	if (path != NULL && *path)
+		change_dir(dir, path, oldpath);
+	free(oldpath);
 	return (1);
 }

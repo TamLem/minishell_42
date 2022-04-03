@@ -10,4 +10,4 @@ file*
 heredocs
 include/minishell.h.gch
 .gitignore
-.gitignore
+tester/

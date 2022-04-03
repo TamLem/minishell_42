@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   export.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nlenoch <nlenoch@student.42.fr>            +#+  +:+       +#+        */
+/*   By: tlemma <tlemma@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/08 12:32:47 by nlenoch           #+#    #+#             */
-/*   Updated: 2022/03/02 11:50:06 by nlenoch          ###   ########.fr       */
+/*   Updated: 2022/04/03 16:24:03 by tlemma           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,22 +14,25 @@
 #include "env.h"
 #include "minishell.h"
 
-void	add_env_help(t_env_list *existing, char *value)
+void	update_existing(char *name, char *value)
 {
-	free_to_null(&existing->value);
-	existing->value = value;
-	existing->is_env = true;
+	t_env_list	*existing;
+
+	existing = ft_getenv_list(name);
+	if (existing && value)
+	{
+		existing->value = value;
+		existing->is_env = true;
+	}
 }
 
 int	add_env(char *name, char *value)
 {
 	t_env_list	*new;
-	t_env_list	*existing;
 
-	existing = ft_getenv_list(name);
-	if (existing && value)
-		add_env_help(existing, value);
-	else if (!existing)
+	if (ft_getenv_list(name))
+		update_existing(name, value);
+	else
 	{
 		new = g_data.env_list;
 		while (new && new->next)
@@ -63,9 +66,8 @@ static int	update_env(int argc, char *argv[], char *envp[])
 	char		*name;
 	char		*value;
 
-	argv++;
 	value = NULL;
-	while (*argv && **argv)
+	while (++argv && *argv)
 	{
 		if (**argv)
 		{
@@ -78,9 +80,11 @@ static int	update_env(int argc, char *argv[], char *envp[])
 			}
 			else
 				name = *argv;
-			ft_update_env_end(name, value);
+			if (!is_valid_name(name))
+				err_handle(2, "export", name);
+			else
+				add_env(name, value);
 		}
-		argv++;
 	}
 	return (0);
 }
@@ -90,7 +94,16 @@ int	ft_export(int argc, char *argv[], char *envp[])
 	char	**env_arr;
 
 	if (argc > 1)
-		return (update_env(argc, argv, envp));
+	{
+		update_env(argc, argv, envp);
+		argv++;
+		while (*argv)
+		{
+			if (!is_valid_name(*argv))
+				return (1);
+			argv++;
+		}
+	}		
 	else
 	{
 		env_arr = env_to_arr();

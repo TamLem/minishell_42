@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lexer.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nlenoch <nlenoch@student.42.fr>            +#+  +:+       +#+        */
+/*   By: tlemma <tlemma@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/03 13:03:11 by tlemma            #+#    #+#             */
-/*   Updated: 2022/03/02 10:45:48 by nlenoch          ###   ########.fr       */
+/*   Updated: 2022/04/03 16:21:28 by tlemma           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,10 +69,15 @@ enum	e_STATE{
 };
 
 int		lex(char *line);
-bool	is_WSPACE(char c);
+bool	is_wspace(char c);
 bool	is_operator(char c);
 int		quotes_matched(char *line);
 bool	shall_split(char *line, char *appended, int state);
 int		get_state(char pos);
+int		param_expand(void);
+char	*field_split(char *str);
+void	del_empty_tokens(void);
+void	print_tokens(void);
+char	*ft_strjoin_withnull(char *s1, char *s2);
 
 #endif

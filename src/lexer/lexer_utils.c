@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lexer_utils.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nlenoch <nlenoch@student.42.fr>            +#+  +:+       +#+        */
+/*   By: tlemma <tlemma@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/10 21:26:47 by tlemma            #+#    #+#             */
-/*   Updated: 2022/03/02 11:51:07 by nlenoch          ###   ########.fr       */
+/*   Updated: 2022/04/03 16:24:05 by tlemma           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 
 int	get_state(char pos);
 
-bool	is_WSPACE(char c)
+bool	is_wspace(char c)
 {
 	if (c == WWSPACE || c == WTAB || c == WNEWLINE)
 		return (true);
@@ -36,19 +36,15 @@ bool	shall_split(char *line, char *appended, int state)
 	next = *(line + 1);
 	if (next == '\0')
 		return (true);
-	if (next == DOLLAR && state != QUOTE)
-		return (true);
-	if (*appended == DOLLAR
-		&& !((ft_isdigit(next) && ft_strlen(appended) > 1)
-			|| ft_isalpha(next) || next == '_' || next == QMARK))
-		return (true);
-	if (is_WSPACE(next) && state == 0)
+	if (is_wspace(next) && state == 0)
 		return (true);
 	if (!is_operator(*line) && is_operator(next) && state == 0)
 		return (true);
+	if (*line == PIPE && *(line + 1) == PIPE)
+		return (true);
 	if (is_operator(*line) && !is_operator(next) && state == 0)
 		return (true);
-	if ((is_operator(*line) && (*line != *appended
+	if ((is_operator(*line) && (next != *appended
 				|| ft_strlen(appended) > 1)) && state == 0)
 		return (true);
 	else
@@ -73,14 +69,18 @@ int	get_state(char pos)
 
 int	quotes_matched(char *line)
 {
+	char	*pipe;
+
+	pipe = ft_strchr(line, PIPE);
 	g_data.state = 0;
 	while (*line)
 	{
 		get_state(*line);
 		line++;
 	}
-	if (get_state(*line) == 0)
-		return (true);
-	else
+	if (get_state(*line) != 0 || (pipe && *(pipe + 1) == '\0'
+			&& ft_strlen(line) > 1))
 		return (false);
+	else
+		return (true);
 }

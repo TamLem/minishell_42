@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   echo.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nlenoch <nlenoch@student.42.fr>            +#+  +:+       +#+        */
+/*   By: tlemma <tlemma@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/01 12:22:51 by nlenoch           #+#    #+#             */
-/*   Updated: 2022/03/02 11:15:16 by nlenoch          ###   ########.fr       */
+/*   Updated: 2022/04/03 16:23:43 by tlemma           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,16 +15,35 @@
 
 bool	check_flag(char *arg, char *flag)
 {
-	if (ft_strncmp(arg, flag, ft_strlen(flag)) != 0)
-		return (false);
-	arg = arg + ft_strlen(flag);
-	while (*arg)
+	bool	is_flag;
+	int		flaglen;
+
+	flaglen = ft_strlen(flag);
+	is_flag = false;
+	if (ft_strncmp(arg, flag, flaglen) == 0)
 	{
-		if (*arg != *(flag + 1))
-			return (false);
-		arg++;
+		is_flag = true;
+		while (arg[flaglen])
+		{
+			if (arg[flaglen] != flag[1])
+				is_flag = false;
+			flaglen++;
+		}
 	}
-	return (true);
+	return (is_flag);
+}
+
+void	echo_print(bool n_flag, char **argv)
+{
+	while (*argv)
+	{
+		printf("%s", *argv);
+		argv++;
+		if (*argv)
+			printf(" ");
+	}
+	if (!n_flag)
+		printf("\n");
 }
 
 void	ft_printhelp(bool n_flag, char **argv)
@@ -55,16 +74,10 @@ int	ft_echo(int argc, char **argv)
 		printf("\n");
 		return (0);
 	}
-	if (argv[1][0] == '-' && argv[1][1] == 'n')
-	{
+	while (argv[i] && check_flag(argv[i], "-n"))
+		i++;
+	if (i > 1)
 		n_flag = true;
-		while (argv[1][i] != '\0' || argv[1][i] == 'n')
-		{
-			if (argv[1][i] != 'n')
-				n_flag = false;
-			i++;
-		}
-	}
-	ft_printhelp(n_flag, argv);
+	echo_print(n_flag, &(argv[i]));
 	return (0);
 }

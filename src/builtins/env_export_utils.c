@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   env_export_utils.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nlenoch <nlenoch@student.42.fr>            +#+  +:+       +#+        */
+/*   By: tlemma <tlemma@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/28 17:48:19 by tlemma            #+#    #+#             */
-/*   Updated: 2022/03/02 11:39:18 by nlenoch          ###   ########.fr       */
+/*   Updated: 2022/04/03 16:23:51 by tlemma           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,7 +85,6 @@ void	print_env_or_export(char *cmd, char **env_arr)
 			printf("declare -x %s\n", *env_arr);
 			env_arr++;
 		}
-		free_dp(env_arr);
 	}
 }
 
@@ -103,43 +102,24 @@ t_env_list	*ft_getenv_list(char *name)
 	return (NULL);
 }
 
-int	env_arr_len(void)
+char	**env_to_arr(void)
 {
 	int			len;
 	t_env_list	*env_lst;
 
 	len = 0;
-	env_lst = g_data.env_list;
-	while (env_lst)
-	{
-		len++;
-		env_lst = env_lst->next;
-	}
-	return (len);
-}
-
-char	**env_to_arr(void)
-{
-	int			i;
-	int			len;
-	char		**env_arr;
-	t_env_list	*env_lst;
-	char		*temp;
-
 	i = 0;
-	len = env_arr_len();
+	env_lst = g_data.env_list;
+	while (env_lst && ++len)
+		env_lst = env_lst->next;
 	env_lst = g_data.env_list;
 	env_arr = ft_malloc(sizeof(char *) * (len + 1));
 	env_arr[len] = NULL;
 	while (i < len)
 	{
 		if (env_lst->value)
-		{
-			env_arr[i] = ft_strjoin(env_lst->name, "=");
-			temp = env_arr[i];
-			env_arr[i] = ft_strjoin(temp, env_lst->value);
-			// env_arr[i] = ft_append_char(env_arr[i], '"');
-		}	
+			env_arr[i]
+				= ft_strjoin(ft_strjoin(env_lst->name, "="), env_lst->value);
 		else
 			env_arr[i] = ft_strdup(env_lst->name);
 		env_lst = env_lst->next;

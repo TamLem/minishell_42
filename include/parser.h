@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nlenoch <nlenoch@student.42.fr>            +#+  +:+       +#+        */
+/*   By: tlemma <tlemma@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/10 22:08:29 by tlemma            #+#    #+#             */
-/*   Updated: 2022/03/02 10:46:21 by nlenoch          ###   ########.fr       */
+/*   Updated: 2022/04/03 16:25:09 by tlemma           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,8 +49,13 @@ typedef struct s_simple_cmd
 	t_heredocs			*heredocs;
 	bool				error;
 	struct s_simple_cmd	*next;
-}	t_simple_cmd;
+}			t_simple_cmd;
 
 int		parse(void);
+int		add_infiles(t_infiles **infile, char *file, int mode);
+int		add_outfiles(t_outfiles **outfile, char *file, int mode);
+int		add_args(t_args **args, char *value);
+int		init_cmd_struct(t_simple_cmd **simple_cmd);
+bool	is_io_modifier(int type);
 
 #endif
