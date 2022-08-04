@@ -6,7 +6,7 @@
 /*   By: tlemma <tlemma@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/01 14:13:55 by tlemma            #+#    #+#             */
-/*   Updated: 2022/03/11 17:08:12 by tlemma           ###   ########.fr       */
+/*   Updated: 2022/08/04 12:44:49 by tlemma           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,11 +61,28 @@ int	init_session(int argc, char *argv[], char *envp[])
 	return (0);
 }
 
+void print_ascii_art()
+{
+	printf("\033[32m");
+	FILE *stream = fopen("src/ascii_header.txt", "r");
+	if (stream)
+	{
+		char line[256];
+		while (fgets(line, sizeof(line), stream))
+			printf("%s", line);
+		fclose(stream);
+	}
+	else
+		printf("\033[31mError: ascii_art.txt not found\n");
+	printf("\033[0m\n");
+}
+
 int	main(int argc, char *argv[], char *envp[])
 {
 	char	*line;
 
 	line = NULL;
+	print_ascii_art();
 	init_session(argc, argv, envp);
 	while (true)
 	{

@@ -16,3 +16,6 @@ Piping, redirections and heredocs are also supported.
   - <sm>change READLINE and READLINE_INC in Makefile to include the readline library</sm>
 - ``make``
 - ``./minishell``
+
+
+<img src="minishell.png">
