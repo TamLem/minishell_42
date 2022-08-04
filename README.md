@@ -1,5 +1,5 @@
 # minishell
-A mini bash like shell that can run unix programs and inbuilt functionalities.
+A mini, bash like, shell that can run unix programs and inbuilt functionalities.
 Inbuilts include: cd, pwd, export,echo, exit, and more.
 
 ## Implementation
